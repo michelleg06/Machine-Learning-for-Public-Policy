@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dr. Stephan Dietrich &amp; Michelle González Amador" />
+
+
+<title>EMX+ : An introduction to Machine Learning for Public Policy</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Machine Learning for Public Policy</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="intro.html">1. Introduction</a>
+</li>
+<li>
+  <a href="reg1.html">2. Regression I</a>
+</li>
+<li>
+  <a href="reg2.html">3. Regression II</a>
+</li>
+<li>
+  <a href="classification.html">4. Classification</a>
+</li>
+<li>
+  <a href="fairml.html">5. Fair ML/Data Ethics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">EMX+ : An introduction to Machine Learning
+for Public Policy</h1>
+<h4 class="author">Dr. Stephan Dietrich &amp; Michelle González
+Amador</h4>
+
+</div>
+
+
+<div class="figure">
+<img src="ML4PP.png" alt=" " width="50%" />
+<p class="caption">
+</p>
+</div>
+<div id="preamble" class="section level3">
+<h3>Preamble</h3>
+<p>Machine learning has become an increasingly integral part of public
+policies. It is applied for policy problems that do not require causal
+inference but instead require predictive inference. Solving these
+prediction policy problems requires tools that are tuned to minimizing
+prediction errors, but also frameworks to ensure that models are
+efficient and fair. EMX+ will introduce the theory and applications of
+machine learning algorithms with a focus on policy applications and
+issues. The goals of this course include:</p>
+<ul>
+<li>Developing a basic understanding of the statistical theory
+underlying common supervised machine learning algorithms</li>
+<li>Developing skills necessary to train and assess the performance of
+selected popular machine learning algorithms for solving public policy
+problems</li>
+<li>Gaining an understanding of the benefits and risks of applying
+machine learning algorithms to public policy problems</li>
+</ul>
+<p>The course consists of 5 workshops each consisting of a technical
+introductory lecture and a hands-on application of the topics to a
+real-world policy problem. Students will be working with the programming
+language R, but coding is not the primary focus of the course.</p>
+<p><strong>Course textbook (ebook available for free):</strong> James,
+G., Witten, D., Hastie, T., &amp; Tibshirani, R. (2021). <a
+href="https://hastie.su.domains/ISLR2/ISLRv2_website.pdf">An
+Introduction to Statistical Learning: With Applications in R.</a></p>
+</div>
+<div id="introduction-to-machine-learning-for-policy-analysis"
+class="section level2">
+<h2>1. Introduction to machine learning for policy analysis</h2>
+<pre><code>·  What is machine learning?
+·  Inference versus prediction for policy analysis
+·  Supervised, unsupervised and reinforcement learning
+·  Regression-classification
+·  Sampling error vs. specification error
+·  Bias-variance tradeoff and Mean Square Error (MSE) minimization
+·  Model validation</code></pre>
+<p><strong>Readings:</strong></p>
+<ul>
+<li>An introduction to Statistical learning, Chapter 2.</li>
+<li>Kleinberg, J., Ludwig, J., Mullainathan, S. and Obermeyer, Z., 2015.
+<a
+href="https://www.aeaweb.org/articles?id=10.1257/aer.p20151023">Prediction
+policy problems. American Economic Review, 105(5), pp.491-95.</a></li>
+<li>Athey, S. (2017). <a
+href="https://www.science.org/doi/10.1126/science.aal4321">Beyond
+prediction: Using big data for policy problems. Science, 355(6324),
+483-485.</a></li>
+<li>Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J. and
+Mullainathan, S., 2017. <a
+href="https://academic.oup.com/qje/article-abstract/133/1/237/4095198?redirectedFrom=fulltext">Human
+decisions and machine predictions. The Quarterly Journal of Economics,
+133(1), pp.237-293.</a></li>
+</ul>
+<p><strong>Workshop:</strong> A gentle introduction to R and Rstudio</p>
+</div>
+<div id="regression-i" class="section level2">
+<h2>2. Regression (I)</h2>
+<pre><code>·   OLS
+·   Assessing accuracy
+·   Training error vs. test error
+·   Feature selection
+·   Cross-validation</code></pre>
+<p><strong>Readings:</strong></p>
+<ul>
+<li>An introduction to Statistical learning, Chapter 3, 5.</li>
+<li>Varian, Hal R. 2014. <a
+href="https://www.aeaweb.org/articles?id=10.1257/jep.28.2.3">“Big Data:
+New Tricks for Econometrics.” Journal of Economic Perspectives, 28 (2):
+3-28.</a></li>
+</ul>
+<p><strong>Workshop:</strong> Eligibility in anti-poverty programming
+(I)</p>
+</div>
+<div id="regression-ii" class="section level2">
+<h2>3. Regression (II)</h2>
+<pre><code>·   Regularization/Shrinkage models
+·   Parameter tuning
+·   Decision trees
+·   Bagging/Boosting</code></pre>
+<p><strong>Readings:</strong></p>
+<ul>
+<li>An introduction to Statistical learning, Chapter, 6 and 8.</li>
+<li>Abebe, R., Kleinberg, J., &amp; Weinberg, S. M. (2020). <a
+href="https://ojs.aaai.org/index.php/AAAI/article/view/6188">Subsidy
+Allocations in the Presence of Income Shocks. Proceedings of the AAAI
+Conference on Artificial Intelligence, 34(05), 7032-7039.</a></li>
+</ul>
+</div>
+<div id="classification" class="section level2">
+<h2>4. Classification</h2>
+<pre><code>·   Logistic regression
+·   Performance indicators
+·   Unbalanced data
+·   xgboost
+·   The Machine Learning Architecture</code></pre>
+<p><strong>Readings:</strong></p>
+<ul>
+<li>An introduction to Statistical learning Chapter 3, 5, 6 8</li>
+<li>Athey, S., &amp; Imbens, G. W. (2019). <a
+href="https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433">Machine
+learning methods that economists should know about. Annual Review of
+Economics, 11, 685-725.</a></li>
+</ul>
+<p><strong>Workshop:</strong> Predicting child marriage</p>
+</div>
+<div id="fair-machine-learning-ethics" class="section level2">
+<h2>5. Fair Machine Learning / Ethics</h2>
+<pre><code>·   An introduction to Statistical Learning, Chapter 3, 5, 6 8
+·   Indicators
+·   Black box algorithms
+·   Biases
+·   Ethical challenges</code></pre>
+<p><strong>Readings:</strong></p>
+<ul>
+<li><a
+href="https://colab.research.google.com/github/fastai/fastbook/blob/master/03_ethics.ipynb">Fast
+AI: Deep Learning for Coders with Fastai and PyTorch: AI Applications
+Without a PhD, Chapter 4.</a></li>
+<li>Kasy, M., &amp; Abebe, R. (2021, March). <a
+href="https://maxkasy.github.io/home/files/papers/fairness_equality_power.pdf">Fairness,
+equality, and power in algorithmic decision-making. In Proceedings of
+the 2021 ACM Conference on Fairness, Accountability, and Transparency
+(pp. 576-586).</a></li>
+<li><a href="https://fairmlbook.org/">Fairness and Machine Learning:
+Limitations and Opportunities, Chapter 4.</a></li>
+</ul>
+<p><strong>Workshop:</strong> Bias detection in screening decisions</p>
+<pre class="r"><code>#render(&quot;EMXMarkdown.Rmd&quot;)</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

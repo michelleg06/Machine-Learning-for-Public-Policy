@@ -117,6 +117,3 @@ Predicting child marriage
 Bias detection in screening decisions
 
 
-````{r}
-#render("EMXMarkdown.Rmd")
-```
