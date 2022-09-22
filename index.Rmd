@@ -14,7 +14,7 @@ library(rmarkdown)
 ```
 
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '50%'}
-knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/ML4PP.png")
+knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/ML4PP.png")
 ```
 ### Preamble
 
