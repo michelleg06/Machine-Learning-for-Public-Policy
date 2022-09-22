@@ -1,0 +1,20 @@
+name: "ML4PP"
+output:
+    html_document:
+        theme: flatly
+navbar:
+    title: "Machine Learning for Public Policy"
+    left:
+        - text: "Home"
+          href: index.html
+        - text: "1. Introduction"
+          href: intro.html
+        - text: "2. Regression I"
+          href: reg1.html
+        - text: "3. Regression II"
+          href: reg2.html
+        - text: "4. Classification"
+          href: classification.html
+        - text: "5. Fair ML/Data Ethics"
+          href: fairml.html
+output_dir: "." # if publishing on Github pages
