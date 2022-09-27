@@ -119,6 +119,6 @@ Predicting child marriage
 
 **Workshop:**
 Bias detection in screening decisions
-Enrollment prediction 2
+
 
 
