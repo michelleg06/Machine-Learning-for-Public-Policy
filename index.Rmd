@@ -5,8 +5,8 @@ author: "Dr. Stephan Dietrich & Michelle González Amador"
 output: html_document
 ---
 <style>
-body {
-text-align: justify}
+    body {
+    text-align: justify}
 </style>
 
 ```{r setup, include=FALSE}
@@ -17,7 +17,7 @@ library(data.table)
 library(rmarkdown)
 ```
 
-```{r pressure, echo=FALSE, fig.cap=" ", out.width = '50%'}
+```{r pressure, echo=FALSE, fig.cap=" ", out.width = '75%'}
 knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/ML4PP.png")
 ```
 # Preamble
