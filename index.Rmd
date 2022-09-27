@@ -4,6 +4,10 @@ author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
 ---
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -42,9 +46,9 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 **Readings:** 
 
 - An introduction to Statistical learning, Chapter 2.
-- Kleinberg, J., Ludwig, J., Mullainathan, S. and Obermeyer, Z., 2015. [Prediction policy problems. American Economic Review, 105(5), pp.491-95.](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023)
-- Athey, S. (2017). [Beyond prediction: Using big data for policy problems. Science, 355(6324), 483-485.](https://www.science.org/doi/10.1126/science.aal4321)
-- Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J. and Mullainathan, S., 2017. [Human decisions and machine predictions. The Quarterly Journal of Economics, 133(1), pp.237-293.](https://academic.oup.com/qje/article-abstract/133/1/237/4095198?redirectedFrom=fulltext)
+- Kleinberg, J., Ludwig, J., Mullainathan, S. and Obermeyer, Z., 2015. [Prediction policy problems. American Economic Review](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023), 105(5), pp.491-95.
+- Athey, S. (2017). [Beyond prediction: Using big data for policy problems](https://www.science.org/doi/10.1126/science.aal4321). Science, 355(6324), 483-485.
+- Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J. and Mullainathan, S., 2017. [Human decisions and machine predictions.](https://academic.oup.com/qje/article-abstract/133/1/237/4095198?redirectedFrom=fulltext) The Quarterly Journal of Economics, 133(1), pp.237-293.
 
 **Workshop:**
 A gentle introduction to R and Rstudio
@@ -60,7 +64,7 @@ A gentle introduction to R and Rstudio
 **Readings:** 
 
 - An introduction to Statistical learning, Chapter 3, 5.
-- Varian, Hal R. 2014. ["Big Data: New Tricks for Econometrics." Journal of Economic Perspectives, 28 (2): 3-28.](https://www.aeaweb.org/articles?id=10.1257/jep.28.2.3)
+- Varian, Hal R. 2014. ["Big Data: New Tricks for Econometrics."](https://www.aeaweb.org/articles?id=10.1257/jep.28.2.3) Journal of Economic Perspectives, 28 (2): 3-28.
 
 **Workshop:**
 Eligibility in anti-poverty programming (I)
@@ -76,7 +80,7 @@ Eligibility in anti-poverty programming (I)
 **Readings:** 
 
 - An introduction to Statistical learning, Chapter, 6 and 8.
-- Abebe, R., Kleinberg, J., & Weinberg, S. M. (2020). [Subsidy Allocations in the Presence of Income Shocks. Proceedings of the AAAI Conference on Artificial Intelligence, 34(05), 7032-7039.](https://ojs.aaai.org/index.php/AAAI/article/view/6188)
+- Abebe, R., Kleinberg, J., & Weinberg, S. M. (2020). [Subsidy Allocations in the Presence of Income Shocks.](https://ojs.aaai.org/index.php/AAAI/article/view/6188) Proceedings of the AAAI Conference on Artificial Intelligence, 34(05), 7032-7039.
 
 ## 4. Classification
 
@@ -91,7 +95,7 @@ Eligibility in anti-poverty programming (I)
 **Readings:** 
 
 - An introduction to Statistical learning Chapter 3, 5, 6 8
-- Athey, S., & Imbens, G. W. (2019). [Machine learning methods that economists should know about. Annual Review of Economics, 11, 685-725.](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433)
+- Athey, S., & Imbens, G. W. (2019). [Machine learning methods that economists should know about.](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433) Annual Review of Economics, 11, 685-725.
 
 **Workshop:**
 Predicting child marriage
@@ -109,8 +113,8 @@ Predicting child marriage
 **Readings:** 
 
 - [Fast AI: Deep Learning for Coders with Fastai and PyTorch: AI Applications Without a PhD,  Chapter 4.](https://colab.research.google.com/github/fastai/fastbook/blob/master/03_ethics.ipynb)
-- Kasy, M., & Abebe, R. (2021, March). [Fairness, equality, and power in algorithmic decision-making. In Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (pp. 576-586).](https://maxkasy.github.io/home/files/papers/fairness_equality_power.pdf)
-- [Fairness and Machine Learning: Limitations and Opportunities, Chapter 4.](https://fairmlbook.org/)
+- Kasy, M., & Abebe, R. (2021, March). [Fairness, equality, and power in algorithmic decision-making.](https://maxkasy.github.io/home/files/papers/fairness_equality_power.pdf) In Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (pp. 576-586).
+- [Fairness and Machine Learning: Limitations and Opportunities](https://fairmlbook.org/), Chapter 4.
 
 
 **Workshop:**
