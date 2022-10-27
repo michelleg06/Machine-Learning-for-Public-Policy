@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Machine learning for policy analysis</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Machine Learning for Public Policy</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="intro.html">1. Introduction</a>
+</li>
+<li>
+  <a href="reg1.html">2. Regression I</a>
+</li>
+<li>
+  <a href="reg2.html">3. Regression II</a>
+</li>
+<li>
+  <a href="classification.html">4. Classification</a>
+</li>
+<li>
+  <a href="fairml.html">5. Fair ML/Data Ethics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Machine learning for policy analysis</h1>
+
+</div>
+
+
+<p>At its core, machine learning is primarily interested in making sense
+of complex data. A machine learning algorithm’s job is to read data and
+identify patterns that can be used for: prediction, feature-relevance
+detection, model-free classification, among other actions.</p>
+<div id="a-general-introduction" class="section level2 tabset">
+<h2 class="tabset"><strong>A general introduction</strong></h2>
+<div id="machine-learning-for-public-policy" class="section level3">
+<h3><strong>Machine Learning for Public Policy</strong>:</h3>
+<p>Empirical Public Policy research is primarily concerned with
+causality and understanding counterfactuals. What is the impact of
+Policy or Programme X on Population Outcome Y? What would have happened
+in the absence of such a policy? However, there are policy problems that
+may be solved without necessarily looking for a causal link. We call
+these `prediction policy problems’ (<a
+href="https://www.aeaweb.org/articles?id=10.1257/aer.p20151023">Kleinberg
+et al. 2015</a>). Some examples include:</p>
+<ul>
+<li><p>Allocating fire and health inspectors in cities (<a
+href="https://www.aeaweb.org/articles?id=10.1257/aer.p20161027">Glaeser
+et al. 2016</a>).</p></li>
+<li><p>Predicting unemployment spell length to help workers decide on
+savings rates and job search strategies.</p></li>
+<li><p>Predicting highest risk youth for targeting interventions (<a
+href="https://www.aeaweb.org/articles?id=10.1257/aer.101.3.288">Chandler,Levitt,
+and List 2011</a>).</p></li>
+</ul>
+<p><strong>How does a Machine Learn?</strong></p>
+<p>Machine learning is classified in three major branches:</p>
+<div
+style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 8px">
+<div>
+<p><strong>Supervised Learning</strong>:</p>
+<p>This course will be primarily concerned with supervised learning.
+Supervised learning is analogous to statistical learning: suppose that
+we observe a quantitative response <span
+class="math inline">\(Y\)</span> and <span
+class="math inline">\(p\)</span> predictors, <span
+class="math inline">\(X_1, X_2,..., X_p\)</span>.</p>
+<p>We can rewrite this in a general linear form as:</p>
+<p><span class="math display">\[Y = f(X) + u\]</span> where <span
+class="math inline">\(u\)</span> is an error term.</p>
+</div>
+<div>
+<p><strong>Unsupervised Learning</strong>:</p>
+<p>Unsupervised learning is known for reading data without labels,
+e.g. pictures.</p>
+</div>
+<div>
+<p><strong>Reinforcement Learning</strong>:</p>
+<p>Reinforcement learning is categorised as Artificial Intelligence. It
+is more focused on goal-directed learning from interaction than are
+other approaches to machine learning. As per <a
+href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf">Sutton
+and Barto (2015)</a>, the three most distinguishing features of
+reinforcement learning are:</p>
+<pre><code>1. Being closed-loop; i.e. the learning system&#39;s actions influence its later inputs.
+    
+    
+2. Does not have direct instructions as to what actions to take; instead it must discover which actions yield the most reward by trying them out.
+    
+    
+3. Not knowing where the consequences of actions, including reward signals, play out over extended time periods.</code></pre>
+</div>
+</div>
+<p><strong>Relevant trade-offs in Machine Learning</strong></p>
+<ul>
+<li><p>Flexibility vs. interpretability.</p></li>
+<li><p>Prediction vs. inference: high predictive power does not allow
+for proper inference.</p></li>
+<li><p>Goodness-of-fit vs. over-fitting: how do we know <em>when</em>
+the fit is good?</p></li>
+</ul>
+</div>
+<div id="an-introduction-to-r-programming" class="section level3">
+<h3><strong>An introduction to R programming</strong></h3>
+<p>For the purposes of this course, we will be working with the
+integrated development environment (IDE) Rstudio. Make sure you have <a
+href="https://www.rstudio.com/products/rstudio/download/">downloaded
+it</a> and have familiarised yourself with the interface before
+proceeding.</p>
+<p><strong>Features of R</strong></p>
+<p>R is a statistical programming language. As such, it understands and
+categorises its input as <strong>data types</strong>:</p>
+<pre class="r"><code># Examples of data types
+
+# Numeric (or double): 
+numeric_vector &lt;- c(1, 1.0, 65.5)
+print(numeric_vector)</code></pre>
+<pre><code>## [1]  1.0  1.0 65.5</code></pre>
+<pre class="r"><code>#Integers: 
+integer_vector &lt;- c(1L, 3L, 45L)
+print(integer_vector)</code></pre>
+<pre><code>## [1]  1  3 45</code></pre>
+<pre class="r"><code>#Logical (or boolean): 
+boolean_vector &lt;- c(TRUE, FALSE)
+print(boolean_vector)</code></pre>
+<pre><code>## [1]  TRUE FALSE</code></pre>
+<pre class="r"><code>#Character: 
+character_vector &lt;- c(&quot;Harry Potter&quot;, &quot;Star Wars&quot;, &quot;Lord of the Rings&quot;)
+print(character_vector)</code></pre>
+<pre><code>## [1] &quot;Harry Potter&quot;      &quot;Star Wars&quot;         &quot;Lord of the Rings&quot;</code></pre>
+<pre class="r"><code>#Null: 
+NA</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>… and <strong>data structures</strong></p>
+<pre class="r"><code># Examples of data structures
+
+#Vectors: think of a row, or a column of the same element.
+x &lt;- c(1L,3L,5L,7L,9L) # we call this an integer vector
+y &lt;- c(1.3, 1, 5, 7, 11.2) # we call this a numerical (or double) vector
+
+print(x)</code></pre>
+<pre><code>## [1] 1 3 5 7 9</code></pre>
+<pre class="r"><code>print(y)</code></pre>
+<pre><code>## [1]  1.3  1.0  5.0  7.0 11.2</code></pre>
+<pre class="r"><code>#Matrices: matrices have rows and columns containing elements of the same type.
+A &lt;- matrix(1:9, ncol=3, nrow=3, byrow= TRUE)
+print(A)</code></pre>
+<pre><code>##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    4    5    6
+## [3,]    7    8    9</code></pre>
+<pre class="r"><code>#Arrays: A vector is a one-dimensional array. A matrix is a two-dimensional array.
+#In short, an array is a collection of data of the same type.
+
+n &lt;- 5*5*3 
+B &lt;- array(1:n, c(5,5,3))
+print(B)</code></pre>
+<pre><code>## , , 1
+## 
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    6   11   16   21
+## [2,]    2    7   12   17   22
+## [3,]    3    8   13   18   23
+## [4,]    4    9   14   19   24
+## [5,]    5   10   15   20   25
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]   26   31   36   41   46
+## [2,]   27   32   37   42   47
+## [3,]   28   33   38   43   48
+## [4,]   29   34   39   44   49
+## [5,]   30   35   40   45   50
+## 
+## , , 3
+## 
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]   51   56   61   66   71
+## [2,]   52   57   62   67   72
+## [3,]   53   58   63   68   73
+## [4,]   54   59   64   69   74
+## [5,]   55   60   65   70   75</code></pre>
+<pre class="r"><code>#Lists: a list is a one-dimensional, heterogeneous data structure. Basically, 
+# it is an object that stores all object types. 
+
+my_list &lt;- list(42, &quot;The answer is&quot;, TRUE)
+print(my_list)</code></pre>
+<pre><code>## [[1]]
+## [1] 42
+## 
+## [[2]]
+## [1] &quot;The answer is&quot;
+## 
+## [[3]]
+## [1] TRUE</code></pre>
+<pre class="r"><code>#Data frames: a data frame is a list of  column vectors. Each vector must
+#contain the same data type, but the different vectors can store different 
+#data types. Note, however, that in a data france all vectors must have the same lenght. 
+
+a &lt;- 1L:5L
+b &lt;- c(&quot;a1&quot;, &quot;b2&quot;, &quot;c3&quot;, &quot;d4&quot;, &quot;e5&quot;)
+c &lt;- c(TRUE, TRUE, FALSE, TRUE, FALSE)
+
+df &lt;- as.data.frame(cbind(a,b,c))
+
+str(df)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  3 variables:
+##  $ a: Factor w/ 5 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5
+##  $ b: Factor w/ 5 levels &quot;a1&quot;,&quot;b2&quot;,&quot;c3&quot;,..: 1 2 3 4 5
+##  $ c: Factor w/ 2 levels &quot;FALSE&quot;,&quot;TRUE&quot;: 2 2 1 2 1</code></pre>
+<p>From here on, we will write an R script together, and learn some
+basic commands and tools that will allow you to explore and manipulate
+data. Please note that this is <strong>not</strong> an exhaustive
+tutorial. It is nonetheless a good place to start.</p>
+<p><strong>1.Setting up the Rstudio working environment</strong> It is
+good practice to make sure that the working environment is empty/clean
+before you start running any code.</p>
+<pre class="r"><code># The r base command rm() stands for remove
+rm(list = ls()) # this line indicates R to clear absolutely everything from the environment</code></pre>
+<p>Once that has been taken care of, you need to load the libraries you
+will be working with. While r base has a large number of commands to
+explore, wrangle, and manipulate data, the <strong>open source</strong>
+feature of R means that people all over the world are constantly working
+on packages and functions to make our lives easier. These can be used by
+calling the libraries in which they are stored:</p>
+<pre class="r"><code>#  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
+library(tidyverse)
+library(data.table)</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

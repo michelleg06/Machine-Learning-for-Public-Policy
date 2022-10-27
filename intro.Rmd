@@ -1,0 +1,181 @@
+---
+title: "Machine learning for policy analysis"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+
+At its core, machine learning is primarily interested in making sense of complex data. A machine learning algorithm's job is to read data and identify patterns that can be used for: prediction, feature-relevance detection, model-free classification, among other actions. 
+
+## **A general introduction** {.tabset}
+
+### **Machine Learning for Public Policy**:
+
+
+Empirical Public Policy research is primarily concerned with causality and understanding counterfactuals. What is the impact of Policy or Programme X on Population Outcome Y? What would have happened in the absence of such a policy? However, there are policy problems that may be solved without necessarily looking for a causal link. We call these `prediction policy problems' ([Kleinberg et al. 2015](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023)). Some examples include: 
+
+
++ Allocating fire and health inspectors in cities ([Glaeser et al.    2016](https://www.aeaweb.org/articles?id=10.1257/aer.p20161027)).
+
+
++ Predicting unemployment spell length to help workers decide on savings rates and job search strategies.
+
+
++ Predicting highest risk youth for targeting interventions ([Chandler,Levitt, and List 2011](https://www.aeaweb.org/articles?id=10.1257/aer.101.3.288)).
+
+
+**How does a Machine Learn?**
+
+
+Machine learning is classified in three major branches: 
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 8px"}
+
+::: {}
+
+
+**Supervised Learning**:
+
+
+This course will be primarily concerned with supervised learning. Supervised learning is analogous to statistical learning: suppose that we observe a quantitative response $Y$ and $p$ predictors, $X_1, X_2,..., X_p$.
+
+
+We can rewrite this in a general linear form as:
+
+
+$$Y = f(X) + u$$
+where $u$ is an error term. 
+
+:::
+
+::: {}
+**Unsupervised Learning**:
+
+
+Unsupervised learning is known for reading data without labels, e.g. pictures. 
+:::
+
+::: {}
+**Reinforcement Learning**: 
+
+
+Reinforcement learning is categorised as Artificial Intelligence. It is more focused on goal-directed learning from interaction than are other approaches to machine learning. As per [Sutton and Barto (2015)](https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf), the three most distinguishing features of reinforcement learning are:
+
+
+    1. Being closed-loop; i.e. the learning system's actions influence its later inputs.
+        
+        
+    2. Does not have direct instructions as to what actions to take; instead it must discover which actions yield the most reward by trying them out.
+        
+        
+    3. Not knowing where the consequences of actions, including reward signals, play out over extended time periods.
+
+
+:::
+
+::::
+
+**Relevant trade-offs in Machine Learning**
+
+
++ Flexibility vs. interpretability.
+
+
++ Prediction vs. inference: high predictive power does not allow for proper inference. 
+
+
++ Goodness-of-fit vs. over-fitting: how do we know *when* the fit is good?
+
+
+### **An introduction to R programming**
+
+For the purposes of this course, we will be working with the integrated development environment (IDE) Rstudio. Make sure you have [downloaded it](https://www.rstudio.com/products/rstudio/download/) and have familiarised yourself with the interface before proceeding.
+
+**Features of R**
+
+R is a statistical programming language. As such, it understands and categorises its input as **data types**: 
+
+```{r}
+
+# Examples of data types
+
+# Numeric (or double): 
+numeric_vector <- c(1, 1.0, 65.5)
+print(numeric_vector)
+
+#Integers: 
+integer_vector <- c(1L, 3L, 45L)
+print(integer_vector)
+
+#Logical (or boolean): 
+boolean_vector <- c(TRUE, FALSE)
+print(boolean_vector)
+
+#Character: 
+character_vector <- c("Harry Potter", "Star Wars", "Lord of the Rings")
+print(character_vector)
+
+#Null: 
+NA
+```
+
+... and **data structures**
+
+```{r}
+
+# Examples of data structures
+
+#Vectors: think of a row, or a column of the same element.
+x <- c(1L,3L,5L,7L,9L) # we call this an integer vector
+y <- c(1.3, 1, 5, 7, 11.2) # we call this a numerical (or double) vector
+
+print(x)
+print(y)
+
+#Matrices: matrices have rows and columns containing elements of the same type.
+A <- matrix(1:9, ncol=3, nrow=3, byrow= TRUE)
+print(A)
+
+#Arrays: A vector is a one-dimensional array. A matrix is a two-dimensional array.
+#In short, an array is a collection of data of the same type.
+
+n <- 5*5*3 
+B <- array(1:n, c(5,5,3))
+print(B)
+
+#Lists: a list is a one-dimensional, heterogeneous data structure. Basically, 
+# it is an object that stores all object types. 
+
+my_list <- list(42, "The answer is", TRUE)
+print(my_list)
+
+#Data frames: a data frame is a list of  column vectors. Each vector must
+#contain the same data type, but the different vectors can store different 
+#data types. Note, however, that in a data france all vectors must have the same lenght. 
+
+a <- 1L:5L
+b <- c("a1", "b2", "c3", "d4", "e5")
+c <- c(TRUE, TRUE, FALSE, TRUE, FALSE)
+
+df <- as.data.frame(cbind(a,b,c))
+
+str(df)
+```
+From here on, we will write an R script together, and learn some basic commands and tools that will allow you to explore and manipulate data. Please note that this is **not** an exhaustive tutorial. It is nonetheless a good place to start.
+
+**1.Setting up the Rstudio working environment**
+It is good practice to make sure that the working environment is empty/clean before you start running any code.
+```{r}
+# The r base command rm() stands for remove
+rm(list = ls()) # this line indicates R to clear absolutely everything from the environment
+
+```
+Once that has been taken care of, you need to load the libraries you will be working with. While r base has a large number of commands to explore, wrangle, and manipulate data, the **open source** feature of R means that people all over the world are constantly working on packages and functions to make our lives easier. These can be used by calling the libraries in which they are stored:
+
+```{r}
+#  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
+library(tidyverse)
+library(data.table)
+
+```
+

@@ -7,6 +7,7 @@ navbar:
     left:
         - text: "Home"
           href: index.html
+          icon: fa-home
         - text: "1. Introduction"
           href: intro.html
         - text: "2. Regression I"
