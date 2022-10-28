@@ -197,7 +197,6 @@ setwd("~/Desktop/") #Note that
 Now that we have all the basic stuff set up, let's start with some basic r base commands that will allow us to explore our data. To do so, we will work with the toy data set *mtcars* that can be called from R without the need to upload data or call data from a website. 
 
 ```{r}
-mtcars # R core dataset
 
 # some basics to explore your data 
 str(mtcars) # show the structure of the object in a compact format
