@@ -93,7 +93,9 @@ For the purposes of this course, we will be working with the integrated developm
 
 **Features of R**
 
-R is a statistical programming language. As such, it understands and categorises its input as **data types**: 
+R is a statistical programming language. As such, it understands and categorises its input as **data types**:
+
+(Note that R is not too strict about data types, but you need to be able to identify them to use them in math operations.)
 
 ```{r}
 
@@ -119,7 +121,9 @@ print(character_vector)
 NA
 ```
 
-... and **data structures**
+... and **data structures**. A data structure is either homogeneous (all elements are of the
+same data type) or heterogeneous (elements can be of more than
+one data type).
 
 ```{r}
 
@@ -161,9 +165,13 @@ df <- as.data.frame(cbind(a,b,c))
 
 str(df)
 ```
+
+
 From here on, we will write an R script together, and learn some basic commands and tools that will allow you to explore and manipulate data. Please note that this is **not** an exhaustive tutorial. It is nonetheless a good place to start.
 
 **1.Setting up the Rstudio working environment**
+
+
 It is good practice to make sure that the working environment is empty/clean before you start running any code.
 ```{r}
 # The r base command rm() stands for remove
@@ -176,6 +184,188 @@ Once that has been taken care of, you need to load the libraries you will be wor
 #  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
 library(tidyverse)
 library(data.table)
+
+```
+If you're working with an imported data set, you should probably set up your working directory as well:
+```{r}
+setwd("~/Desktop/") #Note that
+```
+
+**2.R base commands for data set exploration**
+
+
+Now that we have all the basic stuff set up, let's start with some basic r base commands that will allow us to explore our data. To do so, we will work with the toy data set *mtcars* that can be called from R without the need to upload data or call data from a website. 
+
+```{r}
+mtcars # R core dataset
+
+# some basics to explore your data 
+str(mtcars) # show the structure of the object in a compact format
+dim(mtcars) # inspect the dimension of the dataset (returns #rows, #columns)
+class(mtcars) # evaluate the class of the object
+typeof(mtcars) # evaluate the type of the object. typeof returns R storage type (see: https://stackoverflow.com/questions/6258004/types-and-classes-of-variables)
+View(mtcars$mpg) # Try to avoid running this one in big and complex databases.
+length(mtcars$mpg) # evaluate the number of elements in vector mpg
+mean(mtcars$mpg) # mean of all elements in vector mpg
+sum(mtcars$mpg) # sum of all elements in vector mpg (similar to a column sum)
+sd(mtcars$mpg) # standard deviation
+median(mtcars$mpg) # median
+cor(mtcars$mpg, mtcars$wt) # default is pearson correlation, specify method within function to change it  
+table(mtcars$am) #categorical data in a table: counts
+prop.table(table(mtcars$am)) #categorical data in a table: proportions
+```
+
+**3.Objects and assignments**
+
+
+Another important feature of the R programming language is that it is *object oriented*. That means that, for the most part, for every function used, there must be an object assigned! Let's see an example of object assignment with a bivariate linear regression model:
+
+```{r}
+ols_model <- lm(mpg ~ wt, data = mtcars) # lm stands for linear model. In parenthesis, dv first, iv after
+summary(ols_model)
+```
+If you would like to see the results from your regression, you do not need to run it again. Instead, you print the object (ols_model) again. Similarly, you can call information stored in that object at any time, for example, the estimated coefficients:
+
+```{r}
+
+ols_model$coefficients
+```
+
+**4.Plotting with and without special libraries**
+
+
+Now, we've loaded a couple of libraries. Why did we do that if we've only used r base commands so far? We're going to exemplify the power of libraries by drawing plots using r base, and ggplot2. Ggplot2 is the plotting function from the tidyverse, and arguably one of the best data visualisation tools across programming languages. If you'd like to read more about why that is the case, check out the [Grammar of Graphics](https://ggplot2.tidyverse.org/).
+
+```{r}
+
+# Plotting with R base
+plot(mtcars$wt, mtcars$mpg, pch = 14, col = "grey", main ="Mileage and Weight")
+abline(ols_model, col ="blue") # Note that to add a line of best fit, we had to call our previously estimate linear model, stored in the ols_model object-
+# with base R, you cannot directly assign an object to a plot, you need to use...
+p_rbase <- recordPlot()
+# plot.new() # don't forget to clean up your device afterwards!
+```
+
+```{r}
+# Plotting with ggplot2, using the grammar of graphics
+# 1: linking plot to dataset, 2: definting (aes)thethic mapping, 3: use (geom)etric objects
+# such as points, bars, etc. as markers, 4: the plot has layers
+p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color is defined by car type (automatic 0 or manual 1)
+  geom_smooth(method = "lm", col= "orange") + # no need to run a regression ex-ante to add a line of best fit 
+  geom_point(alpha=0.5) + #alpha controls transparency of the geom
+  theme(legend.position="none") #removing legend
+print(p_ggplot)
+```
+Thanks to the grammar of graphics, we can continue to edit the plot after we have finished it. Perhaps we've come up with ideas to make it more stylish? Or helpful? Let's see an example:
+
+```{r}
+p_ggplot <- p_ggplot + theme(legend.position = "right") # I am saving it with the same name again, but I could easily choose another name and keep two versions of the plot. 
+print(p_ggplot) # the legend we just added is NOT helpful. Why is that? 
+
+# Remember when we talked about data types?!
+
+class(mtcars$am) #for legends, we might prefer levels/categories 
+mtcars$am <- as.factor(mtcars$am) # we have now transformed the numeric am into a factor variable 
+#the importance of assigning objects :)
+
+#  Now we can plot our scatterplot without issues
+p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth(method = "lm", col= "red") +
+  geom_point(alpha=0.5) +
+  theme(legend.position="right")
+print(p_ggplot)
+
+```
+
+**5.R base capabilities and reserved names**
+
+
+We've had some fun, now let's go back to some r base basics. These are going to be relevant for making algorithms of your own:
+
+```{r}
+
+## Arithmetic and other operations
+
+2+2 #addition
+5-2 #subtraction
+33.3/2 #division
+5^2 #exponentiation
+200 %/% 60 #integer division  [or, how many full hours in 200 minutes?]/aka quotient
+200 %% 60 #remainder [or, how many minutes are left over? ]
+
+## Logical operators
+
+34 < 35 #smaller than
+34 < 35 | 33 #smaller than OR than (returns true if it is smaller than any one of them)
+34 > 35 & 33 #bigger than AND than (returns true only if both conditions apply)
+34 != 34 #negation
+34 %in% 1:100 #value matching (is the object contained in the list of items?)
+`%ni%` <- Negate(`%in%`) #let's create a function for NOT IN
+1001 %ni% 1:100 # home-made function! :)
+34==34 #evaluation
+
+## Indexing
+
+# The tidyverse comes with a cool Starwars dataset (or tibble, in the tidyverse language. As long as you have loaded the tidyverse library, you can use it.
+
+starwars$name[1] #indexing: extract the first element in the name vector in the starwars dataframe
+starwars[1,1] #alternative indexing: extract the element of row 1, col 1
+starwars$name[2:4] # elements 2, 3, 4 of name vector
+starwars[,1] #extract all elements from column 1
+#notice that starwars is a tibble, not a dataframe, we'll see the implications of this later
+starwars[1,] #extract all elements from row 1
+starwars$height[starwars$height<150] # returns a logical vector TRUE for elements >150 in height vector
+starwars[c('height', 'name')] #returns c(oncatenated) vectors
+
+```
+
+We are now reaching the end of this brief introduction to R and Rstudio. We will not go into the fun stuff you can do with data.table, you can find that out on your own if you need to (but know it is a powerful data wrangling package), but we will go through the *Reserved Names* in R. These are names you cannot use for your objects, because they serve a programming purpose.
+
+```{r}
+# 1. not-observed data 
+# 1.1 NaN: results that cannot be reasonably defined
+h <- 0/0
+is.nan(h)
+class(h)
+print(h)
+
+# 1.2 NA: missing data
+colSums(is.na(starwars)) #How many missings in the starwars tibble*?
+mean(starwars$height) # Evaluation gives NA?
+is.na(starwars$height) # logical vector returns 6 true statements for is.na (coincides with colSums table)
+class(starwars$height) # class evaluation returns integer...
+mean(as.integer(starwars$height), na.rm = TRUE) # read as integer, ignore NAs :) (rm stands for remove)
+# missing values (NA) are regarded by R as non comparables, even to themselves
+
+# 2. if, else, ifelse, function, for, print, length (etc...)
+# these words are reserved for control flow and looping 
+
+# if else statements
+meanheight <- 174.358
+
+if ( meanheight < 175) {
+  print('very tall!')
+  } else {
+      print('average to normal height')
+    } 
+# a note on using if else: else should be on the same line as if, otherwise it is not recognized
+
+# home-made functions
+f1 <- function(x){
+  return(sum(x+1))
+}
+print(f1(5)) # returns value of x+1 when x = 5
+
+# for loops
+class(starwars$height) # if it is not integer or numeric, then transform it! 
+starwars$height <- as.numeric(as.character(starwars$height))
+starwars$height_judge = NA # if you're creating a new object, make sure you initialize it before running your loop
+
+for (i in 1:length(starwars$height)) {
+    
+    starwars$height_judge[i] <- ifelse(starwars$height[i]<100, "Short", "Tall")
+}
+print(starwars[c("name", "height_judge", "height")])
 
 ```
 

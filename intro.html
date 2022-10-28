@@ -373,6 +373,8 @@ proceeding.</p>
 <p><strong>Features of R</strong></p>
 <p>R is a statistical programming language. As such, it understands and
 categorises its input as <strong>data types</strong>:</p>
+<p>(Note that R is not too strict about data types, but you need to be
+able to identify them to use them in math operations.)</p>
 <pre class="r"><code># Examples of data types
 
 # Numeric (or double): 
@@ -394,7 +396,9 @@ print(character_vector)</code></pre>
 <pre class="r"><code>#Null: 
 NA</code></pre>
 <pre><code>## [1] NA</code></pre>
-<p>… and <strong>data structures</strong></p>
+<p>… and <strong>data structures</strong>. A data structure is either
+homogeneous (all elements are of the same data type) or heterogeneous
+(elements can be of more than one data type).</p>
 <pre class="r"><code># Examples of data structures
 
 #Vectors: think of a row, or a column of the same element.
@@ -476,9 +480,9 @@ str(df)</code></pre>
 basic commands and tools that will allow you to explore and manipulate
 data. Please note that this is <strong>not</strong> an exhaustive
 tutorial. It is nonetheless a good place to start.</p>
-<p><strong>1.Setting up the Rstudio working environment</strong> It is
-good practice to make sure that the working environment is empty/clean
-before you start running any code.</p>
+<p><strong>1.Setting up the Rstudio working environment</strong></p>
+<p>It is good practice to make sure that the working environment is
+empty/clean before you start running any code.</p>
 <pre class="r"><code># The r base command rm() stands for remove
 rm(list = ls()) # this line indicates R to clear absolutely everything from the environment</code></pre>
 <p>Once that has been taken care of, you need to load the libraries you
@@ -490,6 +494,338 @@ calling the libraries in which they are stored:</p>
 <pre class="r"><code>#  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
 library(tidyverse)
 library(data.table)</code></pre>
+<p>If you’re working with an imported data set, you should probably set
+up your working directory as well:</p>
+<pre class="r"><code>setwd(&quot;~/Desktop/&quot;) #Note that</code></pre>
+<p><strong>2.R base commands for data set exploration</strong></p>
+<p>Now that we have all the basic stuff set up, let’s start with some
+basic r base commands that will allow us to explore our data. To do so,
+we will work with the toy data set <em>mtcars</em> that can be called
+from R without the need to upload data or call data from a website.</p>
+<pre class="r"><code>mtcars # R core dataset</code></pre>
+<pre><code>##                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+## Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+## Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+## Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+## Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+## Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+## Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4
+## Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3
+## Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3
+## Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3
+## Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4
+## Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4
+## Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4
+## Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1
+## Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2
+## AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2
+## Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4
+## Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2
+## Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+## Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4
+## Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6
+## Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8
+## Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</code></pre>
+<pre class="r"><code># some basics to explore your data 
+str(mtcars) # show the structure of the object in a compact format</code></pre>
+<pre><code>## &#39;data.frame&#39;:    32 obs. of  11 variables:
+##  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+##  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+##  $ disp: num  160 160 108 258 360 ...
+##  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+##  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+##  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+##  $ qsec: num  16.5 17 18.6 19.4 17 ...
+##  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+##  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
+<pre class="r"><code>dim(mtcars) # inspect the dimension of the dataset (returns #rows, #columns)</code></pre>
+<pre><code>## [1] 32 11</code></pre>
+<pre class="r"><code>class(mtcars) # evaluate the class of the object</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>typeof(mtcars) # evaluate the type of the object. typeof returns R storage type (see: https://stackoverflow.com/questions/6258004/types-and-classes-of-variables)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre class="r"><code>View(mtcars$mpg) # Try to avoid running this one in big and complex databases.
+length(mtcars$mpg) # evaluate the number of elements in vector mpg</code></pre>
+<pre><code>## [1] 32</code></pre>
+<pre class="r"><code>mean(mtcars$mpg) # mean of all elements in vector mpg</code></pre>
+<pre><code>## [1] 20.09062</code></pre>
+<pre class="r"><code>sum(mtcars$mpg) # sum of all elements in vector mpg (similar to a column sum)</code></pre>
+<pre><code>## [1] 642.9</code></pre>
+<pre class="r"><code>sd(mtcars$mpg) # standard deviation</code></pre>
+<pre><code>## [1] 6.026948</code></pre>
+<pre class="r"><code>median(mtcars$mpg) # median</code></pre>
+<pre><code>## [1] 19.2</code></pre>
+<pre class="r"><code>cor(mtcars$mpg, mtcars$wt) # default is pearson correlation, specify method within function to change it  </code></pre>
+<pre><code>## [1] -0.8676594</code></pre>
+<pre class="r"><code>table(mtcars$am) #categorical data in a table: counts</code></pre>
+<pre><code>## 
+##  0  1 
+## 19 13</code></pre>
+<pre class="r"><code>prop.table(table(mtcars$am)) #categorical data in a table: proportions</code></pre>
+<pre><code>## 
+##       0       1 
+## 0.59375 0.40625</code></pre>
+<p><strong>3.Objects and assignments</strong></p>
+<p>Another important feature of the R programming language is that it is
+<em>object oriented</em>. That means that, for the most part, for every
+function used, there must be an object assigned! Let’s see an example of
+object assignment with a bivariate linear regression model:</p>
+<pre class="r"><code>ols_model &lt;- lm(mpg ~ wt, data = mtcars) # lm stands for linear model. In parenthesis, dv first, iv after
+summary(ols_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ wt, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.5432 -2.3647 -0.1252  1.4096  6.8727 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+## wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.046 on 30 degrees of freedom
+## Multiple R-squared:  0.7528, Adjusted R-squared:  0.7446 
+## F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+<p>If you would like to see the results from your regression, you do not
+need to run it again. Instead, you print the object (ols_model) again.
+Similarly, you can call information stored in that object at any time,
+for example, the estimated coefficients:</p>
+<pre class="r"><code>ols_model$coefficients</code></pre>
+<pre><code>## (Intercept)          wt 
+##   37.285126   -5.344472</code></pre>
+<p><strong>4.Plotting with and without special libraries</strong></p>
+<p>Now, we’ve loaded a couple of libraries. Why did we do that if we’ve
+only used r base commands so far? We’re going to exemplify the power of
+libraries by drawing plots using r base, and ggplot2. Ggplot2 is the
+plotting function from the tidyverse, and arguably one of the best data
+visualisation tools across programming languages. If you’d like to read
+more about why that is the case, check out the <a
+href="https://ggplot2.tidyverse.org/">Grammar of Graphics</a>.</p>
+<pre class="r"><code># Plotting with R base
+plot(mtcars$wt, mtcars$mpg, pch = 14, col = &quot;grey&quot;, main =&quot;Mileage and Weight&quot;)
+abline(ols_model, col =&quot;blue&quot;) # Note that to add a line of best fit, we had to call our previously estimate linear model, stored in the ols_model object-</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code># with base R, you cannot directly assign an object to a plot, you need to use...
+p_rbase &lt;- recordPlot()
+# plot.new() # don&#39;t forget to clean up your device afterwards!</code></pre>
+<pre class="r"><code># Plotting with ggplot2, using the grammar of graphics
+# 1: linking plot to dataset, 2: definting (aes)thethic mapping, 3: use (geom)etric objects
+# such as points, bars, etc. as markers, 4: the plot has layers
+p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color is defined by car type (automatic 0 or manual 1)
+  geom_smooth(method = &quot;lm&quot;, col= &quot;orange&quot;) + # no need to run a regression ex-ante to add a line of best fit 
+  geom_point(alpha=0.5) + #alpha controls transparency of the geom
+  theme(legend.position=&quot;none&quot;) #removing legend
+print(p_ggplot)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+Thanks to the grammar of graphics, we can continue to edit the plot
+after we have finished it. Perhaps we’ve come up with ideas to make it
+more stylish? Or helpful? Let’s see an example:</p>
+<pre class="r"><code>p_ggplot &lt;- p_ggplot + theme(legend.position = &quot;right&quot;) # I am saving it with the same name again, but I could easily choose another name and keep two versions of the plot. 
+print(p_ggplot) # the legend we just added is NOT helpful. Why is that? </code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code># Remember when we talked about data types?!
+
+class(mtcars$am) #for legends, we might prefer levels/categories </code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>mtcars$am &lt;- as.factor(mtcars$am) # we have now transformed the numeric am into a factor variable 
+#the importance of assigning objects :)
+
+#  Now we can plot our scatterplot without issues
+p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth(method = &quot;lm&quot;, col= &quot;red&quot;) +
+  geom_point(alpha=0.5) +
+  theme(legend.position=&quot;right&quot;)
+print(p_ggplot)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><strong>5.R base capabilities and reserved names</strong></p>
+<p>We’ve had some fun, now let’s go back to some r base basics. These
+are going to be relevant for making algorithms of your own:</p>
+<pre class="r"><code>## Arithmetic and other operations
+
+2+2 #addition</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>5-2 #subtraction</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>33.3/2 #division</code></pre>
+<pre><code>## [1] 16.65</code></pre>
+<pre class="r"><code>5^2 #exponentiation</code></pre>
+<pre><code>## [1] 25</code></pre>
+<pre class="r"><code>200 %/% 60 #integer division  [or, how many full hours in 200 minutes?]/aka quotient</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>200 %% 60 #remainder [or, how many minutes are left over? ]</code></pre>
+<pre><code>## [1] 20</code></pre>
+<pre class="r"><code>## Logical operators
+
+34 &lt; 35 #smaller than</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>34 &lt; 35 | 33 #smaller than OR than (returns true if it is smaller than any one of them)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>34 &gt; 35 &amp; 33 #bigger than AND than (returns true only if both conditions apply)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>34 != 34 #negation</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>34 %in% 1:100 #value matching (is the object contained in the list of items?)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>`%ni%` &lt;- Negate(`%in%`) #let&#39;s create a function for NOT IN
+1001 %ni% 1:100 # home-made function! :)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>34==34 #evaluation</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>## Indexing
+
+# The tidyverse comes with a cool Starwars dataset (or tibble, in the tidyverse language. As long as you have loaded the tidyverse library, you can use it.
+
+starwars$name[1] #indexing: extract the first element in the name vector in the starwars dataframe</code></pre>
+<pre><code>## [1] &quot;Luke Skywalker&quot;</code></pre>
+<pre class="r"><code>starwars[1,1] #alternative indexing: extract the element of row 1, col 1</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   name          
+##   &lt;chr&gt;         
+## 1 Luke Skywalker</code></pre>
+<pre class="r"><code>starwars$name[2:4] # elements 2, 3, 4 of name vector</code></pre>
+<pre><code>## [1] &quot;C-3PO&quot;       &quot;R2-D2&quot;       &quot;Darth Vader&quot;</code></pre>
+<pre class="r"><code>starwars[,1] #extract all elements from column 1</code></pre>
+<pre><code>## # A tibble: 87 x 1
+##    name              
+##    &lt;chr&gt;             
+##  1 Luke Skywalker    
+##  2 C-3PO             
+##  3 R2-D2             
+##  4 Darth Vader       
+##  5 Leia Organa       
+##  6 Owen Lars         
+##  7 Beru Whitesun lars
+##  8 R5-D4             
+##  9 Biggs Darklighter 
+## 10 Obi-Wan Kenobi    
+## # … with 77 more rows</code></pre>
+<pre class="r"><code>#notice that starwars is a tibble, not a dataframe, we&#39;ll see the implications of this later
+starwars[1,] #extract all elements from row 1</code></pre>
+<pre><code>## # A tibble: 1 x 14
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Luke…    172    77 blond      fair       blue              19 male  mascu…
+## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<pre class="r"><code>starwars$height[starwars$height&lt;150] # returns a logical vector TRUE for elements &gt;150 in height vector</code></pre>
+<pre><code>##  [1]  96  97  66  NA  88 137 112  94 122  79  96  NA  NA  NA  NA  NA</code></pre>
+<pre class="r"><code>starwars[c(&#39;height&#39;, &#39;name&#39;)] #returns c(oncatenated) vectors</code></pre>
+<pre><code>## # A tibble: 87 x 2
+##    height name              
+##     &lt;int&gt; &lt;chr&gt;             
+##  1    172 Luke Skywalker    
+##  2    167 C-3PO             
+##  3     96 R2-D2             
+##  4    202 Darth Vader       
+##  5    150 Leia Organa       
+##  6    178 Owen Lars         
+##  7    165 Beru Whitesun lars
+##  8     97 R5-D4             
+##  9    183 Biggs Darklighter 
+## 10    182 Obi-Wan Kenobi    
+## # … with 77 more rows</code></pre>
+<p>We are now reaching the end of this brief introduction to R and
+Rstudio. We will not go into the fun stuff you can do with data.table,
+you can find that out on your own if you need to (but know it is a
+powerful data wrangling package), but we will go through the
+<em>Reserved Names</em> in R. These are names you cannot use for your
+objects, because they serve a programming purpose.</p>
+<pre class="r"><code># 1. not-observed data 
+# 1.1 NaN: results that cannot be reasonably defined
+h &lt;- 0/0
+is.nan(h)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>class(h)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>print(h)</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<pre class="r"><code># 1.2 NA: missing data
+colSums(is.na(starwars)) #How many missings in the starwars tibble*?</code></pre>
+<pre><code>##       name     height       mass hair_color skin_color  eye_color birth_year 
+##          0          6         28          5          0          0         44 
+##        sex     gender  homeworld    species      films   vehicles  starships 
+##          4          4         10          4          0          0          0</code></pre>
+<pre class="r"><code>mean(starwars$height) # Evaluation gives NA?</code></pre>
+<pre><code>## [1] NA</code></pre>
+<pre class="r"><code>is.na(starwars$height) # logical vector returns 6 true statements for is.na (coincides with colSums table)</code></pre>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [49] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [61] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [73] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+## [85]  TRUE  TRUE FALSE</code></pre>
+<pre class="r"><code>class(starwars$height) # class evaluation returns integer...</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>mean(as.integer(starwars$height), na.rm = TRUE) # read as integer, ignore NAs :) (rm stands for remove)</code></pre>
+<pre><code>## [1] 174.358</code></pre>
+<pre class="r"><code># missing values (NA) are regarded by R as non comparables, even to themselves
+
+# 2. if, else, ifelse, function, for, print, length (etc...)
+# these words are reserved for control flow and looping 
+
+# if else statements
+meanheight &lt;- 174.358
+
+if ( meanheight &lt; 175) {
+  print(&#39;very tall!&#39;)
+  } else {
+      print(&#39;average to normal height&#39;)
+    } </code></pre>
+<pre><code>## [1] &quot;very tall!&quot;</code></pre>
+<pre class="r"><code># a note on using if else: else should be on the same line as if, otherwise it is not recognized
+
+# home-made functions
+f1 &lt;- function(x){
+  return(sum(x+1))
+}
+print(f1(5)) # returns value of x+1 when x = 5</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code># for loops
+class(starwars$height) # if it is not integer or numeric, then transform it! </code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>starwars$height &lt;- as.numeric(as.character(starwars$height))
+starwars$height_judge = NA # if you&#39;re creating a new object, make sure you initialize it before running your loop
+
+for (i in 1:length(starwars$height)) {
+    
+    starwars$height_judge[i] &lt;- ifelse(starwars$height[i]&lt;100, &quot;Short&quot;, &quot;Tall&quot;)
+}
+print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)])</code></pre>
+<pre><code>## # A tibble: 87 x 3
+##    name               height_judge height
+##    &lt;chr&gt;              &lt;chr&gt;         &lt;dbl&gt;
+##  1 Luke Skywalker     Tall            172
+##  2 C-3PO              Tall            167
+##  3 R2-D2              Short            96
+##  4 Darth Vader        Tall            202
+##  5 Leia Organa        Tall            150
+##  6 Owen Lars          Tall            178
+##  7 Beru Whitesun lars Tall            165
+##  8 R5-D4              Short            97
+##  9 Biggs Darklighter  Tall            183
+## 10 Obi-Wan Kenobi     Tall            182
+## # … with 77 more rows</code></pre>
 </div>
 </div>
 
