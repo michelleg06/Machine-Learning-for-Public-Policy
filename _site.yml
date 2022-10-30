@@ -1,7 +1,7 @@
 name: "ML4PP"
 output:
     html_document:
-        theme: spacelab
+        theme: flatly
         includes:
             after_body: footer.html
 navbar:
