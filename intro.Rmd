@@ -169,7 +169,7 @@ str(df)
 
 From here on, we will write an R script together, and learn some basic commands and tools that will allow you to explore and manipulate data. Please note that this is **not** an exhaustive tutorial. It is nonetheless a good place to start.
 
-**1.Setting up the Rstudio working environment**
+**1. Setting up the Rstudio working environment**
 
 
 It is good practice to make sure that the working environment is empty/clean before you start running any code.
@@ -191,7 +191,7 @@ If you're working with an imported data set, you should probably set up your wor
 setwd("~/Desktop/") #Note that
 ```
 
-**2.R base commands for data set exploration**
+**2. R base commands for data set exploration**
 
 
 Now that we have all the basic stuff set up, let's start with some basic r base commands that will allow us to explore our data. To do so, we will work with the toy data set *mtcars* that can be called from R without the need to upload data or call data from a website. 
@@ -214,7 +214,7 @@ table(mtcars$am) #categorical data in a table: counts
 prop.table(table(mtcars$am)) #categorical data in a table: proportions
 ```
 
-**3.Objects and assignments**
+**3. Objects and assignments**
 
 
 Another important feature of the R programming language is that it is *object oriented*. That means that, for the most part, for every function used, there must be an object assigned! Let's see an example of object assignment with a bivariate linear regression model:
@@ -230,7 +230,7 @@ If you would like to see the results from your regression, you do not need to ru
 ols_model$coefficients
 ```
 
-**4.Plotting with and without special libraries**
+**4. Plotting with and without special libraries**
 
 
 Now, we've loaded a couple of libraries. Why did we do that if we've only used r base commands so far? We're going to exemplify the power of libraries by drawing plots using r base, and ggplot2. Ggplot2 is the plotting function from the tidyverse, and arguably one of the best data visualisation tools across programming languages. If you'd like to read more about why that is the case, check out the [Grammar of Graphics](https://ggplot2.tidyverse.org/).
@@ -276,7 +276,7 @@ print(p_ggplot)
 
 ```
 
-**5.R base capabilities and reserved names**
+**5. R base capabilities and reserved names**
 
 
 We've had some fun, now let's go back to some r base basics. These are going to be relevant for making algorithms of your own:
