@@ -2,8 +2,8 @@ name: "ML4PP"
 output:
     html_document:
         theme: flatly
-            includes:
-                after_body: footer.html
+        includes:
+            after_body: footer.html
 navbar:
     title: "Machine Learning for Public Policy"
     left:

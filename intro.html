@@ -260,22 +260,22 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="intro.html">
-    <span class="fa fa-Cogs"></span>
+    <span class="fa fa-gear"></span>
      
-    1. Introduction
+    Introduction
   </a>
 </li>
 <li>
-  <a href="reg1.html">2. Regression I</a>
+  <a href="reg1.html">Regression I</a>
 </li>
 <li>
-  <a href="reg2.html">3. Regression II</a>
+  <a href="reg2.html">Regression II</a>
 </li>
 <li>
-  <a href="classification.html">4. Classification</a>
+  <a href="classification.html">Classification</a>
 </li>
 <li>
-  <a href="fairml.html">5. Fair ML/Data Ethics</a>
+  <a href="fairml.html">Fair ML/Data Ethics</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -484,7 +484,7 @@ str(df)</code></pre>
 basic commands and tools that will allow you to explore and manipulate
 data. Please note that this is <strong>not</strong> an exhaustive
 tutorial. It is nonetheless a good place to start.</p>
-<p><strong>1.Setting up the Rstudio working environment</strong></p>
+<p><strong>1. Setting up the Rstudio working environment</strong></p>
 <p>It is good practice to make sure that the working environment is
 empty/clean before you start running any code.</p>
 <pre class="r"><code># The r base command rm() stands for remove
@@ -501,7 +501,7 @@ library(data.table)</code></pre>
 <p>If you’re working with an imported data set, you should probably set
 up your working directory as well:</p>
 <pre class="r"><code>setwd(&quot;~/Desktop/&quot;) #Note that</code></pre>
-<p><strong>2.R base commands for data set exploration</strong></p>
+<p><strong>2. R base commands for data set exploration</strong></p>
 <p>Now that we have all the basic stuff set up, let’s start with some
 basic r base commands that will allow us to explore our data. To do so,
 we will work with the toy data set <em>mtcars</em> that can be called
@@ -547,7 +547,7 @@ length(mtcars$mpg) # evaluate the number of elements in vector mpg</code></pre>
 <pre><code>## 
 ##       0       1 
 ## 0.59375 0.40625</code></pre>
-<p><strong>3.Objects and assignments</strong></p>
+<p><strong>3. Objects and assignments</strong></p>
 <p>Another important feature of the R programming language is that it is
 <em>object oriented</em>. That means that, for the most part, for every
 function used, there must be an object assigned! Let’s see an example of
@@ -579,7 +579,7 @@ for example, the estimated coefficients:</p>
 <pre class="r"><code>ols_model$coefficients</code></pre>
 <pre><code>## (Intercept)          wt 
 ##   37.285126   -5.344472</code></pre>
-<p><strong>4.Plotting with and without special libraries</strong></p>
+<p><strong>4. Plotting with and without special libraries</strong></p>
 <p>Now, we’ve loaded a couple of libraries. Why did we do that if we’ve
 only used r base commands so far? We’re going to exemplify the power of
 libraries by drawing plots using r base, and ggplot2. Ggplot2 is the
@@ -626,7 +626,7 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
-<p><strong>5.R base capabilities and reserved names</strong></p>
+<p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
 are going to be relevant for making algorithms of your own:</p>
 <pre class="r"><code>## Arithmetic and other operations
@@ -798,6 +798,10 @@ print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)
 ## # … with 77 more rows</code></pre>
 </div>
 </div>
+
+<!DOCTYPE html>
+<p>Copyright &copy; 2022 Michelle González Amador and Stephan Dietrich. All rights reserved.</p>
+<p><a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy" class="fa fa-github"></a></p>
 
 
 
