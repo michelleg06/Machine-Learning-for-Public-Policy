@@ -2,10 +2,7 @@
 title: "Machine learning for policy analysis"
 #author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
-output:
-    prettydoc::html_pretty:
-        theme: architect
-        highlight: github
+output: html_document
 ---
 
 At its core, machine learning is primarily interested in making sense of complex data. A machine learning algorithm's job is to read data and identify patterns that can be used for: prediction, feature-relevance detection, model-free classification, among other actions. 

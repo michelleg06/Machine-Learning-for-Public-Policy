@@ -10,6 +10,7 @@ navbar:
           icon: fa-home
         - text: "1. Introduction"
           href: intro.html
+          icon: fa-Cogs
         - text: "2. Regression I"
           href: reg1.html
         - text: "3. Regression II"
