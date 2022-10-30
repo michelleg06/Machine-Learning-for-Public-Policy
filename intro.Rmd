@@ -52,7 +52,7 @@ where $u$ is an error term.
 **Unsupervised Learning**:
 
 
-Unsupervised learning is known for reading data without labels, e.g. pictures. 
+Unsupervised learning is known for reading data without labels; it is more computationally complex than supervised learning (because it will look for all possible patterns in the data), but it is also more flexible than supervised learning. You can think of clustering, anomaly detection, neural networks, etc.  
 :::
 
 ::: {}
@@ -62,18 +62,22 @@ Unsupervised learning is known for reading data without labels, e.g. pictures.
 Reinforcement learning is categorised as Artificial Intelligence. It is more focused on goal-directed learning from interaction than are other approaches to machine learning. As per [Sutton and Barto (2015)](https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf), the three most distinguishing features of reinforcement learning are:
 
 
-    1. Being closed-loop; i.e. the learning system's actions influence its later inputs.
+1. Being closed-loop; i.e. the learning system's actions influence its later inputs.
         
         
-    2. Does not have direct instructions as to what actions to take; instead it must discover which actions yield the most reward by trying them out.
+2. Does not have direct instructions as to what actions to take; instead it must discover which actions yield the most reward by trying them out.
         
         
-    3. Not knowing where the consequences of actions, including reward signals, play out over extended time periods.
+3. Not knowing where the consequences of actions, including reward signals, play out over extended time periods.
 
 
 :::
 
 ::::
+
+```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
+knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/sup_unsup_re.png")
+```
 
 **Relevant trade-offs in Machine Learning**
 
