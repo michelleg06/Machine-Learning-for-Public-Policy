@@ -12,13 +12,17 @@ navbar:
           icon: fa-home
         - text: "Introduction"
           href: intro.html
-          icon: fa-gear
+          icon: fa-duotone fa-robot
         - text: "Regression I"
           href: reg1.html
+          icon: fa-gear
         - text: "Regression II"
           href: reg2.html
+          icon: fa-gear
         - text: "Classification"
           href: classification.html
+          icon: fa-gear
         - text: "Fair ML/Data Ethics"
           href: fairml.html
+          icon: fa-gear
 output_dir: "." # if publishing on Github pages

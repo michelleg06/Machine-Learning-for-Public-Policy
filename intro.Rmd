@@ -24,7 +24,7 @@ Empirical Public Policy research is primarily concerned with causality and under
 + Predicting highest risk youth for targeting interventions ([Chandler,Levitt, and List 2011](https://www.aeaweb.org/articles?id=10.1257/aer.101.3.288)).
 
 
-**How does a Machine Learn?**
+***How does a Machine Learn?***
 
 
 Machine learning is classified in three major branches: 
@@ -74,15 +74,17 @@ Reinforcement learning is categorised as Artificial Intelligence. It is more foc
 :::
 
 ::::
-
+<center>
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
 knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/sup_unsup_re.png")
 ```
+</center>
+
 
 **Relevant trade-offs in Machine Learning**
 
 
-+ Flexibility vs. interpretability.
++ Flexibility vs. interpretability: not all found patterns are directly interpretable.
 
 
 + Prediction vs. inference: high predictive power does not allow for proper inference. 
@@ -99,12 +101,11 @@ For the purposes of this course, we will be working with the integrated developm
 
 R is a statistical programming language. As such, it understands and categorises its input as **data types**:
 
-(Note that R is not too strict about data types, but you need to be able to identify them to use them in math operations.)
+*(Note that R is not too strict about data types, but you need to be able to identify them to use them in math operations.)*
 
+
+Exammples of data types:
 ```{r}
-
-# Examples of data types
-
 # Numeric (or double): 
 numeric_vector <- c(1, 1.0, 65.5)
 print(numeric_vector)
@@ -121,57 +122,82 @@ print(boolean_vector)
 character_vector <- c("Harry Potter", "Star Wars", "Lord of the Rings")
 print(character_vector)
 
-#Null: 
+#Factor: (also knows as categorical variables)
+factor_vector <- as.factor(c("male","female"))
+print(factor_vector)
+
+#Missing: 
 NA
 ```
 
-... and **data structures**. A data structure is either homogeneous (all elements are of the
-same data type) or heterogeneous (elements can be of more than
-one data type).
+... and **data structures**. A data structure is either homogeneous (all elements are of the same data type) or heterogeneous (elements can be of more than one data type).
+
+
+Examples of data structures:
+
+
+*Vectors*: think of a row, or a column of the same element.
 
 ```{r}
 
-# Examples of data structures
-
-#Vectors: think of a row, or a column of the same element.
+#Vectors: 
 x <- c(1L,3L,5L,7L,9L) # we call this an integer vector
 y <- c(1.3, 1, 5, 7, 11.2) # we call this a numerical (or double) vector
 
 print(x)
 print(y)
+```
 
-#Matrices: matrices have rows and columns containing elements of the same type.
+
+*Matrices*: they have rows and columns containing elements of the same type.
+```{r}
+#Matrices: 
 A <- matrix(1:9, ncol=3, nrow=3, byrow= TRUE)
 print(A)
+```
 
-#Arrays: A vector is a one-dimensional array. A matrix is a two-dimensional array.
-#In short, an array is a collection of data of the same type.
 
+*Arrays*: A vector is a one-dimensional array. A matrix is a two-dimensional array. In short, an array is a collection of data of the same type.
+```{r}
+#Arrays:
 n <- 5*5*3 
 B <- array(1:n, c(5,5,3))
 print(B)
+```
 
-#Lists: a list is a one-dimensional, heterogeneous data structure. Basically, 
-# it is an object that stores all object types. 
 
+*Lists*: a list is a one-dimensional, heterogeneous data structure. Basically, it is an object that stores all object types. 
+```{r}
 my_list <- list(42, "The answer is", TRUE)
 print(my_list)
+```
 
-#Data frames: a data frame is a list of  column vectors. Each vector must
-#contain the same data type, but the different vectors can store different 
-#data types. Note, however, that in a data france all vectors must have the same lenght. 
 
+*Data frames*: a data frame is a list of  column vectors. Each vector must contain the same data type, but the different vectors can store different data types. Note, however, that in a data frame all vectors must have the same length. 
+```{r}
 a <- 1L:5L
+class(a)
 b <- c("a1", "b2", "c3", "d4", "e5")
+class(b)
 c <- c(TRUE, TRUE, FALSE, TRUE, FALSE)
+class(c)
 
 df <- as.data.frame(cbind(a,b,c))
+
+str(df)
+```
+Notice that even though vector in in dataframe df is of class integer, vector b is of class character, and vector c is of class boolean, when binding them together they have been coerced into factors. You'll have to manually transform them into their original class to be able to use them in math operations.
+```{r}
+df$a <- as.integer(df$a)
+df$b <- as.character(df$b)
+df$c <- as.logical(df$c)
 
 str(df)
 ```
 
 
 From here on, we will write an R script together, and learn some basic commands and tools that will allow you to explore and manipulate data. Please note that this is **not** an exhaustive tutorial. It is nonetheless a good place to start.
+
 
 **1. Setting up the Rstudio working environment**
 
@@ -192,8 +218,11 @@ library(data.table)
 ```
 If you're working with an imported data set, you should probably set up your working directory as well:
 ```{r}
-setwd("~/Desktop/") #Note that
+setwd("~/Desktop/") #Note that the squiggly symbol is a shortcut for Mac users, if you're a Windows user, please write the whole path.
 ```
+
+From the working directory, you can call documents: .csv files, .xls and .xlsx, images, .txt, .dta (yes, STATA files!), and more. You'll need to use the right libraries to do so. For instance: *readxl* (from the Tidyverse) uses the function *read_excel()* to import .xlsx and .xls files. If you want to export a data frame in .xlsx format, you can use the package *write_xlsx()*.
+
 
 **2. R base commands for data set exploration**
 
@@ -205,43 +234,44 @@ Now that we have all the basic stuff set up, let's start with some basic r base 
 # some basics to explore your data 
 str(mtcars) # show the structure of the object in a compact format
 dim(mtcars) # inspect the dimension of the dataset (returns #rows, #columns)
-class(mtcars) # evaluate the class of the object
-typeof(mtcars) # evaluate the type of the object. typeof returns R storage type (see: https://stackoverflow.com/questions/6258004/types-and-classes-of-variables)
+class(mtcars) # evaluate the class of the object (e.g. numeric, factor, character...)
 View(mtcars$mpg) # Try to avoid running this one in big and complex databases.
 length(mtcars$mpg) # evaluate the number of elements in vector mpg
 mean(mtcars$mpg) # mean of all elements in vector mpg
 sum(mtcars$mpg) # sum of all elements in vector mpg (similar to a column sum)
 sd(mtcars$mpg) # standard deviation
 median(mtcars$mpg) # median
-cor(mtcars$mpg, mtcars$wt) # default is pearson correlation, specify method within function to change it  
+cor(mtcars$mpg, mtcars$wt) # default is pearson correlation, specify method within function to change it.  
 table(mtcars$am) #categorical data in a table: counts
 prop.table(table(mtcars$am)) #categorical data in a table: proportions
 ```
 
+
 **3. Objects and assignments**
 
 
-Another important feature of the R programming language is that it is *object oriented*. That means that, for the most part, for every function used, there must be an object assigned! Let's see an example of object assignment with a bivariate linear regression model:
+Another important feature of the R programming language is that it is *object oriented*. For the most part, for every function used, there must be an object assigned! Let's see an example of object assignment with a bivariate linear regression model:
 
 ```{r}
-ols_model <- lm(mpg ~ wt, data = mtcars) # lm stands for linear model. In parenthesis, dv first, iv after
+ols_model <- lm(mpg ~ wt, data = mtcars) # lm stands for linear model. In parenthesis, dependent variable first, independent variable after the squiggly.
 summary(ols_model)
 ```
-If you would like to see the results from your regression, you do not need to run it again. Instead, you print the object (ols_model) again. Similarly, you can call information stored in that object at any time, for example, the estimated coefficients:
+If you would like to see the results from your regression, you do not need to run it again. Instead, you print the object (ols_model) you have assigned for the linear model function. Similarly, you can call information stored in that object at any time, for example, the estimated coefficients:
 
 ```{r}
-
 ols_model$coefficients
 ```
+*If you want to read more about object oriented programming in R, check out [Hadley Whickam's site](https://adv-r.hadley.nz/oo.html)*
+
 
 **4. Plotting with and without special libraries**
 
 
-Now, we've loaded a couple of libraries. Why did we do that if we've only used r base commands so far? We're going to exemplify the power of libraries by drawing plots using r base, and ggplot2. Ggplot2 is the plotting function from the tidyverse, and arguably one of the best data visualisation tools across programming languages. If you'd like to read more about why that is the case, check out the [Grammar of Graphics](https://ggplot2.tidyverse.org/).
+We had previously loaded a couple of libraries. Why did we do that if we've only used r base commands so far? We're going to exemplify the power of libraries by drawing plots using r base, and ggplot2. Ggplot2 is the plotting function from the Tidyverse, and arguably one of the best data visualisation tools across programming languages. If you'd like to read more about why that is the case, check out the [Grammar of Graphics](https://ggplot2.tidyverse.org/) site.
 
+
+Plotting with R base
 ```{r}
-
-# Plotting with R base
 plot(mtcars$wt, mtcars$mpg, pch = 14, col = "grey", main ="Mileage and Weight")
 abline(ols_model, col ="blue") # Note that to add a line of best fit, we had to call our previously estimate linear model, stored in the ols_model object-
 # with base R, you cannot directly assign an object to a plot, you need to use...
@@ -249,16 +279,22 @@ p_rbase <- recordPlot()
 # plot.new() # don't forget to clean up your device afterwards!
 ```
 
+Plotting with ggplot2, using the grammar of graphics
 ```{r}
-# Plotting with ggplot2, using the grammar of graphics
-# 1: linking plot to dataset, 2: definting (aes)thethic mapping, 3: use (geom)etric objects
-# such as points, bars, etc. as markers, 4: the plot has layers
+# Steps in the Grammar of Graphics
+# 1: linking plot to dataset, 
+# 2: defining (aes)thetic mapping, 
+# 3: use (geom)etric objects such as points, bars, etc. as markers, 
+# 4: the plot has layers
+
 p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color is defined by car type (automatic 0 or manual 1)
   geom_smooth(method = "lm", col= "orange") + # no need to run a regression ex-ante to add a line of best fit 
-  geom_point(alpha=0.5) + #alpha controls transparency of the geom
+  geom_point(alpha=0.5) + #alpha controls transparency of the geom (a.k.a. data point)
   theme(legend.position="none") #removing legend
 print(p_ggplot)
 ```
+
+
 Thanks to the grammar of graphics, we can continue to edit the plot after we have finished it. Perhaps we've come up with ideas to make it more stylish? Or helpful? Let's see an example:
 
 ```{r}
@@ -275,19 +311,21 @@ mtcars$am <- as.factor(mtcars$am) # we have now transformed the numeric am into 
 p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
   geom_smooth(method = "lm", col= "red") +
   geom_point(alpha=0.5) +
-  theme(legend.position="right")
+  theme(legend.position="right") +
+  theme_classic()
 print(p_ggplot)
 
 ```
+
 
 **5. R base capabilities and reserved names**
 
 
 We've had some fun, now let's go back to some r base basics. These are going to be relevant for making algorithms of your own:
 
-```{r}
+*Arithmetic and other operations*
 
-## Arithmetic and other operations
+```{r}
 
 2+2 #addition
 5-2 #subtraction
@@ -295,9 +333,11 @@ We've had some fun, now let's go back to some r base basics. These are going to 
 5^2 #exponentiation
 200 %/% 60 #integer division  [or, how many full hours in 200 minutes?]/aka quotient
 200 %% 60 #remainder [or, how many minutes are left over? ]
+```
 
-## Logical operators
+*Logical operators*
 
+```{r}
 34 < 35 #smaller than
 34 < 35 | 33 #smaller than OR than (returns true if it is smaller than any one of them)
 34 > 35 & 33 #bigger than AND than (returns true only if both conditions apply)
@@ -306,11 +346,13 @@ We've had some fun, now let's go back to some r base basics. These are going to 
 `%ni%` <- Negate(`%in%`) #let's create a function for NOT IN
 1001 %ni% 1:100 # home-made function! :)
 34==34 #evaluation
+```
 
-## Indexing
 
-# The tidyverse comes with a cool Starwars dataset (or tibble, in the tidyverse language. As long as you have loaded the tidyverse library, you can use it.
+*Indexing*
+The tidyverse comes with a cool Starwars dataframe (or tibble, in the tidyverse language. As long as you have loaded the tidyverse library, you can use it.
 
+```{r}
 starwars$name[1] #indexing: extract the first element in the name vector in the starwars dataframe
 starwars[1,1] #alternative indexing: extract the element of row 1, col 1
 starwars$name[2:4] # elements 2, 3, 4 of name vector
@@ -322,10 +364,11 @@ starwars[c('height', 'name')] #returns c(oncatenated) vectors
 
 ```
 
-We are now reaching the end of this brief introduction to R and Rstudio. We will not go into the fun stuff you can do with data.table, you can find that out on your own if you need to (but know it is a powerful data wrangling package), but we will go through the *Reserved Names* in R. These are names you cannot use for your objects, because they serve a programming purpose.
+We are now reaching the end of this brief introduction to R and Rstudio. We will not go into the fun stuff you can do with data.table, you can find that out on your own if you need to (but know it is a powerful data wrangling package), and instead we will finalise with *Reserved Names* in R. These are names you cannot use for your objects, because they serve a programming purpose.
 
+
+*1. Not-observed data* 
 ```{r}
-# 1. not-observed data 
 # 1.1 NaN: results that cannot be reasonably defined
 h <- 0/0
 is.nan(h)
@@ -334,24 +377,25 @@ print(h)
 
 # 1.2 NA: missing data
 colSums(is.na(starwars)) #How many missings in the starwars tibble*?
-mean(starwars$height) # Evaluation gives NA?
+mean(starwars$height) # evaluation gives NA? Does that mean that the height vector is empty?!
 is.na(starwars$height) # logical vector returns 6 true statements for is.na (coincides with colSums table)
 class(starwars$height) # class evaluation returns integer...
 mean(as.integer(starwars$height), na.rm = TRUE) # read as integer, ignore NAs :) (rm stands for remove)
-# missing values (NA) are regarded by R as non comparables, even to themselves
+# missing values (NA) are regarded by R as non comparables, even to themselves, so if you ever encounter a missing values in a vector, make sure tto explicitly tell the function you are using what to do with them.
+```
 
-# 2. if, else, ifelse, function, for, print, length (etc...)
-# these words are reserved for control flow and looping 
-
+*2. if, else, ifelse, function, for, print, length (etc...)*
+These words are reserved for control flow and looping. 
+```{r}
 # if else statements
 meanheight <- 174.358
 
 if ( meanheight < 175) {
   print('very tall!')
   } else {
-      print('average to normal height')
+      print('average height')
     } 
-# a note on using if else: else should be on the same line as if, otherwise it is not recognized
+# a note on using if else: else should be on the same line as if, otherwise it is not recognised
 
 # home-made functions
 f1 <- function(x){
@@ -361,8 +405,8 @@ print(f1(5)) # returns value of x+1 when x = 5
 
 # for loops
 class(starwars$height) # if it is not integer or numeric, then transform it! 
-starwars$height <- as.numeric(as.character(starwars$height))
-starwars$height_judge = NA # if you're creating a new object, make sure you initialize it before running your loop
+starwars$height <- as.numeric(as.character(starwars$height)) # transforming the height vector to numeric
+starwars$height_judge = NA # if you're using a new object within a for loop, make sure you initialize it before running it
 
 for (i in 1:length(starwars$height)) {
     
