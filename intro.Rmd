@@ -186,7 +186,7 @@ df <- as.data.frame(cbind(a,b,c))
 
 str(df)
 ```
-Notice that even though vector in in dataframe df is of class integer, vector b is of class character, and vector c is of class boolean, when binding them together they have been coerced into factors. You'll have to manually transform them into their original class to be able to use them in math operations.
+Notice that even though vector *a* in dataframe *df* is of class integer, vector *b* is of class character, and vector ^*c* is of class boolean/logical, when binding them together they have been coerced into factors. You'll have to manually transform them into their original class to be able to use them in math operations.
 ```{r}
 df$a <- as.integer(df$a)
 df$b <- as.character(df$b)
@@ -312,8 +312,25 @@ p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
   geom_smooth(method = "lm", col= "red") +
   geom_point(alpha=0.5) +
   theme(legend.position="right") +
-  theme_classic()
+  theme_classic() 
+
 print(p_ggplot)
+
+# Shall we continue?
+
+p_ggplot <- p_ggplot + ggtitle("Scatterplot of mileage vs weight of car") +
+    xlab("Weight of car") + ylab("Miles per gallon") +
+    theme(plot.title = element_text(color="black", size=14, face="bold", hjust = 0.5))
+
+
+p_ggplot <- p_ggplot + scale_colour_manual(name = "Automatic or Manual", 
+                               labels = c("0.Automatic", "1.Manual"),
+                               values = c("darkorange2", "darkgoldenrod1"))
+
+print(p_ggplot)
+
+
+
 
 ```
 
@@ -350,14 +367,16 @@ We've had some fun, now let's go back to some r base basics. These are going to 
 
 
 *Indexing*
-The tidyverse comes with a cool Starwars dataframe (or tibble, in the tidyverse language. As long as you have loaded the tidyverse library, you can use it.
+
+
+The tidyverse comes with a cool Starwars dataframe (or tibble, in the tidyverse language). As long as you have loaded the tidyverse library, you can use it.
 
 ```{r}
-starwars$name[1] #indexing: extract the first element in the name vector in the starwars dataframe
+head(starwars) # print the first 5 elements of the dataframe/tibble
+starwars$name[1] #indexing: extract the first element in the "name" vector from the starwars dataframe
 starwars[1,1] #alternative indexing: extract the element of row 1, col 1
-starwars$name[2:4] # elements 2, 3, 4 of name vector
+starwars$name[2:4] # elements 2, 3, 4 of "name" vector
 starwars[,1] #extract all elements from column 1
-#notice that starwars is a tibble, not a dataframe, we'll see the implications of this later
 starwars[1,] #extract all elements from row 1
 starwars$height[starwars$height<150] # returns a logical vector TRUE for elements >150 in height vector
 starwars[c('height', 'name')] #returns c(oncatenated) vectors

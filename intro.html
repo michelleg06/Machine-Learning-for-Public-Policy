@@ -523,11 +523,11 @@ str(df)</code></pre>
 ##  $ a: Factor w/ 5 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5
 ##  $ b: Factor w/ 5 levels &quot;a1&quot;,&quot;b2&quot;,&quot;c3&quot;,..: 1 2 3 4 5
 ##  $ c: Factor w/ 2 levels &quot;FALSE&quot;,&quot;TRUE&quot;: 2 2 1 2 1</code></pre>
-<p>Notice that even though vector in in dataframe df is of class
-integer, vector b is of class character, and vector c is of class
-boolean, when binding them together they have been coerced into factors.
-You’ll have to manually transform them into their original class to be
-able to use them in math operations.</p>
+<p>Notice that even though vector <em>a</em> in dataframe <em>df</em> is
+of class integer, vector <em>b</em> is of class character, and vector
+^<em>c</em> is of class boolean/logical, when binding them together they
+have been coerced into factors. You’ll have to manually transform them
+into their original class to be able to use them in math operations.</p>
 <pre class="r"><code>df$a &lt;- as.integer(df$a)
 df$b &lt;- as.character(df$b)
 df$c &lt;- as.logical(df$c)
@@ -692,10 +692,25 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
   geom_smooth(method = &quot;lm&quot;, col= &quot;red&quot;) +
   geom_point(alpha=0.5) +
   theme(legend.position=&quot;right&quot;) +
-  theme_classic()
+  theme_classic() 
+
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<pre class="r"><code># Shall we continue?
+
+p_ggplot &lt;- p_ggplot + ggtitle(&quot;Scatterplot of mileage vs weight of car&quot;) +
+    xlab(&quot;Weight of car&quot;) + ylab(&quot;Miles per gallon&quot;) +
+    theme(plot.title = element_text(color=&quot;black&quot;, size=14, face=&quot;bold&quot;, hjust = 0.5))
+
+
+p_ggplot &lt;- p_ggplot + scale_colour_manual(name = &quot;Automatic or Manual&quot;, 
+                               labels = c(&quot;0.Automatic&quot;, &quot;1.Manual&quot;),
+                               values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
+
+print(p_ggplot)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
 are going to be relevant for making algorithms of your own:</p>
@@ -728,17 +743,30 @@ are going to be relevant for making algorithms of your own:</p>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>34==34 #evaluation</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p><em>Indexing</em> The tidyverse comes with a cool Starwars dataframe
-(or tibble, in the tidyverse language. As long as you have loaded the
-tidyverse library, you can use it.</p>
-<pre class="r"><code>starwars$name[1] #indexing: extract the first element in the name vector in the starwars dataframe</code></pre>
+<p><em>Indexing</em></p>
+<p>The tidyverse comes with a cool Starwars dataframe (or tibble, in the
+tidyverse language). As long as you have loaded the tidyverse library,
+you can use it.</p>
+<pre class="r"><code>head(starwars) # print the first 5 elements of the dataframe/tibble</code></pre>
+<pre><code>## # A tibble: 6 x 14
+##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Luke…    172    77 blond      fair       blue            19   male  mascu…
+## 2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
+## 3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
+## 4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
+## 5 Leia…    150    49 brown      light      brown           19   fema… femin…
+## 6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
+## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<pre class="r"><code>starwars$name[1] #indexing: extract the first element in the &quot;name&quot; vector from the starwars dataframe</code></pre>
 <pre><code>## [1] &quot;Luke Skywalker&quot;</code></pre>
 <pre class="r"><code>starwars[1,1] #alternative indexing: extract the element of row 1, col 1</code></pre>
 <pre><code>## # A tibble: 1 x 1
 ##   name          
 ##   &lt;chr&gt;         
 ## 1 Luke Skywalker</code></pre>
-<pre class="r"><code>starwars$name[2:4] # elements 2, 3, 4 of name vector</code></pre>
+<pre class="r"><code>starwars$name[2:4] # elements 2, 3, 4 of &quot;name&quot; vector</code></pre>
 <pre><code>## [1] &quot;C-3PO&quot;       &quot;R2-D2&quot;       &quot;Darth Vader&quot;</code></pre>
 <pre class="r"><code>starwars[,1] #extract all elements from column 1</code></pre>
 <pre><code>## # A tibble: 87 x 1
@@ -755,8 +783,7 @@ tidyverse library, you can use it.</p>
 ##  9 Biggs Darklighter 
 ## 10 Obi-Wan Kenobi    
 ## # … with 77 more rows</code></pre>
-<pre class="r"><code>#notice that starwars is a tibble, not a dataframe, we&#39;ll see the implications of this later
-starwars[1,] #extract all elements from row 1</code></pre>
+<pre class="r"><code>starwars[1,] #extract all elements from row 1</code></pre>
 <pre><code>## # A tibble: 1 x 14
 ##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
 ##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
