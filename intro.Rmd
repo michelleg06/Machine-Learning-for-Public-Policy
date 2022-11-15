@@ -435,3 +435,4 @@ print(starwars[c("name", "height_judge", "height")])
 
 ```
 
+### **Merging datasets in R: a practical example** 
