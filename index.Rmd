@@ -59,6 +59,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 - McBride, L., & Nichols, A. (2018). [Retooling poverty targeting using out-of-sample validation and machine learning.](https://academic.oup.com/wber/article-abstract/32/3/531/2447896?redirectedFrom=fulltext) The World Bank Economic Review, 32(3), 531-550.pter 5.1
 
 **Workshop: 28 November, 3pm**
+
 A gentle introduction to R and Rstudio
 
 
@@ -76,6 +77,7 @@ A gentle introduction to R and Rstudio
 - Varian, Hal R. 2014. ["Big Data: New Tricks for Econometrics."](https://www.aeaweb.org/articles?id=10.1257/jep.28.2.3) Journal of Economic Perspectives, 28 (2): 3-28.
 
 **Workshop:**
+
 LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
 ## 3. Regression (II)
@@ -126,6 +128,7 @@ LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
 
 **Guest Lecture: 14 December 3pm**
+
 Algorithmic Fairness, by Dr. [Juba Ziani](https://www.isye.gatech.edu/users/juba-ziani) from Georgia Tech.
 
 

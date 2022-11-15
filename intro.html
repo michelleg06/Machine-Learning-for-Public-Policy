@@ -748,28 +748,29 @@ are going to be relevant for making algorithms of your own:</p>
 tidyverse language). As long as you have loaded the tidyverse library,
 you can use it.</p>
 <pre class="r"><code>head(starwars) # print the first 5 elements of the dataframe/tibble</code></pre>
-<pre><code>## # A tibble: 6 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Luke…    172    77 blond      fair       blue            19   male  mascu…
-## 2 C-3PO    167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
-## 3 R2-D2     96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
-## 4 Dart…    202   136 none       white      yellow          41.9 male  mascu…
-## 5 Leia…    150    49 brown      light      brown           19   fema… femin…
-## 6 Owen…    178   120 brown, gr… light      blue            52   male  mascu…
-## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<pre><code>## # A tibble: 6 × 14
+##   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+## 1 Luke Skywal…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
+## 2 C-3PO           167    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi…
+## 3 R2-D2            96    32 &lt;NA&gt;    white,… red        33   none  mascu… Naboo  
+## 4 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
+## 5 Leia Organa     150    49 brown   light   brown      19   fema… femin… Aldera…
+## 6 Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…
+## # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
+## #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
+## #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 <pre class="r"><code>starwars$name[1] #indexing: extract the first element in the &quot;name&quot; vector from the starwars dataframe</code></pre>
 <pre><code>## [1] &quot;Luke Skywalker&quot;</code></pre>
 <pre class="r"><code>starwars[1,1] #alternative indexing: extract the element of row 1, col 1</code></pre>
-<pre><code>## # A tibble: 1 x 1
+<pre><code>## # A tibble: 1 × 1
 ##   name          
 ##   &lt;chr&gt;         
 ## 1 Luke Skywalker</code></pre>
 <pre class="r"><code>starwars$name[2:4] # elements 2, 3, 4 of &quot;name&quot; vector</code></pre>
 <pre><code>## [1] &quot;C-3PO&quot;       &quot;R2-D2&quot;       &quot;Darth Vader&quot;</code></pre>
 <pre class="r"><code>starwars[,1] #extract all elements from column 1</code></pre>
-<pre><code>## # A tibble: 87 x 1
+<pre><code>## # A tibble: 87 × 1
 ##    name              
 ##    &lt;chr&gt;             
 ##  1 Luke Skywalker    
@@ -784,16 +785,17 @@ you can use it.</p>
 ## 10 Obi-Wan Kenobi    
 ## # … with 77 more rows</code></pre>
 <pre class="r"><code>starwars[1,] #extract all elements from row 1</code></pre>
-<pre><code>## # A tibble: 1 x 14
-##   name  height  mass hair_color skin_color eye_color birth_year sex   gender
-##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
-## 1 Luke…    172    77 blond      fair       blue              19 male  mascu…
-## # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
-## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<pre><code>## # A tibble: 1 × 14
+##   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
+##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
+## 1 Luke Skywal…    172    77 blond   fair    blue         19 male  mascu… Tatooi…
+## # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
+## #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
+## #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
 <pre class="r"><code>starwars$height[starwars$height&lt;150] # returns a logical vector TRUE for elements &gt;150 in height vector</code></pre>
 <pre><code>##  [1]  96  97  66  NA  88 137 112  94 122  79  96  NA  NA  NA  NA  NA</code></pre>
 <pre class="r"><code>starwars[c(&#39;height&#39;, &#39;name&#39;)] #returns c(oncatenated) vectors</code></pre>
-<pre><code>## # A tibble: 87 x 2
+<pre><code>## # A tibble: 87 × 2
 ##    height name              
 ##     &lt;int&gt; &lt;chr&gt;             
 ##  1    172 Luke Skywalker    
@@ -874,7 +876,7 @@ for (i in 1:length(starwars$height)) {
     starwars$height_judge[i] &lt;- ifelse(starwars$height[i]&lt;100, &quot;Short&quot;, &quot;Tall&quot;)
 }
 print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)])</code></pre>
-<pre><code>## # A tibble: 87 x 3
+<pre><code>## # A tibble: 87 × 3
 ##    name               height_judge height
 ##    &lt;chr&gt;              &lt;chr&gt;         &lt;dbl&gt;
 ##  1 Luke Skywalker     Tall            172
@@ -888,6 +890,10 @@ print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)
 ##  9 Biggs Darklighter  Tall            183
 ## 10 Obi-Wan Kenobi     Tall            182
 ## # … with 77 more rows</code></pre>
+</div>
+<div id="merging-datasets-in-r-a-practical-example"
+class="section level3">
+<h3><strong>Merging datasets in R: a practical example</strong></h3>
 </div>
 </div>
 
