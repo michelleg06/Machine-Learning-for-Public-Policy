@@ -1,6 +1,6 @@
 
 
-## Repository for the UNU-MERIT Machine Learning for Public Policy course
+## Repository for the Machine Learning for Public Policy course
 
 ![ml4pp](https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/ML4PP.png)
 
