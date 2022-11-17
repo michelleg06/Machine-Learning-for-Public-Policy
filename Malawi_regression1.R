@@ -246,8 +246,21 @@ mod1 <- train(sumConsumption ~ ., data = Train_df,
                  trControl = tenfoldcv, # we previously defined this guy
                  )
 print(mod1)
+
+
 # The warnings are, again, indicating us that our model is not very good. Or rather, not good at all!
 # The performance metrics (close to what we estimated in a less elegant way without the package) also tell us our model is less than good
 # From the caret package: By default, the train function chooses the model with the largest performance value (or smallest, for mean squared error in regression models).
+
+
+# We could try to tune our parameters, but that is a different lesson. Let's fit the model instead:
+
+predict(mod1, newdata = head(Test_df))
+
+# According to our friend the internet: 
+# Model fitting is a measure of how well a machine learning model generalizes to similar data to that on which it was trained. A model that is well-fitted produces more accurate outcomes. A model that is overfitted matches the data too closely. A model that is underfitted doesn't match closely enough
+
+# what we're looking at is the first, seventh, twentythird etc predicted value of sumConsumption
+
 
 # Excercise: use this data and select a continious DV. Can you build a good predictive model?
