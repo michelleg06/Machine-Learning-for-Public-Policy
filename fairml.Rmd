@@ -1,0 +1,8 @@
+---
+title: "Algorithmic fairness"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+
+Machine Learning promises to be an important tool for Policymakers who wish to improve their response to challenges such as efficient resource allocation, or timely and effective reaction to crises. However, privacy and fairness issues arise in the use (and misuse) of Machine Learning algorithms. Dr. Juba Ziani, Assistant Professor at Georgia Tech will give us an overview of the common issues that arise, and practical examples in the public sphere where these issues have had a regressive impact in society. The guest lecture also includes some ways in which we (data scientists, machine learning ethusiasts and future policymakers) can minimise these biases to avoid negative impacts from ML in policy decision-making. 
