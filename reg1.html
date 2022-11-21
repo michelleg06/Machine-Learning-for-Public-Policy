@@ -329,6 +329,292 @@ When you download the data, you receive a folder with several .csv files
 that must be put together. The code below does just that.</p>
 <p><strong>1. Preliminaries: setting working directory and opening
 libraries</strong></p>
+<pre class="r"><code># 1.1 Cleaning the working environment and setting up the working directory path
+rm(list = ls())
+setwd(&quot;~/Desktop/Malawi2019&quot;)
+# 1.2 Opening libraries
+
+#install.packages(&quot;tidyverse&quot;,&quot;data.table&quot;)
+library(tidyverse)
+library(data.table)</code></pre>
+<p><strong>2. Uploading the data</strong></p>
+<p>We will be working with the Malawi dataset from the LSMS surveys from
+the World Bank Group. To download and merge the data, you can refer to
+the documentation: <a
+href="https://microdata.worldbank.org/index.php/catalog/3818/related-materials">World
+Bank Microdata: LSMS Malawi</a>.</p>
+<pre class="r"><code># The following like will look inside the folder defined by file.path() command and collect the names of all the files that contain the word patterns &quot;hh_mod&quot;. 
+filedir &lt;- file.path(&quot;~/Desktop/Malawi2019&quot;)
+filenames &lt;- list.files(filedir,pattern=&quot;hh_mod&quot;, full.names=TRUE, recursive=FALSE, ignore.case=TRUE)
+
+# data object now contains all files from the 2019 round from the Household Module
+print(filenames)</code></pre>
+<pre><code>##  [1] &quot;/Users/michellegonzalez/Desktop/Malawi2019/hh_mod_a_filt.csv&quot;
+##  [2] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_B.csv&quot;     
+##  [3] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_C.csv&quot;     
+##  [4] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_D.csv&quot;     
+##  [5] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_E.csv&quot;     
+##  [6] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_F.csv&quot;     
+##  [7] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_F1.csv&quot;    
+##  [8] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_G1.csv&quot;    
+##  [9] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_G2.csv&quot;    
+## [10] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_G3.csv&quot;    
+## [11] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_H.csv&quot;     
+## [12] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_I1.csv&quot;    
+## [13] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_I2.csv&quot;    
+## [14] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_J.csv&quot;     
+## [15] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_K1.csv&quot;    
+## [16] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_K2.csv&quot;    
+## [17] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_L.csv&quot;     
+## [18] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_M.csv&quot;     
+## [19] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_META.csv&quot;  
+## [20] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_N1.csv&quot;    
+## [21] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_N2.csv&quot;    
+## [22] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_O.csv&quot;     
+## [23] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_P.csv&quot;     
+## [24] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_Q.csv&quot;     
+## [25] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_R.csv&quot;     
+## [26] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_S1.csv&quot;    
+## [27] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_S2.csv&quot;    
+## [28] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_T.csv&quot;     
+## [29] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_U.csv&quot;     
+## [30] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_V.csv&quot;     
+## [31] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_W.csv&quot;     
+## [32] &quot;/Users/michellegonzalez/Desktop/Malawi2019/HH_MOD_X.csv&quot;</code></pre>
+<pre class="r"><code># We will now create function that will read all the files referenced in the filenames object and assign an an object to them (each file will become an element within a list).
+
+datList &lt;- lapply(filenames, function(i) {
+    df &lt;- read.csv(i, header=TRUE, strip.white=TRUE)
+    return(df)
+}) # this function should read all the *listed* files from above, convert them into a data frame and store them in a list
+
+head(datList[[1]]) # returns the first elements in the first dataframe from the list datList</code></pre>
+<pre><code>##       case_id                             HHID    ea_id region district reside
+## 1 1.01011e+11 7d78f2c5da59436d9bde9b09ea8a8aaf 10101100  North  Chitipa  RURAL
+## 2 1.01011e+11 7144cc6d29b3485d9e6d6188b255c756 10101100  North  Chitipa  RURAL
+## 3 1.01011e+11 9936d103bf974a93afbc63d477b8b3f2 10101100  North  Chitipa  RURAL
+## 4 1.01011e+11 cc8f211413cd493e83e01a96aba95bbb 10101100  North  Chitipa  RURAL
+## 5 1.01011e+11 e50cfa8d11b44d56891e0fad015b07c7 10101100  North  Chitipa  RURAL
+## 6 1.01011e+11 4c60971913ca49b4beb6def01a0b133f 10101100  North  Chitipa  RURAL
+##   interviewDate  hh_wgt hh_a02a hh_a03 hh_a06 hh_a11 hh_a13 hh_a22 hh_a23
+## 1    2019-08-29 93.7194   10101    100     14     NO            14     58
+## 2    2019-08-29 93.7194   10101    100     23     NO            14     64
+## 3    2019-08-28 93.7194   10101    100     40     NO            14     30
+## 4    2019-08-29 93.7194   10101    100     71     NO            14     30
+## 5    2019-08-28 93.7194   10101    100     95     NO            14     58
+## 6    2019-08-29 93.7194   10101    100    115     NO            14     70
+##   hh_g09 hh_m00 hh_o0a hh_s01 hh_w01 hhsize
+## 1     NO    Yes    YES    YES     NO      4
+## 2    YES    Yes    YES    YES     NO      4
+## 3     NO    Yes     NO     NO     NO      4
+## 4     NO    Yes    YES    YES     NO      5
+## 5     NO    Yes     NO    YES     NO      5
+## 6    YES    Yes    YES     NO     NO      2</code></pre>
+<pre class="r"><code># A smart thing to do is to clean your Global Environment every so often when you are done with an object, to free up some memory
+rm(filenames, filedir)</code></pre>
+<p>Note that the order of the datasets within datList follows the order
+of the names in filenames, such that dataset hh_mod_a_filt.csv would be
+1, HH_MOD_B.csv would be 2, and so forth.</p>
+<p><strong>3. Merging data </strong></p>
+<p>Now that we have succesfully uploaded all the files from our folder,
+we want to merge the datasets stored in the list (datList):</p>
+<ul>
+<li>We want to merge the first dataset [module A], containing household
+level information, with module B, a Household Roster with Individual
+level information. The variable <em>case_id</em> is the unique
+identifier at the household level, and it is present in both
+datasets.</li>
+</ul>
+<pre class="r"><code>datAB &lt;- merge(datList[[1]], datList[[2]], by=&quot;case_id&quot;, all = TRUE)</code></pre>
+<p>Let’s do some sanity checks to see whether our merging worked as
+intended:</p>
+<pre class="r"><code># number of rows and columns of module A
+dim(datList[[1]]) # 11434 rows, 21 columns</code></pre>
+<pre><code>## [1] 11434    21</code></pre>
+<pre class="r"><code># number of rows and columns of module B
+dim(datList[[2]]) # 50476 rows, 53 columns</code></pre>
+<pre><code>## [1] 50476    53</code></pre>
+<pre class="r"><code># number of rows and columns of our merged data. Rows MUST be the same as module B
+dim(datAB) # 50476 rows # 73 columns</code></pre>
+<pre><code>## [1] 50476    73</code></pre>
+<pre class="r"><code># notice that the number of columns = Cols A + Cols B -1[variable we used to merge]
+
+#Brief overview of our new dataset/dataframe!
+str(datAB)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    50476 obs. of  73 variables:
+##  $ case_id      : num  1.01e+11 1.01e+11 1.01e+11 1.01e+11 1.01e+11 ...
+##  $ HHID.x       : Factor w/ 11434 levels &quot;0004806a172546e99ae07674de291ed7&quot;,..: 5624 5624 5624 5624 5088 5088 5088 5088 6852 6852 ...
+##  $ ea_id        : int  10101100 10101100 10101100 10101100 10101100 10101100 10101100 10101100 10101100 10101100 ...
+##  $ region       : Factor w/ 3 levels &quot;Central&quot;,&quot;North&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ district     : Factor w/ 32 levels &quot;Balaka&quot;,&quot;Blantyre&quot;,..: 6 6 6 6 6 6 6 6 6 6 ...
+##  $ reside       : Factor w/ 2 levels &quot;RURAL&quot;,&quot;URBAN&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interviewDate: Factor w/ 346 levels &quot;2019-04-22&quot;,&quot;2019-04-23&quot;,..: 129 129 129 129 129 129 129 129 128 128 ...
+##  $ hh_wgt       : num  93.7 93.7 93.7 93.7 93.7 ...
+##  $ hh_a02a      : int  10101 10101 10101 10101 10101 10101 10101 10101 10101 10101 ...
+##  $ hh_a03       : int  100 100 100 100 100 100 100 100 100 100 ...
+##  $ hh_a06       : int  14 14 14 14 23 23 23 23 40 40 ...
+##  $ hh_a11       : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ hh_a13       : Factor w/ 8 levels &quot;&quot;,&quot;Dwelling destroyed&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_a22       : int  14 14 14 14 14 14 14 14 14 14 ...
+##  $ hh_a23       : int  58 58 58 58 64 64 64 64 30 30 ...
+##  $ hh_g09       : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 2 2 2 2 3 3 3 3 2 2 ...
+##  $ hh_m00       : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ hh_o0a       : Factor w/ 2 levels &quot;NO&quot;,&quot;YES&quot;: 2 2 2 2 2 2 2 2 1 1 ...
+##  $ hh_s01       : Factor w/ 2 levels &quot;NO&quot;,&quot;YES&quot;: 2 2 2 2 2 2 2 2 1 1 ...
+##  $ hh_w01       : Factor w/ 2 levels &quot;NO&quot;,&quot;YES&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hhsize       : int  4 4 4 4 4 4 4 4 4 4 ...
+##  $ HHID.y       : Factor w/ 11434 levels &quot;0004806a172546e99ae07674de291ed7&quot;,..: 5624 5624 5624 5624 5088 5088 5088 5088 6852 6852 ...
+##  $ PID          : int  1 2 3 4 1 2 3 4 1 2 ...
+##  $ hh_b03       : Factor w/ 2 levels &quot;FEMALE&quot;,&quot;MALE&quot;: 2 1 2 2 1 2 2 2 1 2 ...
+##  $ hh_b04       : Factor w/ 16 levels &quot;BROTHER/SISTER-IN-LAW&quot;,..: 7 16 2 2 7 2 2 2 7 2 ...
+##  $ hh_b04a      : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 2 3 2 1 2 2 2 2 3 1 ...
+##  $ hh_b05_2     : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 1 1 2 3 1 1 1 1 1 3 ...
+##  $ hh_b05_2_1   : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 1 1 1 3 1 1 1 1 1 3 ...
+##  $ hh_b05a      : int  41 34 11 4 55 18 13 13 25 8 ...
+##  $ hh_b05b      : int  NA NA NA 8 NA NA NA NA NA NA ...
+##  $ hh_b06a      : Factor w/ 12 levels &quot;APRIL&quot;,&quot;AUGUST&quot;,..: 11 5 10 3 6 2 11 11 3 6 ...
+##  $ hh_b06b      : int  1977 1985 2007 2014 1964 2001 2005 2005 1993 2011 ...
+##  $ hh_b07       : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ hh_b08       : int  7 7 0 7 7 7 7 7 7 7 ...
+##  $ hh_b09       : Factor w/ 7 levels &quot;OTHER TOWN OR URBAN  CENTER IN THIS DISTRICT&quot;,..: 5 2 5 5 5 5 5 5 5 5 ...
+##  $ hh_b10a      : Factor w/ 33 levels &quot;&quot;,&quot;Balaka&quot;,&quot;Blantyre City&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b10b      : Factor w/ 9 levels &quot;&quot;,&quot;Botswana&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b10_oth   : Factor w/ 11 levels &quot;&quot;,&quot;BURUNDI&quot;,&quot;CONGO&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b11       : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ hh_b12       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ hh_b13       : Factor w/ 14 levels &quot;&quot;,&quot;DIVORCE&quot;,&quot;FAMILY QUARREL&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b13_oth   : Factor w/ 56 levels &quot;&quot;,&quot;BUILT OWN HOUSE&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b14       : Factor w/ 6 levels &quot;&quot;,&quot;OTHER TOWN OR URBAN CENTER IN THIS DISTRICT&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b15a      : Factor w/ 33 levels &quot;&quot;,&quot;Balaka&quot;,&quot;Blantyre City&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b15b      : Factor w/ 8 levels &quot;&quot;,&quot;Mozambique&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b15b_oth  : Factor w/ 5 levels &quot;&quot;,&quot;BULUNDI&quot;,&quot;BURUNDI&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b16a      : Factor w/ 4 levels &quot;DEAD&quot;,&quot;DOES NOT KNOW&quot;,..: 1 1 4 4 3 1 1 1 3 3 ...
+##  $ hh_b16b      : int  NA NA 1 1 NA NA NA NA NA NA ...
+##  $ hh_b17       : int  34 18 NA NA NA 7 3 3 NA NA ...
+##  $ hh_b18       : Factor w/ 10 levels &quot;A-LEVEL&quot;,&quot;DEGREE&quot;,..: 8 7 8 8 8 10 10 10 8 8 ...
+##  $ hh_b19a      : Factor w/ 4 levels &quot;DEAD&quot;,&quot;DOES NOT KNOW&quot;,..: 3 1 4 4 3 4 4 4 3 4 ...
+##  $ hh_b19b      : int  NA NA 2 2 NA 1 1 1 NA 1 ...
+##  $ hh_b20       : int  NA 17 NA NA NA NA NA NA NA NA ...
+##  $ hh_b21       : Factor w/ 10 levels &quot;A-LEVEL&quot;,&quot;DEGREE&quot;,..: 8 8 8 8 8 8 8 8 8 10 ...
+##  $ hh_b22       : Factor w/ 16 levels &quot;&quot;,&quot;CHEWA&quot;,&quot;ENGLISH&quot;,..: 13 1 1 1 4 1 1 1 4 1 ...
+##  $ hh_b22_oth   : Factor w/ 40 levels &quot;&quot;,&quot;AMANG&#39;ANJA&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b23       : Factor w/ 6 levels &quot;&quot;,&quot;CHRISTIANITY&quot;,..: 2 2 1 1 2 2 2 2 2 1 ...
+##  $ hh_b23_oth   : Factor w/ 60 levels &quot;&quot;,&quot;ABRAHAM AFRICAN CHURCH&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b24       : Factor w/ 7 levels &quot;&quot;,&quot;DIVORCED&quot;,..: 5 3 1 1 7 4 4 4 6 1 ...
+##  $ hh_b24_1     : Factor w/ 4 levels &quot;&quot;,&quot;MATRILINEAL&quot;,..: 4 4 1 1 1 1 1 1 1 1 ...
+##  $ hh_b24_1_oth : Factor w/ 31 levels &quot;&quot;,&quot;BOTH&quot;,&quot;BOTH MOVED TO A DIFFERENT  VILLAGE&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b24_2     : Factor w/ 4 levels &quot;&quot;,&quot;MOVE TO DIFFERENT VILLAGE&quot;,..: 3 3 1 1 1 1 1 1 1 1 ...
+##  $ hh_b25       : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 3 3 1 1 1 1 1 1 1 1 ...
+##  $ hh_b26a      : int  2 1 NA NA NA NA NA NA NA NA ...
+##  $ hh_b26a_1    : int  2006 2006 NA NA NA NA NA NA NA NA ...
+##  $ hh_b26b      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ hh_b26b_1    : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ hh_b26b_2    : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 2 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b26c      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ hh_b26c_1    : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ hh_b26c_2    : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b27       : Factor w/ 3 levels &quot;&quot;,&quot;NO&quot;,&quot;YES&quot;: 3 1 1 1 1 1 1 1 1 1 ...
+##  $ hh_b28       : int  1 NA NA NA NA NA NA NA NA NA ...</code></pre>
+<p>Something that you might find interesting is that the numeric
+variable <em>case_id</em> (which we used to merge) looks odd. This is
+due to the fact that R is reading this number in scientific form, if
+you’d like to see the standard number:</p>
+<pre class="r"><code>options(scipen = 100) # run this line to turn off scientific form, to set it back use options(scipen = 0)</code></pre>
+<p>Now you can run the <em>str(datAB)</em> line again and see the
+<em>case_id</em> variable in standard form. Let’s further merge
+dataframe datAB with module C, which contains individual level data on
+Education. The individual unique identifier, which exists in Module B,
+and C (and now also in datAB after the merge) is <em>PID</em>:</p>
+<pre class="r"><code>datABC &lt;- merge(datAB, datList[[3]], by=c(&quot;case_id&quot;,&quot;PID&quot;), all = TRUE)</code></pre>
+<p>We use the household unique identifier, <em>case_id</em>, to match
+households and the individual unique identifier, <em>PID</em>, to match
+individuals within each household. The dataframe should increase in
+column number, but not in number of observations (feel free to check
+using dim() or in the global environment).# We should select other
+relevant modules from the IHS5 Household Database: D[Health; case_id
+PID], E[Time Use &amp; Labour; case_id PID], F[Housing, case_id], H[Food
+Security, case_id], T[Subjective Assessment of Well-Being, case_id]:</p>
+<pre class="r"><code>datABCD &lt;- merge(datABC, datList[[4]], by=c(&quot;case_id&quot;,&quot;PID&quot;), all = TRUE)</code></pre>
+<pre><code>## Warning in merge.data.frame(datABC, datList[[4]], by = c(&quot;case_id&quot;, &quot;PID&quot;), :
+## column names &#39;HHID.x&#39;, &#39;HHID.y&#39; are duplicated in the result</code></pre>
+<pre class="r"><code>datABCDE &lt;- merge(datABCD, datList[[5]], by=c(&quot;case_id&quot;,&quot;PID&quot;), all = TRUE)</code></pre>
+<pre><code>## Warning in merge.data.frame(datABCD, datList[[5]], by = c(&quot;case_id&quot;, &quot;PID&quot;), :
+## column names &#39;HHID.x&#39;, &#39;HHID.y&#39; are duplicated in the result</code></pre>
+<p>There’s a warning! It isn’t a big deal (the code still did it’s job),
+but let’s try to sort it out anyways.Dataframe datABCD contains already
+variables HHID.x and HHID.y. Dataframe datABCDE now contains HHID,
+HHID.x and HHID.y, so perhaps it would be prudent to delete two of the
+three duplicates:</p>
+<pre class="r"><code># let&#39;s find out the position of these two columns in the dataframe
+which( colnames(datABCDE)==&quot;HHID.x&quot;) # 3 and 74</code></pre>
+<pre><code>## [1]  3 74</code></pre>
+<pre class="r"><code>which( colnames(datABCDE)==&quot;HHID.y&quot;) # 23 and 129</code></pre>
+<pre><code>## [1]  23 129</code></pre>
+<pre class="r"><code>which( colnames(datABCDE)==&quot;HHID&quot;) # 187 (let&#39;s keep this guy)</code></pre>
+<pre><code>## [1] 187</code></pre>
+<pre class="r"><code>datABCDE &lt;- datABCDE[,-c(3,23,74,129)] # this line removes the four selected duplicated columns.</code></pre>
+<p>Note that as we continue to merge multiple modules these duplicated
+columns will reappear. This happens when two datasets containg the same
+vector besides the unique identifier.</p>
+<pre class="r"><code>#Merging Module F (Housing)
+datABCDEF &lt;- merge(datABCDE, datList[[6]], by=&quot;case_id&quot;, all = TRUE)</code></pre>
+<p>Up until this point, the order of datList dataframes and Modules was
+the same (1-A,2-B,3-C, etc.). Now, we need to take into account that
+there exist modules F1, G1, G2 etc.You can refer to Table 10: Structure
+of the IHS5 Household Database of the <a
+href="https://microdata.worldbank.org/index.php/catalog/2939/related-materials">Basic
+Information Document</a> to confirm the correct order.</p>
+<pre class="r"><code>datABCDEFH &lt;- merge(datABCDEF, datList[[11]], by=&quot;case_id&quot;, all = TRUE)
+datABCDEFHT &lt;- merge(datABCDEFH, datList[[28]], by=&quot;case_id&quot;, all = TRUE)</code></pre>
+<pre><code>## Warning in merge.data.frame(datABCDEFH, datList[[28]], by = &quot;case_id&quot;, all =
+## TRUE): column names &#39;HHID.x&#39;, &#39;HHID.y&#39; are duplicated in the result</code></pre>
+<pre class="r"><code>which( colnames(datABCDEFHT)==&quot;HHID.x&quot;) # 183 454</code></pre>
+<pre><code>## [1] 183 454</code></pre>
+<pre class="r"><code>which( colnames(datABCDEFHT)==&quot;HHID.y&quot;) # 340 494</code></pre>
+<pre><code>## [1] 340 494</code></pre>
+<pre class="r"><code>datABCDEFHT &lt;- datABCDEFHT[,-c(454,340,494)]
+names(datABCDEFHT)[names(datABCDEFHT) == &quot;HHID.x&quot;] &lt;- &quot;HHID&quot; # change the name of the non-eliminated HHID.x column to HHID</code></pre>
+<p>We should also include some information on consumption:</p>
+<pre class="r"><code># G1[Food Consumption Over Past One Week; case_id hh_g02] 8
+# This module collects information on all food consumed by the household in the past 7 days
+datG1 = datList[[8]]
+
+datG1 &lt;- datG1[,c(1,7,8)] # I only want to keep the unique household identifier, item code,  and the total amount consumed in the past week.
+# We want to create a vector (variable) that contains one single number: the total amount spent on food in the past 7 days.
+
+# Initialise empty vectors for &#39;for&#39; loop
+list &lt;- unique(datG1$case_id) # list is an object containing only
+idx  &lt;- NA
+hold &lt;- NA
+sumConsumption &lt;- NA
+temp &lt;- NA
+data &lt;- NA
+
+for (i in 1:length(list)) { # iterate over the number of elements in object &#39;list&#39; 
+        
+        idx    &lt;- which(datG1$case_id == list[i]) #index containing the unique id that matches the iteration number
+        hold   &lt;- datG1[idx,] # vector containing all the elements that match the previous indicator
+        sumConsumption  &lt;- sum(hold$hh_g03a, na.rm = TRUE) # sum all the values contained in food item consumption (hh_g03a) vector (in $)
+        
+        temp &lt;- cbind(hold$case_id,sumConsumption) # create a temporary object with the two concatenated vectors: the unique identifier and the final consumption variable
+        data  &lt;- rbind(data,temp) # append the temporary object to dataframe data
+        
+}
+
+# Make sure that the object data is stored correctly: dataframe type
+datG &lt;- as.data.frame(data)
+
+# let&#39;s keep only one observation per household
+datG &lt;- unique(datG)
+# Now let&#39;s rename the variable and merge our consumption data!
+names(datG)[names(datG) == &quot;V1&quot;] &lt;- &quot;case_id&quot;
+# The first row is empty, let&#39;s get rid of it
+datG &lt;- datG[-1,]
+
+datABCDEFHTG1 &lt;- merge(datABCDEFHT, datG, by=&quot;case_id&quot;, all = TRUE)
+
+# save/export the final, merged dataset
+write_rds(datABCDEFHTG1, &quot;Malawi_2019(2).rds&quot;,&quot;xz&quot;, compression = 9L)</code></pre>
 <p>You can download the final product by clicking on the button
 below.</p>
 <a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_2019.rds">

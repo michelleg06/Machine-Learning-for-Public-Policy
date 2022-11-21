@@ -30,7 +30,7 @@ library(data.table)
 
 filenames <- list.files(pattern="hh_mod", full.names=TRUE, recursive=FALSE, ignore.case=TRUE)
 
-# data object now contains all files from the 2010 round from the household module
+# data object now contains all files from the 2019 round from the household module
 print(filenames)
 
 
