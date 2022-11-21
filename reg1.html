@@ -11,7 +11,7 @@
 
 
 
-<title>Algorithmic fairness</title>
+<title>reg1.knit</title>
 
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -32,8 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -305,22 +304,42 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Algorithmic fairness</h1>
 
 </div>
 
 
-<p>Machine Learning promises to be an important tool for Policymakers
-who wish to improve their response to challenges such as efficient
-resource allocation, or timely and effective reaction to crises.
-However, privacy and fairness issues arise in the use (and misuse) of
-Machine Learning algorithms. Dr. Juba Ziani, Assistant Professor at
-Georgia Tech will give us an overview of the common issues that arise,
-and practical examples in the public sphere where these issues have had
-a regressive impact in society. The guest lecture also includes some
-ways in which we (data scientists, machine learning ethusiasts and
-future policymakers) can minimise these biases to avoid negative impacts
-from ML in policy decision-making.</p>
+<div id="supervised-machine-learning-linear-models-regression"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills"><strong>Supervised Machine
+Learning: Linear Models (Regression)</strong></h2>
+<div id="merging-datasets-with-r-lsms-data-example"
+class="section level3">
+<h3><strong>Merging datasets with R: LSMS data example</strong></h3>
+<p>Many organisations, institutions, and firms around the world collect
+and, if we’re lucky, share data. One such example is The World Bank
+Group who, in cooperation with local statistical offices, collects
+cross-sectional and panel data on the socioeconomic lives of country
+nationals. The Living Standards Measurement Survey (LSMS, for short) has
+been around since the 1980’s, and anyone who wishes to analyse that data
+for (hopefully!) policy-improvement purposes can do so. The only problem
+is, it comes in various formats and separate files. We’ve chosen to
+download the 2019-2020 LSMS data for Malawi, a cross-sectional database
+which contains several modules on Health, Education, Food Security, etc.
+When you download the data, you receive a folder with several .csv files
+that must be put together. The code below does just that.</p>
+<p><strong>1. Preliminaries: setting working directory and opening
+libraries</strong></p>
+<p>You can download the final product by clicking on the button
+below.</p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_2019.rds">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download merged file (.rds)</button>
+</a>
+</div>
+<div id="machine-learning-with-linear-regression"
+class="section level3">
+<h3><strong>Machine Learning with linear regression</strong></h3>
+</div>
+</div>
 
 <!DOCTYPE html>
 <hr>

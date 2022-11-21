@@ -1,0 +1,35 @@
+---
+#title: "Supervised Machine Learning: Linear Models (Regression)"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+
+
+## **Supervised Machine Learning: Linear Models (Regression)** {.tabset .tabset-fade .tabset-pills}
+
+### **Merging datasets with R: LSMS data example**
+Many organisations, institutions, and firms around the world collect and, if we're lucky, share data. One such example is The World Bank Group who, in cooperation with local statistical offices, collects cross-sectional and panel data on the socioeconomic lives of country nationals. The Living Standards Measurement Survey (LSMS, for short) has been around since the 1980's, and anyone who wishes to analyse that data for (hopefully!) policy-improvement purposes can do so. The only problem is, it comes in various formats and separate files. We've chosen to download the 2019-2020 LSMS data for Malawi, a cross-sectional database which contains several modules on Health, Education, Food Security, etc. When you download the data, you receive a folder with several .csv files that must be put together. The code below does just that.
+
+**1. Preliminaries: setting working directory and opening libraries**
+```{r}
+
+```
+
+
+You can download the final product by clicking on the button below.
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_2019.rds",
+  button_label = "Download merged file (.rds)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
+
+### **Machine Learning with linear regression**
+
