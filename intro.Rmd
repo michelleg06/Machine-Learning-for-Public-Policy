@@ -329,8 +329,19 @@ p_ggplot <- p_ggplot + scale_colour_manual(name = "Automatic or Manual",
 
 print(p_ggplot)
 
+# Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
 
-
+p <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth() +
+  geom_point(alpha=0.5) +
+  theme(legend.position="right") +
+  theme_classic() + ggtitle("Scatterplot of mileage vs weight of car") +
+    xlab("Weight of car") + ylab("Miles per gallon") +
+    theme(plot.title = element_text(color="black", size=14, face="bold", hjust = 0.5)) + 
+    scale_colour_manual(name = "Automatic or Manual", 
+                               labels = c("0.Automatic", "1.Manual"),
+                               values = c("darkorange2", "darkgoldenrod1"))
+print(p)
 
 ```
 

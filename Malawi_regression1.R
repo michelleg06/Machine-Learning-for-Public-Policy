@@ -147,19 +147,27 @@ str(malawi) # 41,430 obs. and  17 features
 
 # We want to quickly plot histograms of ALL the variables in our dataset.
 
-x <- malawi %>% select_if(~is.integer(.) | is.numeric(.)) # this line selects all variables which are integer or numeric, and can therefore be plotted as a histogram
-hist.data.frame(x) # from the Hmisc package, quick and painless.
+malawi_continuous <- malawi %>% select_if(~is.integer(.) | is.numeric(.)) # this line selects all variables in the dataframe which are integer OR numeric, and can therefore be plotted as a histogram.
+hist.data.frame(malawi_continuous) # from the Hmisc package, quick and painless.
 
 
 # alternatively: (please note that factors, aka categorical data, will be coerced into numeric)
 #df <- as.data.frame(lapply(malawi,as.numeric))
 
+malawi_factor <- malawi %>% select_if(~is.factor(.)) # subset of the dataframe containing only factor variables
+table(unlist(malawi_factor))
+llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package
 
 # now let's create a correlation matrix out of our dataset! (would be great to see all possible correlates, remember the >.5 rule of thumb!)
 
 # correlation matrix
-M <- cor(x) # create a correlation matrix of the whole dataset, cor() uses Pearson's correlation coefficient as default
-corrplot(M, method="circle", addCoef.col ='black', number.cex = 0.8) # visualise it in a nice way
+M <- cor(malawi_continuous) # create a correlation matrix of the continuous dataset, cor() uses Pearson's correlation coefficient as default. This means we can only take the correlation between continuous variables
+corrplot(M, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise it in a nice way
+
+# Let's compute the Spearman correlation coefficient between categorical variables
+malawi_factorC <- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+M2 <- cor(malawi_factorC, method = "spearman")
+corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise it in a nice way
 
 #OH NO! In some situations, the data generating mechanism can create predictors that only have a single unique value (i.e. a “zero-variance predictor”). For many models (excluding tree-based models), this may cause the model to crash or the fit to be unstable.
 

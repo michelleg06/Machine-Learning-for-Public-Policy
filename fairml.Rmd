@@ -4,5 +4,25 @@ title: "Algorithmic fairness"
 #date: '2022-09-21'
 output: html_document
 ---
+```{r, echo=FALSE}
+library(tufte)
+```
 
-Machine Learning promises to be an important tool for Policymakers who wish to improve their response to challenges such as efficient resource allocation, or timely and effective reaction to crises. However, privacy and fairness issues arise in the use (and misuse) of Machine Learning algorithms. Dr. Juba Ziani, Assistant Professor at Georgia Tech will give us an overview of the common issues that arise, and practical examples in the public sphere where these issues have had a regressive impact in society. The guest lecture also includes some ways in which we (data scientists, machine learning ethusiasts and future policymakers) can minimise these biases to avoid negative impacts from ML in policy decision-making. 
+Machine Learning promises to be an important tool for Policymakers who wish to improve their response to challenges such as efficient resource allocation, or timely and effective reaction to crises. However, privacy and fairness issues arise in the use (and misuse) of Machine Learning algorithms. 
+
+Dr. [Juba Ziani](https://www.juba-ziani.com/), Assistant Professor at Georgia Tech will give us an overview of the more common ethical dilemmas that arise in machine learning, and practical examples in the public sphere where these issues have had a regressive impact in society. The guest lecture also includes some ways in which we (data scientists, machine learning enthusiasts, and future policymakers) can minimise these biases and avoid negative impacts from ML in the policy decision-making process. Some of his recommendations to delve deeper into this topic include:
+
+- The Ethical Algorithm: The Science of Socially Aware Algorithm Design by Michael Kearns and Aaron Roth. Available at: [Amazon](https://www.amazon.com/Ethical-Algorithm-Science-Socially-Design/dp/0190948205).
+
+- Fairness and Machine Learning: Limitations and Opportunities by Solon Barocas, Moritz Hardt, Arvind Narayanan. Available at: [https://fairmlbook.org/](https://fairmlbook.org/)
+
+> "Wombats are the best. A wombat's main defense against predators is its butt. When a predator attacks a wombat, it runs to its burrow and uses its tough cartilage-filled bum to block the hole" 
+> `r tufte::quote_footer('--- Dr. Juba Ziani (and lots of Nature articles)')`
+
+<center>
+```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
+knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/wombat.png")
+```
+</center>
+
+

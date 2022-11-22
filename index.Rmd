@@ -34,6 +34,8 @@ Machine learning has become an increasingly integral part of public policies. It
 
 The course consists of 5 workshops each consisting of a technical introductory lecture and a hands-on application of the topics to a real-world policy problem. Students will be working with the programming language R, but coding is not the primary focus of the course.
 
+<span style="color:red">Please note that workshops 1,2, and 5 will be held in person in winter 2022. Workshops 3 and 4 will be held in person in winter 2023. The exact dates will be provided under each title as soon as they are confirmed.</span> 
+
 **Course textbook (ebook available for free):**
 James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning: With Applications in R.](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)
 
@@ -63,7 +65,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 A gentle introduction to R and Rstudio
 
 
-## 2. Regression (I)
+## [2. Regression (I)](https://www.ml4publicpolicy.com/reg1.html)
 
     ·  	OLS
     ·  	Assessing accuracy
@@ -80,7 +82,7 @@ A gentle introduction to R and Rstudio
 
 LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
-## 3. Regression (II)
+## [3. Regression (II)](https://www.ml4publicpolicy.com/reg2.html)
 
     ·  	Regularization/Shrinkage models
     ·  	Parameter tuning
@@ -93,7 +95,7 @@ LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 - An introduction to Statistical learning, Chapter, 6 and 8.
 - Abebe, R., Kleinberg, J., & Weinberg, S. M. (2020). [Subsidy Allocations in the Presence of Income Shocks.](https://ojs.aaai.org/index.php/AAAI/article/view/6188) Proceedings of the AAAI Conference on Artificial Intelligence, 34(05), 7032-7039.
 
-## 4. Classification
+## [4. Classification](https://www.ml4publicpolicy.com/classification.html)
 
     ·  	Logistic regression
     ·  	Performance indicators
@@ -111,7 +113,7 @@ LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 **Workshop:**
 LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
-## 5. Fair Machine Learning / Ethics
+## [5. Fair Machine Learning / Ethics](https://www.ml4publicpolicy.com/fairml.html)
 
     ·  	An introduction to Statistical Learning, Chapter 3, 5, 6 8
     ·  	Indicators

@@ -711,6 +711,21 @@ p_ggplot &lt;- p_ggplot + scale_colour_manual(name = &quot;Automatic or Manual&q
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
+<pre class="r"><code># Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
+
+p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth() +
+  geom_point(alpha=0.5) +
+  theme(legend.position=&quot;right&quot;) +
+  theme_classic() + ggtitle(&quot;Scatterplot of mileage vs weight of car&quot;) +
+    xlab(&quot;Weight of car&quot;) + ylab(&quot;Miles per gallon&quot;) +
+    theme(plot.title = element_text(color=&quot;black&quot;, size=14, face=&quot;bold&quot;, hjust = 0.5)) + 
+    scale_colour_manual(name = &quot;Automatic or Manual&quot;, 
+                               labels = c(&quot;0.Automatic&quot;, &quot;1.Manual&quot;),
+                               values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
+print(p)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
 are going to be relevant for making algorithms of your own:</p>

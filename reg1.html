@@ -624,6 +624,672 @@ below.</p>
 <div id="machine-learning-with-linear-regression"
 class="section level3">
 <h3><strong>Machine Learning with linear regression</strong></h3>
+<p>This code is a step by step on how to go about writing a predictive
+model using a <em>linear regression</em>. Despite its simplicity and
+transparency, i.e. the ease with which we can interpret its results, a
+linear model is not without challenges in machine learning. Using the
+Malawi 2019-2020 LSMS data, we will predict a known outcome, <em>Food
+Consumption</em>, by training our model using correlates (i.e. features)
+that would logically (assume our logic is based on historical and
+theoretical inputs) explain the phenomenon.</p>
+<p><strong>1. Preliminaries: working directory, libraries, data
+upload</strong></p>
+<pre class="r"><code>rm(list = ls())
+setwd(&quot;~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy&quot;)
+
+# Libraries
+
+# install.packages(&quot;caret&quot;, &quot;AppliedPredictiveModeling&quot;, &quot;corrplot&quot;, &quot;Hmisc&quot;, &quot;plyr&quot;)
+library(plyr)
+library(tidyverse)
+library(data.table)
+library(caret)
+library(AppliedPredictiveModeling)
+library(corrplot)
+library(Hmisc)
+
+malawi &lt;- read_rds(&quot;Malawi_2019.rds&quot;)</code></pre>
+<p><strong>2. Data Pre-Processing: data visualisation and data
+wrangling</strong></p>
+<p>The Malawi dataset contains 50476 observations and 514 features
+(variables). It is a very large dataframe, and we want to work with only
+a subset of it using all the observations but only some features;
+i.e. we’re going to create a subset of the dataframe that contains only
+the relevant features for our ML model.You can find the data label
+descriptions <a
+href="https://microdata.worldbank.org/index.php/catalog/3818/data-dictionary">here</a>.</p>
+<pre class="r"><code>dim(malawi)</code></pre>
+<pre><code>## [1] 50476   514</code></pre>
+<p>We should begin the <em>critical</em> process of feature selection
+(or variable selection). Some notes on this: from a practical point of
+view, a model with less predictors may be easier to interpret. Also,
+some models may be negatively affected by non-informative predictors.
+This process is similar to traditional econometric modeling, but we
+should not conflate predictive and explanatory modeling. Importantly,
+please note that we are not interested in knowing why something happens,
+but rather in what is likely to happen given some known data. Hence:</p>
+<p><em>Target variable</em> (a.k.a. Dependent Variable): Total Food
+Consumption in the Past 7 Days</p>
+<p>Which variables would help us predict a Malawian household’s weekly
+food-spending habit?</p>
+<pre class="r"><code># By looking at the data dictionary, I&#39;ve selected the following variables:
+
+#1 $ food consumption in the past week: sumConsumption
+which( colnames(malawi)==&quot;sumConsumption&quot;) # 514
+#2 How old is NAME (year): hh_b05a
+which( colnames(malawi)==&quot;hh_b05a&quot;) # 27
+#3 reside: reside
+which( colnames(malawi)==&quot;reside&quot;) # 6
+#4 household size: hhsize
+which( colnames(malawi)==&quot;hhsize&quot;) #21 
+#5 did you or anyone else in this HH borrow on credit?: hh_s01
+which( colnames(malawi)==&quot;hh_s01&quot;) # 19
+#6 gender [1vMALE, 2 FEMALE]: hh_b03 
+which( colnames(malawi)==&quot;hh_b03&quot;) # 22
+#7 What is the highest educational qualification [NAME] has acquired: hh_c09
+which( colnames(malawi)==&quot;hh_c09&quot;) # 88
+#8 $ Tuition, including any extra tuition fees (hh_c22a)
+which( colnames(malawi)==&quot;hh_c22a&quot;) # 105
+#9 $ Expenditures on after school programs &amp; tutoring (hh_c22b)
+which( colnames(malawi)==&quot;hh_c22b&quot;) # 106
+#10 $ School books and other materials (hh_c22c)
+which( colnames(malawi)==&quot;hh_c22c&quot;) # 107
+#11 $ School uniform clothing (hh_c22d)
+which( colnames(malawi)==&quot;hh_c22d&quot;) #108
+#12 $ TOTAL (hh_c22j)
+which( colnames(malawi)==&quot;hh_c22j&quot;) #114
+#13 How much was spent in TOTAL in the last 12 months? (hh_c22l)
+which( colnames(malawi)==&quot;hh_c22l&quot;) #116
+#14 Have you used a computer? (hh_c24)
+which( colnames(malawi)==&quot;hh_c24&quot;) # 124
+#15 Amt [NAME] spent in the past 4 weeks for all illnesses and injuries? (hh_d10)
+which( colnames(malawi)==&quot;hh_d10&quot;) # 142
+#16 Amt in total did [NAME]spent...for medical care not related to an illness? (hh_d11)
+which( colnames(malawi)==&quot;hh_d11&quot;) #143 
+#17 How much in total did [NAME] spend..for medical insurance? (hh_d12_1)
+which( colnames(malawi)==&quot;hh_d12_1&quot;) #145
+#18 Does [NAME] want to change his/her current employment situation? (hh_e70)
+which( colnames(malawi)==&quot;hh_e70&quot;) #337
+#19 What was the total amout paid in the form of land rent during the p... (hh_f04_4)
+which( colnames(malawi)==&quot;hh_f04_4&quot;) #355
+#20 hh_f04a How much do you pay to rent this property?
+which( colnames(malawi)==&quot;hh_f04a&quot;) #358
+#21 Do you have electricity working in your dwelling? (hh_f19)
+which( colnames(malawi)==&quot;hh_f19&quot;) #381
+#22 How many working cell phones in total does your household own? (hh_f34)
+which( colnames(malawi)==&quot;hh_f34&quot;) #404
+#23 Which of the following is true? Your current income . . . (hh_t08)
+which( colnames(malawi)==&quot;hh_t08&quot;) #499
+#24 Concerning your HH&#39;s food consumption, over the past months which is true (hh_t01)
+which( colnames(malawi)==&quot;hh_t01&quot;) #492
+#25 HH were unable to eat healthy &amp; nutritious food b&#39;se of a lack of money/other (hh_t14)
+which( colnames(malawi)==&quot;hh_t14&quot;) #507
+#26 ... What other features do you consider important?
+
+# subsetting our dataframe
+cols   &lt;- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
+malawi &lt;- malawi[,cols] 
+# The malawi dataframe should only have 25 (selected) features now</code></pre>
+<p><em>Missing values</em></p>
+<p>In traditional econometric models, we often discuss what we can do in
+the presence of missing data. First and foremost, we should assess
+whether there is a pattern to missingness and if so, what that means to
+what we can learn from our (sub)population. This remains true for
+machine learning. A practical difference is that while one can implement
+a causal econometric model with missing values, many machine learning
+models fail if there are any in the training or control data.</p>
+<pre class="r"><code># Missing values (NAs) by feature
+colSums(is.na(malawi))</code></pre>
+<pre><code>##         reside         hhsize        hh_b05a sumConsumption         hh_s01 
+##              0              0              0           9046              0 
+##         hh_b03         hh_c09        hh_c22a        hh_c22b        hh_c22c 
+##              0              0          32402          32398          32408 
+##        hh_c22d        hh_c22j        hh_c22l         hh_c24         hh_d10 
+##          32402          32397          32542              0              0 
+##         hh_d11       hh_d12_1         hh_e70       hh_f04_4        hh_f04a 
+##              0              0              0          50121          44487 
+##         hh_f19         hh_f34         hh_t08         hh_t01         hh_t14 
+##              0              0              0              0              0</code></pre>
+<p>Interestingly, a lot of the features from module C have more than
+half the values missing (&gt;30,000 hhs). All of the variables refer to
+$ spent on education. For the sake of simplicity, I will simply remove
+those features. But this action may later affect our predictive model,
+if such features were to increase its predictive performance. Another
+alternative would be to only work with the remaining households for
+which we have full data. However, that would reduce our sample size
+significantly and I would discourage it. Finally, multiple imputation is
+not feasible due to the <a
+href="https://gist.github.com/farrajota/a733524a814596b0124d068a55221c29">large
+share of missingness in the data</a>.</p>
+<pre class="r"><code>#hh_c22a-l
+which( colnames(malawi)==&quot;hh_c22a&quot;) # 8</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_c22b&quot;) # 9</code></pre>
+<pre><code>## [1] 9</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_c22c&quot;) # 10</code></pre>
+<pre><code>## [1] 10</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_c22d&quot;) #11</code></pre>
+<pre><code>## [1] 11</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_c22j&quot;) #12</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_c22l&quot;) #13</code></pre>
+<pre><code>## [1] 13</code></pre>
+<pre class="r"><code>cols_cModule &lt;- c(8,9,10,11,12,13)
+malawi &lt;- malawi[,-cols_cModule]
+# we have 19 features left in the malawi dataframe
+
+# Are there any remaining missing values? double-checking is always a good idea!
+colSums(is.na(malawi))</code></pre>
+<pre><code>##         reside         hhsize        hh_b05a sumConsumption         hh_s01 
+##              0              0              0           9046              0 
+##         hh_b03         hh_c09         hh_c24         hh_d10         hh_d11 
+##              0              0              0              0              0 
+##       hh_d12_1         hh_e70       hh_f04_4        hh_f04a         hh_f19 
+##              0              0          50121          44487              0 
+##         hh_f34         hh_t08         hh_t01         hh_t14 
+##              0              0              0              0</code></pre>
+<pre class="r"><code># There seem to be quite a lot of missing values in a couple of vectors from the F module
+which( colnames(malawi)==&quot;hh_f04_4&quot;) # 13</code></pre>
+<pre><code>## [1] 13</code></pre>
+<pre class="r"><code>which( colnames(malawi)==&quot;hh_f04a&quot;) # 14</code></pre>
+<pre><code>## [1] 14</code></pre>
+<pre class="r"><code>malawi &lt;- malawi[,-c(13,14)]
+
+# The target feature, Food Consumption in the past 7 days [sumConsumption], has 9046 missing values. Let&#39;s get rid of them
+rows_consumption &lt;- which(is.na(malawi$sumConsumption))
+head(rows_consumption)</code></pre>
+<pre><code>## [1] 41431 41432 41433 41434 41435 41436</code></pre>
+<pre class="r"><code>tail(rows_consumption)</code></pre>
+<pre><code>## [1] 50471 50472 50473 50474 50475 50476</code></pre>
+<pre class="r"><code>length(rows_consumption) # we&#39;ve created an indicator with all the missing rows</code></pre>
+<pre><code>## [1] 9046</code></pre>
+<pre class="r"><code>malawi &lt;- malawi[-rows_consumption,]
+colSums(is.na(malawi)) # all clear!</code></pre>
+<pre><code>##         reside         hhsize        hh_b05a sumConsumption         hh_s01 
+##              0              0              0              0              0 
+##         hh_b03         hh_c09         hh_c24         hh_d10         hh_d11 
+##              0              0              0              0              0 
+##       hh_d12_1         hh_e70         hh_f19         hh_f34         hh_t08 
+##              0              0              0              0              0 
+##         hh_t01         hh_t14 
+##              0              0</code></pre>
+<p><em>Visualising our data</em></p>
+<p>A quick and effective way to take a first glance at our data is to
+plot <strong>histograms</strong> of relevant (continuously distributed)
+features.</p>
+<pre class="r"><code>malawi_continuous &lt;- malawi %&gt;% select_if(~is.integer(.) | is.numeric(.)) # this line selects all variables in the dataframe which are integer OR numeric, and can therefore be plotted as a histogram.
+hist.data.frame(malawi_continuous) # from the Hmisc package, quick and painless.</code></pre>
+<p><img src="reg1_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Some important information we can gather from these plots: our food
+consumption measure is skewed (perhaps it should be logged?), there are
+a number of variables for which there seems to be bunching at the zero
+value. The only (close to) normal distribution we observe is in terms of
+household size.</p>
+<p>We should plot the remaining factor (binary, categorical)
+features.</p>
+<pre class="r"><code>malawi_factor &lt;- malawi %&gt;% select_if(~is.factor(.)) # subset of the dataframe containing only factor variables
+llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package</code></pre>
+<pre><code>## $reside
+## 
+## RURAL URBAN 
+## 35814  5616 
+## 
+## $hh_s01
+## 
+##    NO   YES 
+## 28946 12484 
+## 
+## $hh_b03
+## 
+## FEMALE   MALE 
+##  21501  19929 
+## 
+## $hh_c09
+## 
+##             A-LEVEL    DEGREE   DIPLOMA       JCE   MASTERS MSCE/GCSE      NONE 
+##     10012       115       104       263      1794        23      1677     24110 
+##       PhD      PSLC 
+##         4      3328 
+## 
+## $hh_c24
+## 
+##          No   Yes 
+##  5655 34279  1496 
+## 
+## $hh_e70
+## 
+##          No   Yes 
+## 22163 15720  3547 
+## 
+## $hh_f19
+## 
+##    NO   YES 
+## 36824  4606 
+## 
+## $hh_t08
+## 
+##                                                                     
+##                                                                   3 
+##                                    ALLOWS YOU TO BUILD YOUR SAVINGS 
+##                                                                2443 
+##                                    ALLOWS YOU TO SAVE JUST A LITTLE 
+##                                                                5762 
+## IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 
+##                                                                8147 
+##    IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES 
+##                                                                7760 
+##                                       ONLY JUST MEETS YOUR EXPENSES 
+##                                                               17315 
+## 
+## $hh_t01
+## 
+##                                               
+##                                             3 
+##      It was just adequate for household needs 
+##                                         13520 
+## It was less than adequate for household needs 
+##                                         25794 
+## It was more than adequate for household needs 
+##                                          2113 
+## 
+## $hh_t14
+## 
+##            DON&#39;T KNOW         NO        YES 
+##          3         25       7949      33453</code></pre>
+<p>Some of what we can gather from looking at the tables is that there
+are features for which the levels (also known as categories) are not
+labeled in a way that we can understand. For example, feature hh_c09
+(What is the highest educational qualification [NAME] has acquired) has
+about 10,012 values under an unnamed educational qualification. Two
+things may be going on here: 1) the enumerators coded missing values
+differently from NA (which R automatically reads as missing), or 2)
+there is a value which was unlabeled and we may need to relabel.</p>
+<pre class="r"><code>levels(malawi$hh_c09)</code></pre>
+<pre><code>##  [1] &quot;&quot;          &quot;A-LEVEL&quot;   &quot;DEGREE&quot;    &quot;DIPLOMA&quot;   &quot;JCE&quot;       &quot;MASTERS&quot;  
+##  [7] &quot;MSCE/GCSE&quot; &quot;NONE&quot;      &quot;PhD&quot;       &quot;PSLC&quot;</code></pre>
+<pre class="r"><code># the line above tells us that there are empty cells, recognised by the level &quot;&quot;.
+head(malawi$hh_c09) # we can confirm that it is indeed an empty cell by looking at the first six values of the dataframe (using the head command, which returns the first six elements). One of the six elements is nothing. </code></pre>
+<pre><code>## [1] NONE NONE NONE      NONE NONE
+## Levels:  A-LEVEL DEGREE DIPLOMA JCE MASTERS MSCE/GCSE NONE PhD PSLC</code></pre>
+<p>The main take away from creating tables of all the factor variables
+in the dataframe is that there are still missing values that were not
+taken care of during the data cleaning step. This is due to the fact
+that, as R read the factors, it mistakenly read an empty cell as a
+category, and not a missing value.</p>
+<p><em>Exploring relationships between features</em></p>
+<p>Let’s explore the relationships that may or may not exist between our
+selected features using two distinct correlation matrices.</p>
+<pre class="r"><code>M &lt;- cor(malawi_continuous) # create a correlation matrix of the continuous dataset, cor() uses Pearson&#39;s correlation coefficient as default. This means we can only take the correlation between continuous variables
+corrplot(M, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.8) # visualise it in a nice way
+
+# Let&#39;s compute the Spearman correlation coefficient between categorical variables
+malawi_factorC &lt;- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+M2 &lt;- cor(malawi_factorC, method = &quot;spearman&quot;)
+corrplot(M2, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.8) # visualise it in a nice way</code></pre>
+<p><img src="reg1_files/figure-html/figures-side-1.png" width="50%" /><img src="reg1_files/figure-html/figures-side-2.png" width="50%" /></p>
+<p>Notice how, in both matrices, but particularly that which contains
+our target variable, we observe several instances were the correlation
+coefficient is zero. We call this, a zero-variance predictor. For many
+machine learning models (excluding tree-based models), this may cause
+the model to crash or the fit to be unstable.</p>
+<p><strong>3. Partition data into training and test
+datasets</strong></p>
+<p>When we are working with machine learning learning models, it is
+important to have two datasets. A training dataset from which our model
+will learn, and a test dataset containing the same features as our
+training dataset. To split our main dataset into two, we will work with
+an 80/20 split.</p>
+<p>The 80/20 split has its origins in the Pareto Principle, which states
+that “in most cases, 80% of effects from from 20% of causes”. Without
+other relevant knowledge of the source or shape of the data, this
+partitioning method is a good place to start and indeed standard in the
+machine learning field.</p>
+<pre class="r"><code># Always set a seet for reproducibility purposes!
+set.seed(1234777) # use any number you want
+
+# We could split the data manually, but the caret package includes an useful function
+
+train_idx &lt;- createDataPartition(malawi$sumConsumption, p = .8, list = FALSE, times = 1)
+head(train_idx)</code></pre>
+<pre><code>##      Resample1
+## [1,]         2
+## [2,]         3
+## [3,]         4
+## [4,]         5
+## [5,]         6
+## [6,]         8</code></pre>
+<pre class="r"><code>Train_df &lt;- malawi[ train_idx,]
+Test_df  &lt;- malawi[-train_idx,]</code></pre>
+<p><strong>4. Creating our first predictive model and evaluating its
+performance: RMSE and R^2</strong></p>
+<p>We will start by fitting a predictive model using the training
+dataset; that is, our target variable <em>Total household food
+consumption in the past 7 days</em> or <em>sumConsumption</em> will be a
+<span class="math inline">\(Y\)</span> dependent variable in a linear
+model $ Y = + x’+ $, and the remaining features in the dataframe
+correspond to the row vectors <span
+class="math inline">\(x&#39;\beta\)</span>.</p>
+<pre class="r"><code>model1 &lt;- lm(sumConsumption ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable sumConsumption
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = sumConsumption ~ ., data = Train_df)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -508.9  -76.7  -44.1  -12.1 3923.1 
+## 
+## Coefficients: (2 not defined because of singularities)
+##                                                                               Estimate
+## (Intercept)                                                                15.80553139
+## resideURBAN                                                                13.25930787
+## hhsize                                                                      1.68308427
+## hh_b05a                                                                    -0.15652501
+## hh_s01YES                                                                   4.69238570
+## hh_b03MALE                                                                  3.37089141
+## hh_c09A-LEVEL                                                             -35.33520488
+## hh_c09DEGREE                                                              -23.29047021
+## hh_c09DIPLOMA                                                              40.06399172
+## hh_c09JCE                                                                  23.00516884
+## hh_c09MASTERS                                                               4.13154007
+## hh_c09MSCE/GCSE                                                            21.78924065
+## hh_c09NONE                                                                  9.96067002
+## hh_c09PhD                                                                 -78.80761748
+## hh_c09PSLC                                                                 15.68218634
+## hh_c24No                                                                  -17.95947321
+## hh_c24Yes                                                                  72.10804661
+## hh_d10                                                                      0.00221699
+## hh_d11                                                                     -0.00060426
+## hh_d12_1                                                                    0.00006099
+## hh_e70No                                                                    7.39158612
+## hh_e70Yes                                                                  15.54210741
+## hh_f19YES                                                                  68.33823174
+## hh_f34                                                                     25.37035505
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                    181.98522340
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                    148.16756347
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 117.79756491
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES    126.24788608
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                       127.30794077
+## hh_t01It was just adequate for household needs                            -64.65588521
+## hh_t01It was less than adequate for household needs                       -75.41116339
+## hh_t01It was more than adequate for household needs                                 NA
+## hh_t14DON&#39;T KNOW                                                          253.18065871
+## hh_t14NO                                                                   40.07915366
+## hh_t14YES                                                                           NA
+##                                                                             Std. Error
+## (Intercept)                                                               161.74398164
+## resideURBAN                                                                 4.23590564
+## hhsize                                                                      0.58544602
+## hh_b05a                                                                     0.08366859
+## hh_s01YES                                                                   2.77798729
+## hh_b03MALE                                                                  2.53391182
+## hh_c09A-LEVEL                                                              24.36045238
+## hh_c09DEGREE                                                               26.39127156
+## hh_c09DIPLOMA                                                              17.75528193
+## hh_c09JCE                                                                   7.42166404
+## hh_c09MASTERS                                                              56.87898083
+## hh_c09MSCE/GCSE                                                             8.05585727
+## hh_c09NONE                                                                  4.37004645
+## hh_c09PhD                                                                 114.43067766
+## hh_c09PSLC                                                                  6.11689724
+## hh_c24No                                                                    5.74888352
+## hh_c24Yes                                                                   9.90039225
+## hh_d10                                                                      0.00086729
+## hh_d11                                                                      0.00108446
+## hh_d12_1                                                                    0.00004830
+## hh_e70No                                                                    3.09939708
+## hh_e70Yes                                                                   4.99386247
+## hh_f19YES                                                                   4.95327561
+## hh_f34                                                                      1.47285844
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                    161.85712567
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                    161.81512228
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 161.81440629
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES    161.81397243
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                       161.79623519
+## hh_t01It was just adequate for household needs                              6.09734642
+## hh_t01It was less than adequate for household needs                         6.26197125
+## hh_t01It was more than adequate for household needs                                 NA
+## hh_t14DON&#39;T KNOW                                                           53.90830586
+## hh_t14NO                                                                    3.77472730
+## hh_t14YES                                                                           NA
+##                                                                           t value
+## (Intercept)                                                                 0.098
+## resideURBAN                                                                 3.130
+## hhsize                                                                      2.875
+## hh_b05a                                                                    -1.871
+## hh_s01YES                                                                   1.689
+## hh_b03MALE                                                                  1.330
+## hh_c09A-LEVEL                                                              -1.451
+## hh_c09DEGREE                                                               -0.883
+## hh_c09DIPLOMA                                                               2.256
+## hh_c09JCE                                                                   3.100
+## hh_c09MASTERS                                                               0.073
+## hh_c09MSCE/GCSE                                                             2.705
+## hh_c09NONE                                                                  2.279
+## hh_c09PhD                                                                  -0.689
+## hh_c09PSLC                                                                  2.564
+## hh_c24No                                                                   -3.124
+## hh_c24Yes                                                                   7.283
+## hh_d10                                                                      2.556
+## hh_d11                                                                     -0.557
+## hh_d12_1                                                                    1.263
+## hh_e70No                                                                    2.385
+## hh_e70Yes                                                                   3.112
+## hh_f19YES                                                                  13.797
+## hh_f34                                                                     17.225
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                      1.124
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                      0.916
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES   0.728
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES      0.780
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                         0.787
+## hh_t01It was just adequate for household needs                            -10.604
+## hh_t01It was less than adequate for household needs                       -12.043
+## hh_t01It was more than adequate for household needs                            NA
+## hh_t14DON&#39;T KNOW                                                            4.697
+## hh_t14NO                                                                   10.618
+## hh_t14YES                                                                      NA
+##                                                                                       Pr(&gt;|t|)
+## (Intercept)                                                                            0.92216
+## resideURBAN                                                                            0.00175
+## hhsize                                                                                 0.00404
+## hh_b05a                                                                                0.06139
+## hh_s01YES                                                                              0.09120
+## hh_b03MALE                                                                             0.18342
+## hh_c09A-LEVEL                                                                          0.14692
+## hh_c09DEGREE                                                                           0.37751
+## hh_c09DIPLOMA                                                                          0.02405
+## hh_c09JCE                                                                              0.00194
+## hh_c09MASTERS                                                                          0.94210
+## hh_c09MSCE/GCSE                                                                        0.00684
+## hh_c09NONE                                                                             0.02266
+## hh_c09PhD                                                                              0.49102
+## hh_c09PSLC                                                                             0.01036
+## hh_c24No                                                                               0.00179
+## hh_c24Yes                                                                    0.000000000000333
+## hh_d10                                                                                 0.01059
+## hh_d11                                                                                 0.57739
+## hh_d12_1                                                                               0.20662
+## hh_e70No                                                                               0.01709
+## hh_e70Yes                                                                              0.00186
+## hh_f19YES                                                                 &lt; 0.0000000000000002
+## hh_f34                                                                    &lt; 0.0000000000000002
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                                 0.26087
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                                 0.35985
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES              0.46663
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES                 0.43528
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                    0.43138
+## hh_t01It was just adequate for household needs                            &lt; 0.0000000000000002
+## hh_t01It was less than adequate for household needs                       &lt; 0.0000000000000002
+## hh_t01It was more than adequate for household needs                                         NA
+## hh_t14DON&#39;T KNOW                                                             0.000002657104708
+## hh_t14NO                                                                  &lt; 0.0000000000000002
+## hh_t14YES                                                                                   NA
+##                                                                              
+## (Intercept)                                                                  
+## resideURBAN                                                               ** 
+## hhsize                                                                    ** 
+## hh_b05a                                                                   .  
+## hh_s01YES                                                                 .  
+## hh_b03MALE                                                                   
+## hh_c09A-LEVEL                                                                
+## hh_c09DEGREE                                                                 
+## hh_c09DIPLOMA                                                             *  
+## hh_c09JCE                                                                 ** 
+## hh_c09MASTERS                                                                
+## hh_c09MSCE/GCSE                                                           ** 
+## hh_c09NONE                                                                *  
+## hh_c09PhD                                                                    
+## hh_c09PSLC                                                                *  
+## hh_c24No                                                                  ** 
+## hh_c24Yes                                                                 ***
+## hh_d10                                                                    *  
+## hh_d11                                                                       
+## hh_d12_1                                                                     
+## hh_e70No                                                                  *  
+## hh_e70Yes                                                                 ** 
+## hh_f19YES                                                                 ***
+## hh_f34                                                                    ***
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                       
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                       
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES    
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES       
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                          
+## hh_t01It was just adequate for household needs                            ***
+## hh_t01It was less than adequate for household needs                       ***
+## hh_t01It was more than adequate for household needs                          
+## hh_t14DON&#39;T KNOW                                                          ***
+## hh_t14NO                                                                  ***
+## hh_t14YES                                                                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 228.5 on 33113 degrees of freedom
+## Multiple R-squared:  0.1013, Adjusted R-squared:  0.1004 
+## F-statistic: 116.7 on 32 and 33113 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+<p>The output of our model, obtained with the summary() command, has
+three important indicators to assess the performance of our model:</p>
+<ul>
+<li>Model <em>residuals</em>: recall residuals are the observed value
+minus the predicted value.</li>
+</ul>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -508.94  -76.74  -44.06    0.00  -12.11 3923.07</code></pre>
+<p>The max(imum) error of <span class="math inline">\(3290.59\)</span>
+suggests that the model under-predicted expenses by circa $3,300 for at
+least one observation. Fifty percent of the predictions (between the
+first and third quartiles) over-predict the true consumption value by
+$77 and $12.50. From these data, we obtain the popular measure of
+perfomance evaluation known as the Root Mean Squared Error (RMSE, for
+short).</p>
+<pre class="r"><code># Calculate the RMSE for the training dataset, or the in-sample RMSE.
+
+# 1. Predict values on the training dataset
+p0 &lt;- predict(model1, Train_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error0 &lt;- p0 - Train_df[[&quot;sumConsumption&quot;]]
+
+# 3. In-sample RMSE
+RMSE_insample &lt;- sqrt(mean(error0 ^ 2))
+print(RMSE_insample)</code></pre>
+<pre><code>## [1] 228.4205</code></pre>
+<p>The RMSE (<span class="math inline">\(227.528\)</span>) gives us an
+absolute number that indicates how much our predicted values deviate
+from the true (observed) number. Think of the question, <em>how far, on
+average, are the residuals away from zero?</em> Generally speaking, the
+lower the value, the better the model fit. Besides being a good measure
+of goodness of fit, the RMSE is also useful for comparing the ability of
+our model to make predictions on different (e.g. test) datasets. The
+in-sample RMSE should be close or equal to the out-of-sample RMSE.</p>
+<ul>
+<li><p>The <em>p-values</em>: represented by stars *** indicate the
+predictive power of each feature in the model. In the same line, the
+magnitude of the coefficient is also important, especially given that we
+are interested in explanatory power and not causality.</p></li>
+<li><p>The R-squared: arguably the go-to indicator for performance
+assessment. The total variance explained by our model (R^2) is ~ 10
+percent (0.09986). Low R^2 values are not uncommon, especially in the
+social sciences. However, when hoping to use a model for predictive
+purposes, 10 percent might not be enough, large number of statistically
+significant features notwithstanding. The drawback from relying solely
+on this measure is that it does not take into consideration the problem
+of model over-fitting; i.e. you can inflate the R-squared by adding as
+many variables as you want, even if those variables have little
+predicting power. This method will yield great results in the training
+data, but will underperform when extrapolating the model to the test (or
+indeed any other) data.</p></li>
+</ul>
+<p><em>Out of sample model predictions</em></p>
+<p>Now that we have built and evaluated our model, we can proceed to
+make out-of-sample predictions.</p>
+<pre class="r"><code>p &lt;- predict(model1, Test_df)</code></pre>
+<pre><code>## Warning in predict.lm(model1, Test_df): prediction from a rank-deficient fit may
+## be misleading</code></pre>
+<p>Notice that our prediction produces a warning. The warning is just
+that, a warning, and it does not stop the program from running or
+producing results. It does, however, indicate that those results may be
+meaningless. This is not big news for us at this point, since we have
+run into some interesting insights along the way: zero-variance
+predictors in the correlation matrix, a low R-squared value…</p>
+<p><em>The bias-variance tradeoff in practice</em></p>
+<p>We previously mentioned that the RMSE metric could also be used to
+compare between training and test model predictions. Let us estimate the
+ou-of-sample RMSE:</p>
+<pre class="r"><code>error &lt;- p - Test_df[[&quot;sumConsumption&quot;]] # predicted values minus actual values
+RMSE_test &lt;- sqrt(mean(error^2))
+print(RMSE_test) # this is known as the out-of-sample RMSE</code></pre>
+<pre><code>## [1] 232.5525</code></pre>
+<p>Notice that the <em>in-sample RMSE</em>[<span
+class="math inline">\(227.528\)</span>] is very close to the
+<em>out-of-sample RMSE</em>[<span
+class="math inline">\(235.9987\)</span>]. This means that our our model
+makes consistent predictions across different datasets. However, we also
+now by now that these predictions are not great. What we are observing
+here is a model that has not found a balance between bias and
+variance.</p>
+<p><em>What do we mean by bias in a model?</em></p>
+<p>The bias is the difference between the average prediction of our
+model and the true (observed) value. Minimising the bias is analogous to
+minimising the RMSE.</p>
+<p><em>What do we mean by variance in a model?</em></p>
+<p>It is the observed variability of model prediction for a given data
+point. A model with high variance would yield low error values in the
+training data but high errors in the test data.</p>
+<p>Our Food Consumption prediction model therefore exhibits a low level
+of variance (and thus it extrapolates well to other datasets) but a high
+level of bias. We have created an <strong>under-fitted
+model!</strong></p>
+<p><strong>5. Challenge!</strong></p>
+<p>How can we improve our model? We want to avoid under-fitting,
+i.e. what we did throughout this example. We also want to avoid
+over-fitting the model. Improve and assess your model following the
+example above. Here are some suggestions that you can use to improve the
+model:</p>
+<ul>
+<li><p>Rethink the predictors: remember the zero-variance predictors in
+the correlation matrix? Perhaps they should be removed from the model.
+They add nothing to our model and instead make unstable predictions. You
+could also revisit the original dataset with more than 500 features and
+think of other variables that might be of interest. Finally, there were
+some factor features (a.k.a. categorical variables) that still had some
+missing values. Should we get rid of the features? Or get rid of the
+missing values and keep the features but decrease the sample size? This
+is up to you!</p></li>
+<li><p>Include polynomial transformations: the relationship between any
+given predictor and the target feature (dependent variable) might be
+non-linear and thus better explained by a polynomial (squared, cubic)
+transformation.</p></li>
+<li><p>Other variable transformations: remember the distribution of our
+consumption variable? It was highly skewed. Perhaps a log transformation
+might be needed.</p></li>
+<li><p>Include interaction terms: perhaps the true explanatory power of
+a feature comes from its interaction with another feature. Say, the
+effect of education on consumption is dominated by the gender of the
+household head. We know from previous <a
+href="https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf">research</a>
+that when women are recipients of cash transfers from the government,
+households spent more of their budget on food.</p></li>
+</ul>
 </div>
 </div>
 
