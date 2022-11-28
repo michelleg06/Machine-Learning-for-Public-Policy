@@ -445,3 +445,17 @@ for (i in 1:length(starwars$height)) {
 print(starwars[c("name", "height_judge", "height")])
 
 ```
+
+You can download the R script by clicking on the button below.
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Gentle Intro to R and Rstudio.R",
+  button_label = "Download Intro to R script (.R)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```

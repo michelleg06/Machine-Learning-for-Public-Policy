@@ -19,10 +19,10 @@ navbar:
         - text: "Regression II"
           href: reg2.html
           icon: fa-gear
-        - text: "Classification"
-          href: classification.html
-          icon: fa-gear
         - text: "Fair ML/Data Ethics"
           href: fairml.html
           icon: fa fa-graduation-cap
+        - text: "Classification"
+          href: classification.html
+          icon: fa-gear
 output_dir: "." # if publishing on Github pages

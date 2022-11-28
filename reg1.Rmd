@@ -8,6 +8,32 @@ output: html_document
 
 ## **Supervised Machine Learning: Linear Models (Regression)** {.tabset .tabset-fade .tabset-pills}
 
+**Predicting social assistance beneficiaries** 
+
+Social policies usually work with tight budgets and limited fiscal space. To allocate resources efficiently, benefits need to be targeted to those who need them the most. Yet, identifying needs isn’t easy and misclassifications can have severe and irreversible impacts on people in need. Different targeting mechanisms are being used including expert judgment to define eligibility criteria or selection by community committees. The most common approach for anti-poverty programs is based on data: Proxy Means Testing (PMT). A recent review and discussion of social assistance targeting by the World Bank can be found [here](https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance).
+
+![](https://www.youtube.com/watch?v=Tzm9r91DBnc)
+
+The underlying idea behind PMT is to use data on easily observable household characteristics - which are hard to manipulate - to predict poverty. Traditionally, regressions of observable characteristics on reported consumption are performed on existing large-scale survey data sets. The regression coefficients of the best-performing model are then used as a weight. To define program eligibility, a second survey is conducted with potential beneficiaries. To screen households, information on the selected PMT variables is collected (e.g. number of rooms, type of house, household size) and the values of the chosen observables are multiplied by the observables respective weight (derived from the previous regression). Households are then ordered according to their predicted PMT score and benefits are allocated to households below a certain threshold. 
+In block 1 of this course, we use data to build a PMT algorithm. We rely on World Bank’s LSMS household survey data from Malawi to build a model to rank and identify households in need. Before jumping to the data, we need to ensure that we have a proper understanding of the problem we want to solve.
+
+*Discussion Points*
+
+•	Why is this a prediction policy problem? What would be a causal inference problem in this setting? Is it a regression or a classification problem?
+
+•	Which variables and characteristics we include in the PMT can make a big difference.
+
+    o	Programmatically and conceptually, which type of characteristics do we want to consider for the PMT? 
+
+    o	Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?
+
+•	What are the practical implications of the bias-variance tradeoff in this application?
+
+•	What are potential risks of such a data driven targeting approach?
+
+
+
+
 ### **Merging datasets with R: LSMS data example**
 
 Many organisations, institutions, and firms around the world collect and, if we're lucky, share data. One such example is The World Bank Group who, in cooperation with local statistical offices, collects cross-sectional and panel data on the socioeconomic lives of country nationals. The Living Standards Measurement Survey (LSMS, for short) has been around since the 1980's, and anyone who wishes to analyse that data for (hopefully!) policy-improvement purposes can do so. The only problem is, it comes in various formats and separate files. We've chosen to download the 2019-2020 LSMS data for Malawi, a cross-sectional database which contains several modules on Health, Education, Food Security, etc. When you download the data, you receive a folder with several .csv files that must be put together. The code below does just that.

@@ -279,17 +279,17 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="classification.html">
-    <span class="fa fa-gear"></span>
-     
-    Classification
-  </a>
-</li>
-<li>
   <a href="fairml.html">
     <span class="fa fa-graduation-cap"></span>
      
     Fair ML/Data Ethics
+  </a>
+</li>
+<li>
+  <a href="classification.html">
+    <span class="fa fa-gear"></span>
+     
+    Classification
   </a>
 </li>
       </ul>
@@ -312,6 +312,48 @@ $(document).ready(function () {
 class="section level2 tabset tabset-fade tabset-pills">
 <h2 class="tabset tabset-fade tabset-pills"><strong>Supervised Machine
 Learning: Linear Models (Regression)</strong></h2>
+<p><strong>Predicting social assistance beneficiaries</strong></p>
+<p>Social policies usually work with tight budgets and limited fiscal
+space. To allocate resources efficiently, benefits need to be targeted
+to those who need them the most. Yet, identifying needs isn’t easy and
+misclassifications can have severe and irreversible impacts on people in
+need. Different targeting mechanisms are being used including expert
+judgment to define eligibility criteria or selection by community
+committees. The most common approach for anti-poverty programs is based
+on data: Proxy Means Testing (PMT). A recent review and discussion of
+social assistance targeting by the World Bank can be found <a
+href="https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance">here</a>.</p>
+<p><img src="https://www.youtube.com/watch?v=Tzm9r91DBnc" /></p>
+<p>The underlying idea behind PMT is to use data on easily observable
+household characteristics - which are hard to manipulate - to predict
+poverty. Traditionally, regressions of observable characteristics on
+reported consumption are performed on existing large-scale survey data
+sets. The regression coefficients of the best-performing model are then
+used as a weight. To define program eligibility, a second survey is
+conducted with potential beneficiaries. To screen households,
+information on the selected PMT variables is collected (e.g. number of
+rooms, type of house, household size) and the values of the chosen
+observables are multiplied by the observables respective weight (derived
+from the previous regression). Households are then ordered according to
+their predicted PMT score and benefits are allocated to households below
+a certain threshold. In block 1 of this course, we use data to build a
+PMT algorithm. We rely on World Bank’s LSMS household survey data from
+Malawi to build a model to rank and identify households in need. Before
+jumping to the data, we need to ensure that we have a proper
+understanding of the problem we want to solve.</p>
+<p><em>Discussion Points</em></p>
+<p>• Why is this a prediction policy problem? What would be a causal
+inference problem in this setting? Is it a regression or a
+classification problem?</p>
+<p>• Which variables and characteristics we include in the PMT can make
+a big difference.</p>
+<pre><code>o   Programmatically and conceptually, which type of characteristics do we want to consider for the PMT? 
+
+o   Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?</code></pre>
+<p>• What are the practical implications of the bias-variance tradeoff
+in this application?</p>
+<p>• What are potential risks of such a data driven targeting
+approach?</p>
 <div id="merging-datasets-with-r-lsms-data-example"
 class="section level3">
 <h3><strong>Merging datasets with R: LSMS data example</strong></h3>

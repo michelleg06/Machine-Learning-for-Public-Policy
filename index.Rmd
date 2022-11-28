@@ -34,68 +34,91 @@ Machine learning has become an increasingly integral part of public policies. It
 
 The course consists of 5 workshops each consisting of a technical introductory lecture and a hands-on application of the topics to a real-world policy problem. Students will be working with the programming language R, but coding is not the primary focus of the course.
 
-<span style="color:red">Please note that workshops 1,2, and 5 will be held in person in winter 2022. Workshops 3 and 4 will be held in person in winter 2023. The exact dates will be provided under each title as soon as they are confirmed.</span> 
+will be provided under each title as soon as they are confirmed.</span> 
 
 **Course textbook (ebook available for free):**
 James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning: With Applications in R.](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)
 
-## [1. Introduction to machine learning for policy analysis](https://www.ml4publicpolicy.com/intro.html)
+## [1. Gentle Introduction to R and Rstudio](https://www.ml4publicpolicy.com/intro.html)
 
-    ·  What is machine learning?
-    ·  Inference versus prediction for policy analysis
-    ·  Supervised, unsupervised and reinforcement learning
-    ·  Bias-variance tradeoff and Mean Square Error (MSE) minimization
-    ·  Metrics
-    ·  Model validation
+    ·  Introduction to the course
+    ·  Introduction to the R statistical programming language with the Rstudio IDE
+
+**Workshop: 28 November 2022, 3pm**
+**Room 0.18**
+
+
+## [2. Introduction to Machine Learning for Public Policy: Regression (I)](https://www.ml4publicpolicy.com/reg1.html)
+
+    ·  	Prediction Policy problems
+    ·   Inference vs. prediction for policy analysis
+    ·  	Assessing accuracy: bias-variance tradeoff
+    ·  	Training error vs. test error
+    ·  	Feature selection
+   
+
 
 **Readings:** 
 
 *Mandatory*
-- An introduction to Statistical learning, Chapter 2 and Chapter 5.1.
+
+- An introduction to Statistical learning, Chapter 2.
+
 - Kleinberg, J., Ludwig, J., Mullainathan, S. and Obermeyer, Z., 2015. [Prediction policy problems. American Economic Review](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023), 105(5), pp.491-95.
 
 *Optional readings*
+
 - Athey, S. (2017). [Beyond prediction: Using big data for policy problems](https://www.science.org/doi/10.1126/science.aal4321). Science, 355(6324), 483-485.
+
 - Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J. and Mullainathan, S., 2017. [Human decisions and machine predictions.](https://academic.oup.com/qje/article-abstract/133/1/237/4095198?redirectedFrom=fulltext) The Quarterly Journal of Economics, 133(1), pp.237-293.
+
 - Hanna, R., & Olken, B. A. (2018). [Universal basic incomes versus targeted transfers: Anti-poverty programs in developing countries.](https://www.aeaweb.org/articles?id=10.1257/jep.32.4.201) Journal of Economic Perspectives, 32(4), 201-26. (exercise application)
+
 - McBride, L., & Nichols, A. (2018). [Retooling poverty targeting using out-of-sample validation and machine learning.](https://academic.oup.com/wber/article-abstract/32/3/531/2447896?redirectedFrom=fulltext) The World Bank Economic Review, 32(3), 531-550.pter 5.1
 
-**Workshop: 28 November, 3pm**
-
-A gentle introduction to R and Rstudio
-
-
-## [2. Regression (I)](https://www.ml4publicpolicy.com/reg1.html)
-
-    ·  	OLS
-    ·  	Assessing accuracy
-    ·  	Training error vs. test error
-    ·  	Feature selection
-    ·  	Cross-validation
-
-**Readings:** 
-
-- An introduction to Statistical learning, Chapter 3, 5.
-- Varian, Hal R. 2014. ["Big Data: New Tricks for Econometrics."](https://www.aeaweb.org/articles?id=10.1257/jep.28.2.3) Journal of Economic Perspectives, 28 (2): 3-28.
-
-**Workshop:**
+**Workshop: 5 December, 3pm**
+**Room 0.18**
 
 LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
 ## [3. Regression (II)](https://www.ml4publicpolicy.com/reg2.html)
 
-    ·  	Regularization/Shrinkage models
-    ·  	Parameter tuning
-    ·  	Decision trees
-    ·  	Bagging/Boosting
+    ·  	Crossvalidation
+    ·  	Shrinkage models: Lasso & Ridge
+    ·  	Dimension reduction: Principal Component Analysis
 
 
 **Readings:** 
 
-- An introduction to Statistical learning, Chapter, 6 and 8.
+- An introduction to Statistical learning, Chapter 5.1, Chapter, 6.2, 6.3.
+
 - Abebe, R., Kleinberg, J., & Weinberg, S. M. (2020). [Subsidy Allocations in the Presence of Income Shocks.](https://ojs.aaai.org/index.php/AAAI/article/view/6188) Proceedings of the AAAI Conference on Artificial Intelligence, 34(05), 7032-7039.
 
-## [4. Classification](https://www.ml4publicpolicy.com/classification.html)
+## [4. Fair Machine Learning / Ethics](https://www.ml4publicpolicy.com/fairml.html)
+
+    ·  	An introduction to Statistical Learning, Chapter 3, 5, 6 8
+    ·  	Indicators
+    ·  	Black box algorithms
+    ·  	Biases
+    ·  	Ethical challenges
+
+
+**Readings:** 
+
+- [Fast AI: Deep Learning for Coders with Fastai and PyTorch: AI Applications Without a PhD,  Chapter 4.](https://colab.research.google.com/github/fastai/fastbook/blob/master/03_ethics.ipynb)
+
+- Kasy, M., & Abebe, R. (2021, March). [Fairness, equality, and power in algorithmic decision-making.](https://maxkasy.github.io/home/files/papers/fairness_equality_power.pdf) In Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (pp. 576-586).
+
+- [Fairness and Machine Learning: Limitations and Opportunities](https://fairmlbook.org/), Chapter 4.
+
+
+**Guest Lecture: 14 December 3pm**
+**Zoom Link will be provided**
+
+Algorithmic Fairness, by Dr. [Juba Ziani](https://www.isye.gatech.edu/users/juba-ziani) from Georgia Tech.
+
+
+## [5. Classification](https://www.ml4publicpolicy.com/classification.html)
 
     ·  	Logistic regression
     ·  	Performance indicators
@@ -108,30 +131,13 @@ LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 **Readings:** 
 
 - An introduction to Statistical learning Chapter 3, 5, 6 8
+
 - Athey, S., & Imbens, G. W. (2019). [Machine learning methods that economists should know about.](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433) Annual Review of Economics, 11, 685-725.
 
 **Workshop:**
-LSMS data: Fifth Integrated Household Survey 2019-2020 (Malawi)
 
-## [5. Fair Machine Learning / Ethics](https://www.ml4publicpolicy.com/fairml.html)
+<span style="color:red"> This topic will be introduced next semester. More information on dates and format will be announced when available </span>
 
-    ·  	An introduction to Statistical Learning, Chapter 3, 5, 6 8
-    ·  	Indicators
-    ·  	Black box algorithms
-    ·  	Biases
-    ·  	Ethical challenges
-
-
-**Readings:** 
-
-- [Fast AI: Deep Learning for Coders with Fastai and PyTorch: AI Applications Without a PhD,  Chapter 4.](https://colab.research.google.com/github/fastai/fastbook/blob/master/03_ethics.ipynb)
-- Kasy, M., & Abebe, R. (2021, March). [Fairness, equality, and power in algorithmic decision-making.](https://maxkasy.github.io/home/files/papers/fairness_equality_power.pdf) In Proceedings of the 2021 ACM Conference on Fairness, Accountability, and Transparency (pp. 576-586).
-- [Fairness and Machine Learning: Limitations and Opportunities](https://fairmlbook.org/), Chapter 4.
-
-
-**Guest Lecture: 14 December 3pm**
-
-Algorithmic Fairness, by Dr. [Juba Ziani](https://www.isye.gatech.edu/users/juba-ziani) from Georgia Tech.
 
 
 
