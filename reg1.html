@@ -32,6 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
 
 <style type="text/css">
@@ -323,7 +324,11 @@ committees. The most common approach for anti-poverty programs is based
 on data: Proxy Means Testing (PMT). A recent review and discussion of
 social assistance targeting by the World Bank can be found <a
 href="https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance">here</a>.</p>
-<p><img src="https://www.youtube.com/watch?v=Tzm9r91DBnc" /></p>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/Tzm9r91DBnc" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
 <p>The underlying idea behind PMT is to use data on easily observable
 household characteristics - which are hard to manipulate - to predict
 poverty. Traditionally, regressions of observable characteristics on
@@ -348,7 +353,6 @@ classification problem?</p>
 <p>• Which variables and characteristics we include in the PMT can make
 a big difference.</p>
 <pre><code>o   Programmatically and conceptually, which type of characteristics do we want to consider for the PMT? 
-
 o   Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?</code></pre>
 <p>• What are the practical implications of the bias-variance tradeoff
 in this application?</p>
@@ -861,7 +865,7 @@ plot <strong>histograms</strong> of relevant (continuously distributed)
 features.</p>
 <pre class="r"><code>malawi_continuous &lt;- malawi %&gt;% select_if(~is.integer(.) | is.numeric(.)) # this line selects all variables in the dataframe which are integer OR numeric, and can therefore be plotted as a histogram.
 hist.data.frame(malawi_continuous) # from the Hmisc package, quick and painless.</code></pre>
-<p><img src="reg1_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="reg1_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <p>Some important information we can gather from these plots: our food
 consumption measure is skewed (perhaps it should be logged?), there are
 a number of variables for which there seems to be bunching at the zero
