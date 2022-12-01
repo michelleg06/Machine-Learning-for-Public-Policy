@@ -5,7 +5,7 @@
 ## Encoding: UTF-8
 ## Packages: tidyverse
 ## Date: 28 November 2022
-## Author: <Your name here >
+## Author: Michelle González Amador
 ## Version:
 getRversion() # R ‘3.6.2’
 RStudio.Version()$version # Rstudio 2022.7.2.576’

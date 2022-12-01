@@ -309,10 +309,20 @@ $(document).ready(function () {
 </div>
 
 
+<style>
+    body {
+    text-align: justify}
+</style>
 <div id="supervised-machine-learning-linear-models-regression"
 class="section level2 tabset tabset-fade tabset-pills">
 <h2 class="tabset tabset-fade tabset-pills"><strong>Supervised Machine
 Learning: Linear Models (Regression)</strong></h2>
+<p><strong>Introducing the Prediction Policy Framework</strong></p>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/aA7tLQxf1xE" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
 <p><strong>Predicting social assistance beneficiaries</strong></p>
 <p>Social policies usually work with tight budgets and limited fiscal
 space. To allocate resources efficiently, benefits need to be targeted
@@ -865,7 +875,7 @@ plot <strong>histograms</strong> of relevant (continuously distributed)
 features.</p>
 <pre class="r"><code>malawi_continuous &lt;- malawi %&gt;% select_if(~is.integer(.) | is.numeric(.)) # this line selects all variables in the dataframe which are integer OR numeric, and can therefore be plotted as a histogram.
 hist.data.frame(malawi_continuous) # from the Hmisc package, quick and painless.</code></pre>
-<p><img src="reg1_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="reg1_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>Some important information we can gather from these plots: our food
 consumption measure is skewed (perhaps it should be logged?), there are
 a number of variables for which there seems to be bunching at the zero

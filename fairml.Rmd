@@ -4,6 +4,11 @@ title: "Algorithmic fairness"
 #date: '2022-09-21'
 output: html_document
 ---
+<style>
+    body {
+    text-align: justify}
+</style>
+
 ```{r, echo=FALSE}
 library(tufte)
 ```

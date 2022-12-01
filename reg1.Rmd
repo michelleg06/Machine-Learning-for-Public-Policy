@@ -4,9 +4,20 @@
 #date: '2022-09-21'
 output: html_document
 ---
-
+<style>
+    body {
+    text-align: justify}
+</style>
 
 ## **Supervised Machine Learning: Linear Models (Regression)** {.tabset .tabset-fade .tabset-pills}
+
+**Introducing the Prediction Policy Framework**
+
+```{r, echo=FALSE}
+library("vembedr")
+embed_url("https://www.youtube.com/watch?v=aA7tLQxf1xE")
+```
+
 
 **Predicting social assistance beneficiaries** 
 
