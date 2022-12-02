@@ -318,27 +318,35 @@ class="section level2 tabset tabset-fade tabset-pills">
 <h2 class="tabset tabset-fade tabset-pills"><strong>Supervised Machine
 Learning: Linear Models (Regression)</strong></h2>
 <p><strong>Introducing the Prediction Policy Framework</strong></p>
+<p>In the video-lecture below you’ll be given a brief introduction to
+the prediction policy framework, and a primer on machine learning.
+Please take a moment to watch the 10 minute video.</p>
+<center>
 <div class="vembedr">
 <div>
 <iframe src="https://www.youtube.com/embed/aA7tLQxf1xE" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
 </div>
 </div>
+</center>
+<p>After watching the video, we have a practical excercise in R:</p>
 <p><strong>Predicting social assistance beneficiaries</strong></p>
 <p>Social policies usually work with tight budgets and limited fiscal
 space. To allocate resources efficiently, benefits need to be targeted
 to those who need them the most. Yet, identifying needs isn’t easy and
 misclassifications can have severe and irreversible impacts on people in
-need. Different targeting mechanisms are being used including expert
+need. Different targeting mechanisms are being used, including expert
 judgment to define eligibility criteria or selection by community
 committees. The most common approach for anti-poverty programs is based
 on data: Proxy Means Testing (PMT). A recent review and discussion of
 social assistance targeting by the World Bank can be found <a
 href="https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance">here</a>.</p>
+<center>
 <div class="vembedr">
 <div>
 <iframe src="https://www.youtube.com/embed/Tzm9r91DBnc" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
 </div>
 </div>
+</center>
 <p>The underlying idea behind PMT is to use data on easily observable
 household characteristics - which are hard to manipulate - to predict
 poverty. Traditionally, regressions of observable characteristics on
@@ -348,26 +356,44 @@ used as a weight. To define program eligibility, a second survey is
 conducted with potential beneficiaries. To screen households,
 information on the selected PMT variables is collected (e.g. number of
 rooms, type of house, household size) and the values of the chosen
-observables are multiplied by the observables respective weight (derived
-from the previous regression). Households are then ordered according to
-their predicted PMT score and benefits are allocated to households below
-a certain threshold. In block 1 of this course, we use data to build a
-PMT algorithm. We rely on World Bank’s LSMS household survey data from
-Malawi to build a model to rank and identify households in need. Before
-jumping to the data, we need to ensure that we have a proper
-understanding of the problem we want to solve.</p>
-<p><em>Discussion Points</em></p>
-<p>• Why is this a prediction policy problem? What would be a causal
+observables are multiplied by the observables’ respective weight
+(derived from the previous regression). Households are then ordered
+according to their predicted PMT score and benefits are allocated to
+households below a certain threshold. In block 1 of this course, we use
+data to build a PMT algorithm. We rely on World Bank’s LSMS household
+survey data from Malawi to build a model to rank and identify households
+in need. Before jumping to the data, we need to ensure that we have a
+proper understanding of the problem we want to solve.</p>
+<p><strong>Discussion Points</strong></p>
+<ul>
+<li>
+Why is this a prediction policy problem? What would be a causal
 inference problem in this setting? Is it a regression or a
-classification problem?</p>
-<p>• Which variables and characteristics we include in the PMT can make
-a big difference.</p>
-<pre><code>o   Programmatically and conceptually, which type of characteristics do we want to consider for the PMT? 
-o   Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?</code></pre>
-<p>• What are the practical implications of the bias-variance tradeoff
-in this application?</p>
-<p>• What are potential risks of such a data driven targeting
-approach?</p>
+classification problem?
+</li>
+<li>
+Which variables and characteristics we include in the PMT can make a big
+difference.
+<ul>
+<li>
+Programmatically and conceptually, which type of characteristics do we
+want to consider for the PMT?
+</li>
+<li>
+Technically, how do we select which variables to include in a prediction
+model? How is this difference from a causal inference problem?
+</li>
+</ul>
+</li>
+<li>
+What are the practical implications of the bias-variance tradeoff in
+this application?
+</li>
+<li>
+What are potential risks of such a data driven targeting approach?
+</li>
+</ul>
+<p><br></p>
 <div id="merging-datasets-with-r-lsms-data-example"
 class="section level3">
 <h3><strong>Merging datasets with R: LSMS data example</strong></h3>
@@ -376,13 +402,12 @@ and, if we’re lucky, share data. One such example is The World Bank
 Group who, in cooperation with local statistical offices, collects
 cross-sectional and panel data on the socioeconomic lives of country
 nationals. The Living Standards Measurement Survey (LSMS, for short) has
-been around since the 1980’s, and anyone who wishes to analyse that data
-for (hopefully!) policy-improvement purposes can do so. The only problem
-is, it comes in various formats and separate files. We’ve chosen to
-download the 2019-2020 LSMS data for Malawi, a cross-sectional database
-which contains several modules on Health, Education, Food Security, etc.
-When you download the data, you receive a folder with several .csv files
-that must be put together. The code below does just that.</p>
+been around since the 1980’s, and it is publicly shared in various
+formats and distinct files. We’ve chosen to download the 2019-2020 LSMS
+data for Malawi, a cross-sectional database which contains several
+modules on Health, Education, Food Security, etc. When you download the
+data, you receive a folder with several .csv files that must be put
+together. The code below does just that.</p>
 <p><strong>1. Preliminaries: setting working directory and opening
 libraries</strong></p>
 <pre class="r"><code># 1.1 Cleaning the working environment and setting up the working directory path
@@ -597,7 +622,7 @@ Security, case_id], T[Subjective Assessment of Well-Being, case_id]:</p>
 <pre><code>## Warning in merge.data.frame(datABCD, datList[[5]], by = c(&quot;case_id&quot;, &quot;PID&quot;), :
 ## column names &#39;HHID.x&#39;, &#39;HHID.y&#39; are duplicated in the result</code></pre>
 <p>There’s a warning! It isn’t a big deal (the code still did it’s job),
-but let’s try to sort it out anyways.Dataframe datABCD contains already
+but let’s try to sort it out anyway. Dataframe datABCD contains already
 variables HHID.x and HHID.y. Dataframe datABCDE now contains HHID,
 HHID.x and HHID.y, so perhaps it would be prudent to delete two of the
 three duplicates:</p>
@@ -610,8 +635,8 @@ which( colnames(datABCDE)==&quot;HHID.x&quot;) # 3 and 74</code></pre>
 <pre><code>## [1] 187</code></pre>
 <pre class="r"><code>datABCDE &lt;- datABCDE[,-c(3,23,74,129)] # this line removes the four selected duplicated columns.</code></pre>
 <p>Note that as we continue to merge multiple modules these duplicated
-columns will reappear. This happens when two datasets containg the same
-vector besides the unique identifier.</p>
+columns will reappear. This happens when two datasets containing the
+same vector name <besides the unique> identifier are merged.</p>
 <pre class="r"><code>#Merging Module F (Housing)
 datABCDEF &lt;- merge(datABCDE, datList[[6]], by=&quot;case_id&quot;, all = TRUE)</code></pre>
 <p>Up until this point, the order of datList dataframes and Modules was
@@ -671,7 +696,7 @@ datABCDEFHTG1 &lt;- merge(datABCDEFHT, datG, by=&quot;case_id&quot;, all = TRUE)
 
 # save/export the final, merged dataset
 write_rds(datABCDEFHTG1, &quot;Malawi_2019(2).rds&quot;,&quot;xz&quot;, compression = 9L)</code></pre>
-<p>You can download the final product by clicking on the button
+<p>You can download the final data set by clicking on the button
 below.</p>
 <a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_2019.rds">
 <button class="btn btn-info"><i class="fa fa-save"></i> Download merged file (.rds)</button>
@@ -686,8 +711,8 @@ transparency, i.e. the ease with which we can interpret its results, a
 linear model is not without challenges in machine learning. Using the
 Malawi 2019-2020 LSMS data, we will predict a known outcome, <em>Food
 Consumption</em>, by training our model using correlates (i.e. features)
-that would logically (assume our logic is based on historical and
-theoretical inputs) explain the phenomenon.</p>
+that would explain the phenomenon; i.e. we will build a PMT
+algorithm.</p>
 <p><strong>1. Preliminaries: working directory, libraries, data
 upload</strong></p>
 <pre class="r"><code>rm(list = ls())
@@ -695,23 +720,23 @@ setwd(&quot;~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy&quot
 
 # Libraries
 
-# install.packages(&quot;caret&quot;, &quot;AppliedPredictiveModeling&quot;, &quot;corrplot&quot;, &quot;Hmisc&quot;, &quot;plyr&quot;)
+# install.packages(&quot;caret&quot;, &quot;corrplot&quot;, &quot;Hmisc&quot;, &quot;plyr&quot;)
 library(plyr)
 library(tidyverse)
 library(data.table)
 library(caret)
-library(AppliedPredictiveModeling)
 library(corrplot)
 library(Hmisc)
+library(stargazer)
 
 malawi &lt;- read_rds(&quot;Malawi_2019.rds&quot;)</code></pre>
 <p><strong>2. Data Pre-Processing: data visualisation and data
 wrangling</strong></p>
-<p>The Malawi dataset contains 50476 observations and 514 features
+<p>The Malawi dataset contains 50,476 observations and 514 features
 (variables). It is a very large dataframe, and we want to work with only
 a subset of it using all the observations but only some features;
 i.e. we’re going to create a subset of the dataframe that contains only
-the relevant features for our ML model.You can find the data label
+the relevant features for our PMT.You can find the data label
 descriptions <a
 href="https://microdata.worldbank.org/index.php/catalog/3818/data-dictionary">here</a>.</p>
 <pre class="r"><code>dim(malawi)</code></pre>
@@ -725,9 +750,9 @@ should not conflate predictive and explanatory modeling. Importantly,
 please note that we are not interested in knowing why something happens,
 but rather in what is likely to happen given some known data. Hence:</p>
 <p><em>Target variable</em> (a.k.a. Dependent Variable): Total Food
-Consumption in the Past 7 Days</p>
-<p>Which variables would help us predict a Malawian household’s weekly
-food-spending habit?</p>
+Consumption $ in the Past 7 Days</p>
+<p>Which variables would help us predict Malawian households’ weekly
+food-spending?</p>
 <pre class="r"><code># By looking at the data dictionary, I&#39;ve selected the following variables:
 
 #1 $ food consumption in the past week: sumConsumption
@@ -740,7 +765,7 @@ which( colnames(malawi)==&quot;reside&quot;) # 6
 which( colnames(malawi)==&quot;hhsize&quot;) #21 
 #5 did you or anyone else in this HH borrow on credit?: hh_s01
 which( colnames(malawi)==&quot;hh_s01&quot;) # 19
-#6 gender [1vMALE, 2 FEMALE]: hh_b03 
+#6 gender [1 MALE, 2 FEMALE]: hh_b03 
 which( colnames(malawi)==&quot;hh_b03&quot;) # 22
 #7 What is the highest educational qualification [NAME] has acquired: hh_c09
 which( colnames(malawi)==&quot;hh_c09&quot;) # 88
@@ -785,7 +810,8 @@ which( colnames(malawi)==&quot;hh_t14&quot;) #507
 # subsetting our dataframe
 cols   &lt;- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
 malawi &lt;- malawi[,cols] 
-# The malawi dataframe should only have 25 (selected) features now</code></pre>
+# The malawi dataframe should only have 25 (selected) features now
+# Also know that you can subset with the column name instead of the number of the column. In this excercise we use the number as a way to introduce the which() function, which may come in handy in the future. </code></pre>
 <p><em>Missing values</em></p>
 <p>In traditional econometric models, we often discuss what we can do in
 the presence of missing data. First and foremost, we should assess
@@ -1022,208 +1048,134 @@ performance: RMSE and R^2</strong></p>
 dataset; that is, our target variable <em>Total household food
 consumption in the past 7 days</em> or <em>sumConsumption</em> will be a
 <span class="math inline">\(Y\)</span> dependent variable in a linear
-model $ Y = + x’+ $, and the remaining features in the dataframe
+model <span class="math inline">\(Y = \alpha + x&#39;\beta +
+\epsilon\)</span>, and the remaining features in the dataframe
 correspond to the row vectors <span
 class="math inline">\(x&#39;\beta\)</span>.</p>
 <pre class="r"><code>model1 &lt;- lm(sumConsumption ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable sumConsumption
-summary(model1)</code></pre>
+stargazer(model1, type = &quot;text&quot;)</code></pre>
 <pre><code>## 
-## Call:
-## lm(formula = sumConsumption ~ ., data = Train_df)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -508.9  -76.7  -44.1  -12.1 3923.1 
-## 
-## Coefficients: (2 not defined because of singularities)
-##                                                                               Estimate
-## (Intercept)                                                                15.80553139
-## resideURBAN                                                                13.25930787
-## hhsize                                                                      1.68308427
-## hh_b05a                                                                    -0.15652501
-## hh_s01YES                                                                   4.69238570
-## hh_b03MALE                                                                  3.37089141
-## hh_c09A-LEVEL                                                             -35.33520488
-## hh_c09DEGREE                                                              -23.29047021
-## hh_c09DIPLOMA                                                              40.06399172
-## hh_c09JCE                                                                  23.00516884
-## hh_c09MASTERS                                                               4.13154007
-## hh_c09MSCE/GCSE                                                            21.78924065
-## hh_c09NONE                                                                  9.96067002
-## hh_c09PhD                                                                 -78.80761748
-## hh_c09PSLC                                                                 15.68218634
-## hh_c24No                                                                  -17.95947321
-## hh_c24Yes                                                                  72.10804661
-## hh_d10                                                                      0.00221699
-## hh_d11                                                                     -0.00060426
-## hh_d12_1                                                                    0.00006099
-## hh_e70No                                                                    7.39158612
-## hh_e70Yes                                                                  15.54210741
-## hh_f19YES                                                                  68.33823174
-## hh_f34                                                                     25.37035505
-## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                    181.98522340
-## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                    148.16756347
-## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 117.79756491
-## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES    126.24788608
-## hh_t08ONLY JUST MEETS YOUR EXPENSES                                       127.30794077
-## hh_t01It was just adequate for household needs                            -64.65588521
-## hh_t01It was less than adequate for household needs                       -75.41116339
-## hh_t01It was more than adequate for household needs                                 NA
-## hh_t14DON&#39;T KNOW                                                          253.18065871
-## hh_t14NO                                                                   40.07915366
-## hh_t14YES                                                                           NA
-##                                                                             Std. Error
-## (Intercept)                                                               161.74398164
-## resideURBAN                                                                 4.23590564
-## hhsize                                                                      0.58544602
-## hh_b05a                                                                     0.08366859
-## hh_s01YES                                                                   2.77798729
-## hh_b03MALE                                                                  2.53391182
-## hh_c09A-LEVEL                                                              24.36045238
-## hh_c09DEGREE                                                               26.39127156
-## hh_c09DIPLOMA                                                              17.75528193
-## hh_c09JCE                                                                   7.42166404
-## hh_c09MASTERS                                                              56.87898083
-## hh_c09MSCE/GCSE                                                             8.05585727
-## hh_c09NONE                                                                  4.37004645
-## hh_c09PhD                                                                 114.43067766
-## hh_c09PSLC                                                                  6.11689724
-## hh_c24No                                                                    5.74888352
-## hh_c24Yes                                                                   9.90039225
-## hh_d10                                                                      0.00086729
-## hh_d11                                                                      0.00108446
-## hh_d12_1                                                                    0.00004830
-## hh_e70No                                                                    3.09939708
-## hh_e70Yes                                                                   4.99386247
-## hh_f19YES                                                                   4.95327561
-## hh_f34                                                                      1.47285844
-## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                    161.85712567
-## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                    161.81512228
-## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 161.81440629
-## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES    161.81397243
-## hh_t08ONLY JUST MEETS YOUR EXPENSES                                       161.79623519
-## hh_t01It was just adequate for household needs                              6.09734642
-## hh_t01It was less than adequate for household needs                         6.26197125
-## hh_t01It was more than adequate for household needs                                 NA
-## hh_t14DON&#39;T KNOW                                                           53.90830586
-## hh_t14NO                                                                    3.77472730
-## hh_t14YES                                                                           NA
-##                                                                           t value
-## (Intercept)                                                                 0.098
-## resideURBAN                                                                 3.130
-## hhsize                                                                      2.875
-## hh_b05a                                                                    -1.871
-## hh_s01YES                                                                   1.689
-## hh_b03MALE                                                                  1.330
-## hh_c09A-LEVEL                                                              -1.451
-## hh_c09DEGREE                                                               -0.883
-## hh_c09DIPLOMA                                                               2.256
-## hh_c09JCE                                                                   3.100
-## hh_c09MASTERS                                                               0.073
-## hh_c09MSCE/GCSE                                                             2.705
-## hh_c09NONE                                                                  2.279
-## hh_c09PhD                                                                  -0.689
-## hh_c09PSLC                                                                  2.564
-## hh_c24No                                                                   -3.124
-## hh_c24Yes                                                                   7.283
-## hh_d10                                                                      2.556
-## hh_d11                                                                     -0.557
-## hh_d12_1                                                                    1.263
-## hh_e70No                                                                    2.385
-## hh_e70Yes                                                                   3.112
-## hh_f19YES                                                                  13.797
-## hh_f34                                                                     17.225
-## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                      1.124
-## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                      0.916
-## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES   0.728
-## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES      0.780
-## hh_t08ONLY JUST MEETS YOUR EXPENSES                                         0.787
-## hh_t01It was just adequate for household needs                            -10.604
-## hh_t01It was less than adequate for household needs                       -12.043
-## hh_t01It was more than adequate for household needs                            NA
-## hh_t14DON&#39;T KNOW                                                            4.697
-## hh_t14NO                                                                   10.618
-## hh_t14YES                                                                      NA
-##                                                                                       Pr(&gt;|t|)
-## (Intercept)                                                                            0.92216
-## resideURBAN                                                                            0.00175
-## hhsize                                                                                 0.00404
-## hh_b05a                                                                                0.06139
-## hh_s01YES                                                                              0.09120
-## hh_b03MALE                                                                             0.18342
-## hh_c09A-LEVEL                                                                          0.14692
-## hh_c09DEGREE                                                                           0.37751
-## hh_c09DIPLOMA                                                                          0.02405
-## hh_c09JCE                                                                              0.00194
-## hh_c09MASTERS                                                                          0.94210
-## hh_c09MSCE/GCSE                                                                        0.00684
-## hh_c09NONE                                                                             0.02266
-## hh_c09PhD                                                                              0.49102
-## hh_c09PSLC                                                                             0.01036
-## hh_c24No                                                                               0.00179
-## hh_c24Yes                                                                    0.000000000000333
-## hh_d10                                                                                 0.01059
-## hh_d11                                                                                 0.57739
-## hh_d12_1                                                                               0.20662
-## hh_e70No                                                                               0.01709
-## hh_e70Yes                                                                              0.00186
-## hh_f19YES                                                                 &lt; 0.0000000000000002
-## hh_f34                                                                    &lt; 0.0000000000000002
-## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                                 0.26087
-## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                                 0.35985
-## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES              0.46663
-## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES                 0.43528
-## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                    0.43138
-## hh_t01It was just adequate for household needs                            &lt; 0.0000000000000002
-## hh_t01It was less than adequate for household needs                       &lt; 0.0000000000000002
-## hh_t01It was more than adequate for household needs                                         NA
-## hh_t14DON&#39;T KNOW                                                             0.000002657104708
-## hh_t14NO                                                                  &lt; 0.0000000000000002
-## hh_t14YES                                                                                   NA
-##                                                                              
-## (Intercept)                                                                  
-## resideURBAN                                                               ** 
-## hhsize                                                                    ** 
-## hh_b05a                                                                   .  
-## hh_s01YES                                                                 .  
-## hh_b03MALE                                                                   
-## hh_c09A-LEVEL                                                                
-## hh_c09DEGREE                                                                 
-## hh_c09DIPLOMA                                                             *  
-## hh_c09JCE                                                                 ** 
-## hh_c09MASTERS                                                                
-## hh_c09MSCE/GCSE                                                           ** 
-## hh_c09NONE                                                                *  
-## hh_c09PhD                                                                    
-## hh_c09PSLC                                                                *  
-## hh_c24No                                                                  ** 
-## hh_c24Yes                                                                 ***
-## hh_d10                                                                    *  
-## hh_d11                                                                       
-## hh_d12_1                                                                     
-## hh_e70No                                                                  *  
-## hh_e70Yes                                                                 ** 
-## hh_f19YES                                                                 ***
-## hh_f34                                                                    ***
-## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                       
-## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                       
-## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES    
-## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES       
-## hh_t08ONLY JUST MEETS YOUR EXPENSES                                          
-## hh_t01It was just adequate for household needs                            ***
-## hh_t01It was less than adequate for household needs                       ***
-## hh_t01It was more than adequate for household needs                          
-## hh_t14DON&#39;T KNOW                                                          ***
-## hh_t14NO                                                                  ***
-## hh_t14YES                                                                    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 228.5 on 33113 degrees of freedom
-## Multiple R-squared:  0.1013, Adjusted R-squared:  0.1004 
-## F-statistic: 116.7 on 32 and 33113 DF,  p-value: &lt; 0.00000000000000022</code></pre>
-<p>The output of our model, obtained with the summary() command, has
-three important indicators to assess the performance of our model:</p>
+## =====================================================================================================
+##                                                                               Dependent variable:    
+##                                                                           ---------------------------
+##                                                                                 sumConsumption       
+## -----------------------------------------------------------------------------------------------------
+## resideURBAN                                                                        13.259***         
+##                                                                                     (4.236)          
+##                                                                                                      
+## hhsize                                                                             1.683***          
+##                                                                                     (0.585)          
+##                                                                                                      
+## hh_b05a                                                                             -0.157*          
+##                                                                                     (0.084)          
+##                                                                                                      
+## hh_s01YES                                                                           4.692*           
+##                                                                                     (2.778)          
+##                                                                                                      
+## hh_b03MALE                                                                           3.371           
+##                                                                                     (2.534)          
+##                                                                                                      
+## hh_c09A-LEVEL                                                                       -35.335          
+##                                                                                    (24.360)          
+##                                                                                                      
+## hh_c09DEGREE                                                                        -23.290          
+##                                                                                    (26.391)          
+##                                                                                                      
+## hh_c09DIPLOMA                                                                      40.064**          
+##                                                                                    (17.755)          
+##                                                                                                      
+## hh_c09JCE                                                                          23.005***         
+##                                                                                     (7.422)          
+##                                                                                                      
+## hh_c09MASTERS                                                                        4.132           
+##                                                                                    (56.879)          
+##                                                                                                      
+## hh_c09MSCE/GCSE                                                                    21.789***         
+##                                                                                     (8.056)          
+##                                                                                                      
+## hh_c09NONE                                                                          9.961**          
+##                                                                                     (4.370)          
+##                                                                                                      
+## hh_c09PhD                                                                           -78.808          
+##                                                                                    (114.431)         
+##                                                                                                      
+## hh_c09PSLC                                                                         15.682**          
+##                                                                                     (6.117)          
+##                                                                                                      
+## hh_c24No                                                                          -17.959***         
+##                                                                                     (5.749)          
+##                                                                                                      
+## hh_c24Yes                                                                          72.108***         
+##                                                                                     (9.900)          
+##                                                                                                      
+## hh_d10                                                                              0.002**          
+##                                                                                     (0.001)          
+##                                                                                                      
+## hh_d11                                                                              -0.001           
+##                                                                                     (0.001)          
+##                                                                                                      
+## hh_d12_1                                                                            0.0001           
+##                                                                                    (0.00005)         
+##                                                                                                      
+## hh_e70No                                                                            7.392**          
+##                                                                                     (3.099)          
+##                                                                                                      
+## hh_e70Yes                                                                          15.542***         
+##                                                                                     (4.994)          
+##                                                                                                      
+## hh_f19YES                                                                          68.338***         
+##                                                                                     (4.953)          
+##                                                                                                      
+## hh_f34                                                                             25.370***         
+##                                                                                     (1.473)          
+##                                                                                                      
+## hh_t08ALLOWS YOU TO BUILD YOUR SAVINGS                                              181.985          
+##                                                                                    (161.857)         
+##                                                                                                      
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                              148.168          
+##                                                                                    (161.815)         
+##                                                                                                      
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES           117.798          
+##                                                                                    (161.814)         
+##                                                                                                      
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES              126.248          
+##                                                                                    (161.814)         
+##                                                                                                      
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                 127.308          
+##                                                                                    (161.796)         
+##                                                                                                      
+## hh_t01It was just adequate for household needs                                    -64.656***         
+##                                                                                     (6.097)          
+##                                                                                                      
+## hh_t01It was less than adequate for household needs                               -75.411***         
+##                                                                                     (6.262)          
+##                                                                                                      
+## hh_t01It was more than adequate for household needs                                                  
+##                                                                                                      
+##                                                                                                      
+## hh_t14DON&#39;T KNOW                                                                  253.181***         
+##                                                                                    (53.908)          
+##                                                                                                      
+## hh_t14NO                                                                           40.079***         
+##                                                                                     (3.775)          
+##                                                                                                      
+## hh_t14YES                                                                                            
+##                                                                                                      
+##                                                                                                      
+## Constant                                                                            15.806           
+##                                                                                    (161.744)         
+##                                                                                                      
+## -----------------------------------------------------------------------------------------------------
+## Observations                                                                        33,146           
+## R2                                                                                   0.101           
+## Adjusted R2                                                                          0.100           
+## Residual Std. Error                                                          228.534 (df = 33113)    
+## F Statistic                                                               116.660*** (df = 32; 33113)
+## =====================================================================================================
+## Note:                                                                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>The output of our model, obtained with the summary() command, or
+stargazer(), has three important indicators to assess the performance of
+our model:</p>
 <ul>
 <li>Model <em>residuals</em>: recall residuals are the observed value
 minus the predicted value.</li>
@@ -1303,6 +1255,95 @@ makes consistent predictions across different datasets. However, we also
 now by now that these predictions are not great. What we are observing
 here is a model that has not found a balance between bias and
 variance.</p>
+<p>We can take a first glance at the realised household food consumption
+vs. the predicted food consumption stored in our object ‘p’ by selecting
+the first six elements of our dataset using the command head()</p>
+<pre class="r"><code>head(cbind(Test_df$sumConsumption,p))</code></pre>
+<pre><code>##                  p
+## 1  71.05 139.47176
+## 7  37.50  89.82853
+## 23 51.50  45.20280
+## 27 42.00 195.02980
+## 31 74.50 131.10278
+## 32 74.50 134.63020</code></pre>
+<p>With the first six households, we’re pretty far off the mark. Another
+way to visualise this is to use a <em>Confusion Matrix</em> (2×2 table
+that shows the predicted values from the model vs. the actual values
+from the test dataset). Remember we are trying to build a model that can
+accurately predict a household’s food consumption needs. Assume that the
+government of Malawi has decided to give cash transfers to households
+who spend less than $95 a week. Let’s create binary variables for the
+realised outcome and the predicted outcome, which take on the value 1 if
+the household spends below $95 a week and 0 otherwise. We can then use
+those binary variables to build a confusion matrix.</p>
+<pre class="r"><code>Test_df$realised_consumption &lt;- ifelse(Test_df$sumConsumption&lt;95,1,0)
+# How many households spend less than $95 a week on food?
+table(Test_df$realised_consumption)</code></pre>
+<pre><code>## 
+##    0    1 
+## 2170 6114</code></pre>
+<pre class="r"><code># Answer: 6114!
+
+Test_df$predicted_consumption &lt;- ifelse(p&lt;95,1,0)
+# How many households do we predict spend less than $95 a week?
+table(Test_df$predicted_consumption)</code></pre>
+<pre><code>## 
+##    0    1 
+## 4739 3545</code></pre>
+<pre class="r"><code># Answer: 3545!
+
+# Confusion Matrix manually (it&#39;s really just a crosstabulation!)
+table(Test_df$realised_consumption,Test_df$predicted_consumption)</code></pre>
+<pre><code>##    
+##        0    1
+##   0 1684  486
+##   1 3055 3059</code></pre>
+<pre class="r"><code># Confusion Matrix from the caret package
+confusionMatrix(as.factor(Test_df$realised_consumption), as.factor(Test_df$predicted_consumption)) </code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    0    1
+##          0 1684  486
+##          1 3055 3059
+##                                              
+##                Accuracy : 0.5725             
+##                  95% CI : (0.5618, 0.5832)   
+##     No Information Rate : 0.5721             
+##     P-Value [Acc &gt; NIR] : 0.4692             
+##                                              
+##                   Kappa : 0.2                
+##                                              
+##  Mcnemar&#39;s Test P-Value : &lt;0.0000000000000002
+##                                              
+##             Sensitivity : 0.3553             
+##             Specificity : 0.8629             
+##          Pos Pred Value : 0.7760             
+##          Neg Pred Value : 0.5003             
+##              Prevalence : 0.5721             
+##          Detection Rate : 0.2033             
+##    Detection Prevalence : 0.2620             
+##       Balanced Accuracy : 0.6091             
+##                                              
+##        &#39;Positive&#39; Class : 0                  
+## </code></pre>
+<p>The confusion matrix already gives us a glimpse on how a bad
+prediction model can affect the lives of people in need. Beyond what we
+can read from the crosstabs (or confusion matrix), the caret package
+confusionMatrix() function also includes some statistical measures of
+performance. We won’t discuss all of them, but focus on the Kappa
+statistic, a measure of model accuracy that is adjusted by accounting
+for the possibility of a correct prediction by chance alone. It ranges
+from 0 to 1, and can be interpreted using the following thresholds:</p>
+<ul>
+<li><p>Poor = Less than 0.20</p></li>
+<li><p>Fair = 0.20 to 0.40</p></li>
+<li><p>Moderate = 0.40 to 0.60</p></li>
+<li><p>Good = 0.60 to 0.80</p></li>
+<li><p>Very good = 0.80 to 1.00</p></li>
+</ul>
+<p>With a kappa value of 0.2, our model has poor accuracy. Now let’s
+recapitulate:</p>
 <p><em>What do we mean by bias in a model?</em></p>
 <p>The bias is the difference between the average prediction of our
 model and the true (observed) value. Minimising the bias is analogous to
@@ -1322,15 +1363,15 @@ over-fitting the model. Improve and assess your model following the
 example above. Here are some suggestions that you can use to improve the
 model:</p>
 <ul>
-<li><p>Rethink the predictors: remember the zero-variance predictors in
-the correlation matrix? Perhaps they should be removed from the model.
-They add nothing to our model and instead make unstable predictions. You
-could also revisit the original dataset with more than 500 features and
-think of other variables that might be of interest. Finally, there were
-some factor features (a.k.a. categorical variables) that still had some
-missing values. Should we get rid of the features? Or get rid of the
-missing values and keep the features but decrease the sample size? This
-is up to you!</p></li>
+<li><p>Rethink the predictors: remember the zero-variance predictor in
+the ‘continuous variables’ correlation matrix? Perhaps it should be
+removed from the model. It adds nothing to our model and instead makes
+unstable predictions. You could also revisit the original dataset with
+more than 500 features and think of other variables that might be of
+interest. Finally, there were some factor features (a.k.a. categorical
+variables) that still had some missing values. Should we get rid of the
+features? Or get rid of the missing values and keep the features but
+decrease the sample size? This is up to you!</p></li>
 <li><p>Include polynomial transformations: the relationship between any
 given predictor and the target feature (dependent variable) might be
 non-linear and thus better explained by a polynomial (squared, cubic)
@@ -1346,6 +1387,9 @@ href="https://www.povertyactionlab.org/sites/default/files/publication/Briefcase
 that when women are recipients of cash transfers from the government,
 households spent more of their budget on food.</p></li>
 </ul>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_regression1.R">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download R script Regression 1: PMT</button>
+</a>
 </div>
 </div>
 

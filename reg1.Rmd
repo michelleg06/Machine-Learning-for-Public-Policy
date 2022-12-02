@@ -13,42 +13,51 @@ output: html_document
 
 **Introducing the Prediction Policy Framework**
 
+In the video-lecture below you'll be given a brief introduction to the prediction policy framework, and a primer on machine learning. Please take a moment to watch the 10 minute video.
+
+<center>
 ```{r, echo=FALSE}
 library("vembedr")
 embed_url("https://www.youtube.com/watch?v=aA7tLQxf1xE")
 ```
+</center>
 
+After watching the video, we have a practical excercise in R:
 
 **Predicting social assistance beneficiaries** 
 
-Social policies usually work with tight budgets and limited fiscal space. To allocate resources efficiently, benefits need to be targeted to those who need them the most. Yet, identifying needs isn’t easy and misclassifications can have severe and irreversible impacts on people in need. Different targeting mechanisms are being used including expert judgment to define eligibility criteria or selection by community committees. The most common approach for anti-poverty programs is based on data: Proxy Means Testing (PMT). A recent review and discussion of social assistance targeting by the World Bank can be found [here](https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance).
+Social policies usually work with tight budgets and limited fiscal space. To allocate resources efficiently, benefits need to be targeted to those who need them the most. Yet, identifying needs isn’t easy and misclassifications can have severe and irreversible impacts on people in need. Different targeting mechanisms are being used, including expert judgment to define eligibility criteria or selection by community committees. The most common approach for anti-poverty programs is based on data: Proxy Means Testing (PMT). A recent review and discussion of social assistance targeting by the World Bank can be found [here](https://www.worldbank.org/en/topic/socialprotection/publication/a-new-look-at-old-dilemmas-revisiting-targeting-in-social-assistance).
 
+<center>
 ```{r, echo=FALSE}
 library("vembedr")
 embed_url("https://www.youtube.com/watch?v=Tzm9r91DBnc")
 ```
+</center>
 
-
-The underlying idea behind PMT is to use data on easily observable household characteristics - which are hard to manipulate - to predict poverty. Traditionally, regressions of observable characteristics on reported consumption are performed on existing large-scale survey data sets. The regression coefficients of the best-performing model are then used as a weight. To define program eligibility, a second survey is conducted with potential beneficiaries. To screen households, information on the selected PMT variables is collected (e.g. number of rooms, type of house, household size) and the values of the chosen observables are multiplied by the observables respective weight (derived from the previous regression). Households are then ordered according to their predicted PMT score and benefits are allocated to households below a certain threshold. 
+The underlying idea behind PMT is to use data on easily observable household characteristics - which are hard to manipulate - to predict poverty. Traditionally, regressions of observable characteristics on reported consumption are performed on existing large-scale survey data sets. The regression coefficients of the best-performing model are then used as a weight. To define program eligibility, a second survey is conducted with potential beneficiaries. To screen households, information on the selected PMT variables is collected (e.g. number of rooms, type of house, household size) and the values of the chosen observables are multiplied by the observables' respective weight (derived from the previous regression). Households are then ordered according to their predicted PMT score and benefits are allocated to households below a certain threshold. 
 In block 1 of this course, we use data to build a PMT algorithm. We rely on World Bank’s LSMS household survey data from Malawi to build a model to rank and identify households in need. Before jumping to the data, we need to ensure that we have a proper understanding of the problem we want to solve.
 
-*Discussion Points*
+**Discussion Points**
 
-•	Why is this a prediction policy problem? What would be a causal inference problem in this setting? Is it a regression or a classification problem?
+<ul>
+<li> Why is this a prediction policy problem? What would be a causal inference problem in this setting? Is it a regression or a classification problem? </li>
+<li> Which variables and characteristics we include in the PMT can make a big difference. 
+    <ul>
+    <li>Programmatically and conceptually, which type of characteristics do we want to consider for the PMT?</li>
+    <li>Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?</li>
+    </ul>
+</li>    
+<li> What are the practical implications of the bias-variance tradeoff in this application? </li>
+<li> What are potential risks of such a data driven targeting approach? </li>
+</ul>
 
-•	Which variables and characteristics we include in the PMT can make a big difference.
-
-    o	Programmatically and conceptually, which type of characteristics do we want to consider for the PMT? 
-    o	Technically, how do we select which variables to include in a prediction model? How is this difference from a causal inference problem?
-    
-•	What are the practical implications of the bias-variance tradeoff in this application?
-
-•	What are potential risks of such a data driven targeting approach?
+<br>
 
 
 ### **Merging datasets with R: LSMS data example**
 
-Many organisations, institutions, and firms around the world collect and, if we're lucky, share data. One such example is The World Bank Group who, in cooperation with local statistical offices, collects cross-sectional and panel data on the socioeconomic lives of country nationals. The Living Standards Measurement Survey (LSMS, for short) has been around since the 1980's, and anyone who wishes to analyse that data for (hopefully!) policy-improvement purposes can do so. The only problem is, it comes in various formats and separate files. We've chosen to download the 2019-2020 LSMS data for Malawi, a cross-sectional database which contains several modules on Health, Education, Food Security, etc. When you download the data, you receive a folder with several .csv files that must be put together. The code below does just that.
+Many organisations, institutions, and firms around the world collect and, if we're lucky, share data. One such example is The World Bank Group who, in cooperation with local statistical offices, collects cross-sectional and panel data on the socioeconomic lives of country nationals. The Living Standards Measurement Survey (LSMS, for short) has been around since the 1980's, and it is publicly shared in various formats and distinct files. We've chosen to download the 2019-2020 LSMS data for Malawi, a cross-sectional database which contains several modules on Health, Education, Food Security, etc. When you download the data, you receive a folder with several .csv files that must be put together. The code below does just that.
 
 **1. Preliminaries: setting working directory and opening libraries**
 
@@ -143,7 +152,7 @@ datABCDE <- merge(datABCD, datList[[5]], by=c("case_id","PID"), all = TRUE)
 
 ```
 
-There's a warning! It isn't a big deal (the code still did it's job), but let's try to sort it out anyways.Dataframe datABCD contains already variables HHID.x and HHID.y. Dataframe datABCDE now contains HHID, HHID.x and HHID.y, so perhaps it would be prudent to delete two of the three duplicates:
+There's a warning! It isn't a big deal (the code still did it's job), but let's try to sort it out anyway. Dataframe datABCD contains already variables HHID.x and HHID.y. Dataframe datABCDE now contains HHID, HHID.x and HHID.y, so perhaps it would be prudent to delete two of the three duplicates:
 
 ```{r}
 
@@ -154,7 +163,7 @@ which( colnames(datABCDE)=="HHID") # 187 (let's keep this guy)
 datABCDE <- datABCDE[,-c(3,23,74,129)] # this line removes the four selected duplicated columns.
 
 ```
-Note that as we continue to merge multiple modules these duplicated columns will reappear. This happens when two datasets containg the same vector besides the unique identifier. 
+Note that as we continue to merge multiple modules these duplicated columns will reappear. This happens when two datasets containing the same vector name <besides the unique> identifier are merged.
 
 ```{r}
 #Merging Module F (Housing)
@@ -220,7 +229,7 @@ write_rds(datABCDEFHTG1, "Malawi_2019(2).rds","xz", compression = 9L)
 
 ```
 
-You can download the final product by clicking on the button below.
+You can download the final data set by clicking on the button below.
 ```{r, echo=FALSE}
 library(downloadthis)
 download_link(
@@ -236,7 +245,7 @@ download_link(
 
 ### **Machine Learning with linear regression**
 
-This code is a step by step on how to go about writing a predictive model using a *linear regression*. Despite its simplicity and transparency, i.e. the ease with which we can interpret its results, a linear model is not without challenges in machine learning. Using the Malawi 2019-2020 LSMS data, we will predict a known outcome, *Food Consumption*, by training our model using correlates (i.e. features) that would logically (assume our logic is based on historical and theoretical inputs) explain the phenomenon. 
+This code is a step by step on how to go about writing a predictive model using a *linear regression*. Despite its simplicity and transparency, i.e. the ease with which we can interpret its results, a linear model is not without challenges in machine learning. Using the Malawi 2019-2020 LSMS data, we will predict a known outcome, *Food Consumption*, by training our model using correlates (i.e. features) that would explain the phenomenon; i.e. we will build a PMT algorithm.
 
 **1. Preliminaries: working directory, libraries, data upload**
 
@@ -246,21 +255,21 @@ setwd("~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy")
 
 # Libraries
 
-# install.packages("caret", "AppliedPredictiveModeling", "corrplot", "Hmisc", "plyr")
+# install.packages("caret", "corrplot", "Hmisc", "plyr")
 library(plyr)
 library(tidyverse)
 library(data.table)
 library(caret)
-library(AppliedPredictiveModeling)
 library(corrplot)
 library(Hmisc)
+library(stargazer)
 
 malawi <- read_rds("Malawi_2019.rds")
 ```
 
 **2. Data Pre-Processing: data visualisation and data wrangling**
 
-The Malawi dataset contains 50476 observations and 514 features (variables). It is a very large dataframe, and we want to work with only a subset of it using all the observations but only some features; i.e. we're going to create a subset of the dataframe that contains only the relevant features for our ML model.You can find the data label descriptions [here](https://microdata.worldbank.org/index.php/catalog/3818/data-dictionary).
+The Malawi dataset contains 50,476 observations and 514 features (variables). It is a very large dataframe, and we want to work with only a subset of it using all the observations but only some features; i.e. we're going to create a subset of the dataframe that contains only the relevant features for our PMT.You can find the data label descriptions [here](https://microdata.worldbank.org/index.php/catalog/3818/data-dictionary).
 
 
 ```{r}
@@ -269,9 +278,9 @@ dim(malawi)
 
 We should begin the *critical* process of feature selection (or variable selection). Some notes on this: from a practical point of view, a model with less predictors may be easier to interpret. Also, some models may be negatively affected by non-informative predictors. This process is similar to traditional econometric modeling, but we should not conflate predictive and explanatory modeling. Importantly, please note that we are not interested in knowing why something happens, but rather in what is likely to happen given some known data. Hence: 
 
-*Target variable* (a.k.a. Dependent Variable): Total Food Consumption in the Past 7 Days
+*Target variable* (a.k.a. Dependent Variable): Total Food Consumption \$ in the Past 7 Days
 
-Which variables would help us predict a Malawian household's weekly food-spending habit?
+Which variables would help us predict Malawian households' weekly food-spending?
 
 ```{r, results=FALSE}
 # By looking at the data dictionary, I've selected the following variables:
@@ -286,7 +295,7 @@ which( colnames(malawi)=="reside") # 6
 which( colnames(malawi)=="hhsize") #21 
 #5 did you or anyone else in this HH borrow on credit?: hh_s01
 which( colnames(malawi)=="hh_s01") # 19
-#6 gender [1vMALE, 2 FEMALE]: hh_b03 
+#6 gender [1 MALE, 2 FEMALE]: hh_b03 
 which( colnames(malawi)=="hh_b03") # 22
 #7 What is the highest educational qualification [NAME] has acquired: hh_c09
 which( colnames(malawi)=="hh_c09") # 88
@@ -332,6 +341,7 @@ which( colnames(malawi)=="hh_t14") #507
 cols   <- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
 malawi <- malawi[,cols] 
 # The malawi dataframe should only have 25 (selected) features now
+# Also know that you can subset with the column name instead of the number of the column. In this excercise we use the number as a way to introduce the which() function, which may come in handy in the future. 
 ```
 
 *Missing values*
@@ -343,7 +353,7 @@ In traditional econometric models, we often discuss what we can do in the presen
 colSums(is.na(malawi))
 ```
 
-Interestingly, a lot of the features from module C have more than half the values missing (>30,000 hhs). All of the variables refer to $ spent on education. For the sake of simplicity, I will simply remove those features. But this action may later affect our predictive model, if such features were to increase its predictive performance. Another alternative would be to only work with the remaining households for which we have full data. However, that would reduce our sample size significantly and I would discourage it. Finally, multiple imputation is not feasible due to the [large share of missingness in the data](https://gist.github.com/farrajota/a733524a814596b0124d068a55221c29). 
+Interestingly, a lot of the features from module C have more than half the values missing (>30,000 hhs). All of the variables refer to \$ spent on education. For the sake of simplicity, I will simply remove those features. But this action may later affect our predictive model, if such features were to increase its predictive performance. Another alternative would be to only work with the remaining households for which we have full data. However, that would reduce our sample size significantly and I would discourage it. Finally, multiple imputation is not feasible due to the [large share of missingness in the data](https://gist.github.com/farrajota/a733524a814596b0124d068a55221c29). 
 
 ```{r}
 #hh_c22a-l
@@ -443,16 +453,17 @@ Test_df  <- malawi[-train_idx,]
 
 **4. Creating our first predictive model and evaluating its performance: RMSE and R^2**
 
-We will start by fitting a predictive model using the training dataset; that is, our target variable *Total household food consumption in the past 7 days* or *sumConsumption* will be a $Y$ dependent variable in a linear model $ Y = \alpha + x'\beta + \epsilon$, and the remaining features in the dataframe correspond to the row vectors $x'\beta$. 
+We will start by fitting a predictive model using the training dataset; that is, our target variable *Total household food consumption in the past 7 days* or *sumConsumption* will be a $Y$ dependent variable in a linear model $Y = \alpha + x'\beta + \epsilon$, and the remaining features in the dataframe correspond to the row vectors $x'\beta$. 
 
 ```{r}
 model1 <- lm(sumConsumption ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable sumConsumption
-summary(model1)
+stargazer(model1, type = "text")
 ```
 
-The output of our model, obtained with the summary() command, has three important indicators to assess the performance of our model:
+The output of our model, obtained with the summary() command, or stargazer(), has three important indicators to assess the performance of our model:
 
 - Model *residuals*: recall residuals are the observed value minus the predicted value.
+
 ```{r, echo=FALSE}
 print(summary(model1$residuals))
 ```
@@ -499,6 +510,48 @@ print(RMSE_test) # this is known as the out-of-sample RMSE
 ```
 Notice that the *in-sample RMSE*[$227.528$] is very close to the *out-of-sample RMSE*[$235.9987$]. This means that our our model makes consistent predictions across different datasets. However, we also now by now that these predictions are not great. What we are observing here is a model that has not found a balance between bias and variance. 
 
+We can take a first glance at the realised household food consumption vs. the predicted food consumption stored in our object 'p' by selecting the first six elements of our dataset using the command head()
+
+```{r}
+head(cbind(Test_df$sumConsumption,p))
+```
+
+With the first six households, we're pretty far off the mark. Another way to visualise this is to use a *Confusion Matrix* (2×2 table that shows the predicted values from the model vs. the actual values from the test dataset). Remember we are trying to build a model that can accurately predict a household's food consumption needs. Assume that the government of Malawi has decided to give cash transfers to households who spend less than \$95 a week. Let's create binary variables for the realised outcome and the predicted outcome, which take on the value 1 if the household spends below \$95 a week and 0 otherwise. We can then use those binary variables to build a confusion matrix.
+
+```{r}
+
+Test_df$realised_consumption <- ifelse(Test_df$sumConsumption<95,1,0)
+# How many households spend less than $95 a week on food?
+table(Test_df$realised_consumption)
+# Answer: 6114!
+
+Test_df$predicted_consumption <- ifelse(p<95,1,0)
+# How many households do we predict spend less than $95 a week?
+table(Test_df$predicted_consumption)
+# Answer: 3545!
+
+# Confusion Matrix manually (it's really just a crosstabulation!)
+table(Test_df$realised_consumption,Test_df$predicted_consumption)
+
+# Confusion Matrix from the caret package
+confusionMatrix(as.factor(Test_df$realised_consumption), as.factor(Test_df$predicted_consumption)) 
+
+```
+
+The confusion matrix already gives us a glimpse on how a bad prediction model can affect the lives of people in need. Beyond what we can read from the crosstabs (or confusion matrix), the caret package confusionMatrix() function also includes some statistical measures of performance. We won't discuss all of them, but focus on the Kappa statistic, a measure of model accuracy that is adjusted by accounting for the possibility of a correct prediction by chance alone. It ranges from 0 to 1, and can be interpreted using the following thresholds:
+
+- Poor = Less than 0.20
+
+- Fair = 0.20 to 0.40
+
+- Moderate = 0.40 to 0.60
+
+- Good = 0.60 to 0.80
+
+- Very good = 0.80 to 1.00
+
+With a kappa value of 0.2, our model has poor accuracy. Now let's recapitulate:
+
 *What do we mean by bias in a model?*
 
 The bias is the difference between the average prediction of our model and the true (observed) value. Minimising the bias is analogous to minimising the RMSE.  
@@ -513,10 +566,25 @@ Our Food Consumption prediction model therefore exhibits a low level of variance
 
 How can we improve our model? We want to avoid under-fitting, i.e. what we did throughout this example. We also want to avoid over-fitting the model. Improve and assess your model following the example above. Here are some suggestions that you can use to improve the model:
 
-- Rethink the predictors: remember the zero-variance predictors in the correlation matrix? Perhaps they should be removed from the model. They add nothing to our model and instead make unstable predictions. You could also revisit the original dataset with more than 500 features and think of other variables that might be of interest. Finally, there were some factor features (a.k.a. categorical variables) that still had some missing values. Should we get rid of the features? Or get rid of the missing values and keep the features but decrease the sample size? This is up to you!
+- Rethink the predictors: remember the zero-variance predictor in the 'continuous variables' correlation matrix? Perhaps it should be removed from the model. It adds nothing to our model and instead makes unstable predictions. You could also revisit the original dataset with more than 500 features and think of other variables that might be of interest. Finally, there were some factor features (a.k.a. categorical variables) that still had some missing values. Should we get rid of the features? Or get rid of the missing values and keep the features but decrease the sample size? This is up to you!
 
 - Include polynomial transformations: the relationship between any given predictor and the target feature (dependent variable) might be non-linear and thus better explained by a polynomial (squared, cubic) transformation.
 
 - Other variable transformations: remember the distribution of our consumption variable? It was highly skewed. Perhaps a log transformation might be needed. 
 
 - Include interaction terms: perhaps the true explanatory power of a feature comes from its interaction with another feature. Say, the effect of education on consumption is dominated by the gender of the household head. We know from previous [research](https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf) that when women are recipients of cash transfers from the government, households spent more of their budget on food. 
+
+
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_regression1.R",
+  button_label = "Download R script Regression 1: PMT",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```

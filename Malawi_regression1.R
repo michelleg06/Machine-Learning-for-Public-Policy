@@ -3,7 +3,7 @@
 ## Project: Predictive Modelling with the Malawi 2019 LSMS data
 ## Script purpose: A primer on Machine Learning and Supervised Predictive Modeling
 ## Encoding: UTF-8
-## Packages: tidyverse, data.table, caret, AppliedPredictiveModeling, corrplot, Hmisc
+## Packages: tidyverse, data.table, caret, corrplot, Hmisc, plyr
 ## Date: 15 November 2022
 ## Author: Michelle González Amador
 ## Version: R ‘3.6.2’ // Rstudio ‘2022.2.3.492’
@@ -15,17 +15,17 @@ setwd("~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy")
 getRversion()
 RStudio.Version()$version
 
-##### 1. Libraries ####
+### 1. Libraries ####
 
 # install.packages("caret", "AppliedPredictiveModeling", "corrplot", "Hmisc")
 # Mac M1 Chip (and above) users will get an error installing the last package, please check with Michelle to fix it.
 
 #library(usethis) 
 #usethis::edit_r_environ() #use this if you need to increase memory use
+library(plyr)
 library(tidyverse)
 library(data.table)
-library(caret) # To learn more about the caret package: https://topepo.github.io/caret/
-library(AppliedPredictiveModeling)
+library(caret)
 library(corrplot)
 library(Hmisc)
 
@@ -102,6 +102,7 @@ which( colnames(malawi)=="hh_t14") #507
 # subsetting our dataframe
 cols   <- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
 malawi <- malawi[,cols] 
+# Also know that you can subset with the column name instead of the number of the column. In this excercise we use the number as a way to introduce the which() function, which may come in handy in the future. 
 # The malawi dataframe should only have 25 (selected) features now
 
 ### Let's do a quick data clean-up (please be sure to go over this step yourself and analyse whether it was implemented appropiately)
@@ -155,8 +156,15 @@ hist.data.frame(malawi_continuous) # from the Hmisc package, quick and painless.
 #df <- as.data.frame(lapply(malawi,as.numeric))
 
 malawi_factor <- malawi %>% select_if(~is.factor(.)) # subset of the dataframe containing only factor variables
-table(unlist(malawi_factor))
 llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package
+
+# Some of what we can gather from looking at the tables is that there are features for which the levels (also known as categories) are not labeled in a way that we can understand. 
+# For example, feature hh_c09 (What is the highest educational qualification [NAME] has acquired) has about 10,012 values under an unnamed educational qualification. 
+# Two things may be going on here: 1) the enumerators coded missing values differently from NA (which R automatically reads as missing), or 2) there is a value which was unlabeled and we may need to relabel.
+
+levels(malawi$hh_c09)
+# the line above tells us that there are empty cells, recognised by the level "".
+head(malawi$hh_c09) # we can confirm that it is indeed an empty cell by looking at the first six values of the dataframe (using the head command, which returns the first six elements). One of the six elements is nothing. 
 
 # now let's create a correlation matrix out of our dataset! (would be great to see all possible correlates, remember the >.5 rule of thumb!)
 
@@ -173,7 +181,7 @@ corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.8) # visualis
 
 #This correlation matrix does not take into account the Spearman correlation btween factor and numeric variables!
 
-#### 4. Partition data into training and test data ####
+### 4. Partition data into training and test data ####
 # First, set a seed to guarantee replicability of the process
 set.seed(1234777) # use any number you want
 
@@ -189,86 +197,128 @@ Test_df  <- malawi[-train_idx,]
 # we have succesfully created a training and a test dataset based on the 80/20 rule!
 # Now that we have split our data, we can use the lm() function to fit a model to your training set, rather than the entire dataset.
 
-##### 5. Creating our first predictive model and evaluating its performance: RMSE and R^2 ######
+### 5. Creating our first predictive model and evaluating its performance: RMSE and R^2 ######
 
 model1 <- lm(sumConsumption ~ .,Train_df) # the dot asks the lm() function tu use all other variables in the df as predictors
 summary(model1)
 cat(sprintf("The R^2 value of our model, or total variance explained is: %.4f",0.1013))
-#What do you make of this number? Is it a good model?
 
-# You can use the predict() function to make predictions from that model on the test data
-# we are testing how well the model extrapolates to a different population
+
+#The output of our model, obtained with the summary() command, has three important indicators to assess the performance of our model:
+    
+#Model *residuals*: recall residuals are the observed value minus the predicted value.
+print(summary(model1$residuals))
+
+#The max(imum) error of $3290.59$ suggests that the model under-predicted expenses by circa $3,300 for at least one observation. 
+#Fifty percent of the predictions (between the first and third quartiles) over-predict the true consumption value by $77 and $12.50. 
+#From these data, we obtain the popular measure of perfomance evaluation known as the Root Mean Squared Error (RMSE, for short).
+
+# Calculate the RMSE for the training dataset, or the in-sample RMSE.
+
+# 1. Predict values on the training dataset
+p0 <- predict(model1, Train_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error0 <- p0 - Train_df[["sumConsumption"]]
+
+# 3. In-sample RMSE
+RMSE_insample <- sqrt(mean(error0 ^ 2))
+print(RMSE_insample)
+
+
+#The RMSE ($227.528$) gives us an absolute number that indicates how much our predicted values deviate from the true (observed) number. 
+#Think of the question, *how far, on average, are the residuals away from zero?* Generally speaking, the lower the value, the better the model fit. 
+#Besides being a good measure of goodness of fit, the RMSE is also useful for comparing the ability of our model to make predictions on different (e.g. test) datasets. 
+#The in-sample RMSE should be close or equal to the out-of-sample RMSE.
+
+#The *p-values*: represented by stars *** indicate the predictive power of each feature in the model. In the same line, 
+#the magnitude of the coefficient is also important, especially given that we are interested in explanatory power and not causality. 
+
+#The R-squared: arguably the go-to indicator for performance assessment. The total variance explained by our model (R^2) is ~ 10 percent (0.09986). 
+#Low R^2 values are not uncommon, especially in the social sciences. However, when hoping to use a model for predictive purposes, 10 percent might not be enough, large number of statistically significant features notwithstanding. The drawback from relying solely on this measure is that it does not take into consideration the problem of model over-fitting; i.e. you can inflate the R-squared by adding as many variables as you want, even if those variables have little predicting power. This method will yield great results in the training data, but will underperform when extrapolating the model to the test (or indeed any other) data.
+
+### 6. Out of sample model predictions ######
+
+#Now that we have built and evaluated our model, we can proceed to make out-of-sample predictions.
 p <- predict(model1, Test_df)
 
-# We got a warning. What does it mean? 
-# This warning does not stop the program from running or producing results. It does, however, indicate that those results may be meaningless.
+#Notice that our prediction produces a warning. The warning is just that, a warning, and it does not stop the program from running or producing results. 
+#It does, however, indicate that those results may be meaningless. This is not big news for us at this point, since we have run into some interesting insights along the way: zero-variance predictors in the correlation matrix, a low R-squared value... 
 
-# Now that you have predictions on the test set, you can use these predictions to calculate an error metric (in this case RMSE) on the test set and see how the model performs out-of-sample
-# We'll use two steps: 
-#1: calculate distance between the observed values minus de predicted values.
-
+#The bias-variance tradeoff in practice*
+#We previously mentioned that the RMSE metric could also be used to compare between training and test model predictions. 
+#Let us estimate the ou-of-sample RMSE:
+    
 error <- p - Test_df[["sumConsumption"]] # predicted values minus actual values
-#2: estimate the Root Mean Squared Error (you've got the Error part already!)
-
 RMSE_test <- sqrt(mean(error^2))
 print(RMSE_test) # this is known as the out-of-sample RMSE
 
-# Now we need to calculate the RMSE for the training dataset
-# this is known as the in-sample RMSE!
-p0 <- predict(model1, Train_df)
+#Notice that the *in-sample RMSE*[$227.528$] is very close to the *out-of-sample RMSE*[$235.9987$]. 
+#This means that our our model makes consistent predictions across different datasets. 
+#However, we also now by now that these predictions are not great. 
+#What we are observing here is a model that has not found a balance between bias and variance.
 
-error0 <- p0 - Train_df[["sumConsumption"]]
-# In-sample RMSE
-RMSE_og <- sqrt(mean(error0 ^ 2))
+# We can take a first glance at the realised household food consumption vs. the predicted food consumption stored in our object 'p' by selecting the first six elements of our dataset using the command head()
 
-# Comparing out of sample RMSE to in-sample RMSE
-cat(sprintf("RMSE by dataset: training[%.2f], test[%.2f]",RMSE_og,RMSE_test))
+head(cbind(Test_df$sumConsumption,p))
 
-# First: what is a good RMSE value?
-# recall that RMSE has the same unit as the dependent variable (DV). It means that there is no absolute good or bad threshold, however you can define it based on your DV. For a datum which ranges from 0 to 1000, an RMSE of 0.7 is small, but if the range goes from 0 to 1, it is not that small anymore. However, although the smaller the RMSE, the better, you can make theoretical claims on levels of the RMSE by knowing what is expected from your DV in your field of research. 
+#With the first six households, we're pretty far off the mark. Another way to visualise this is to use a *Confusion Matrix* (2×2 table that shows the predicted values from the model vs. the actual values from the test dataset). 
+#Remember we are trying to build a model that can accurately predict a household's food consumption needs. Assume that the government of Malawi has decided to give cash transfers to households who spend less than \$95 a week. 
+#Let's create binary variables for the realised outcome and the predicted outcome, which take on the value 1 if the household spends below \$95 a week and 0 otherwise. 
+#We can then use those binary variables to build a confusion matrix.
 
-#Second: how to compare models with different datasets using RMSE?
-# the smaller the better but remember that small differences between those RMSE may not be relevant or even significant.
-# what conclusions can we draw from comparing our two RMSEs?
-# The RMSE for your training and your test sets should be very similar if you have built a good model. If the RMSE for the test set is much higher than that of the training set, it is likely that you've badly over fit the data, i.e. you've created a model that tests well in sample, but has little predictive value when tested out of sample.
+Test_df$realised_consumption <- ifelse(Test_df$sumConsumption<95,1,0)
+# How many households spend less than $95 a week on food?
+table(Test_df$realised_consumption)
+# Answer: 6114!
+
+Test_df$predicted_consumption <- ifelse(p<95,1,0)
+# How many households do we predict spend less than $95 a week?
+table(Test_df$predicted_consumption)
+# Answer: 3545!
+
+# Confusion Matrix manually (it's really just a crosstabulation!)
+table(Test_df$realised_consumption,Test_df$predicted_consumption)
+
+# Confusion Matrix from the caret package
+confusionMatrix(as.factor(Test_df$realised_consumption), as.factor(Test_df$predicted_consumption)) 
+
+#The confusion matrix already gives us a glimpse on how a bad prediction model can affect the lives of people in need. Beyond what we can read from the crosstabs (or confusion matrix), the caret package confusionMatrix() function also includes some statistical measures of performance. 
+# We won't discuss all of them, but focus on the Kappa statistic, a measure of model accuracy that is adjusted by accounting for the possibility of a correct prediction by chance alone. 
+#It ranges from 0 to 1, and can be interpreted using the following thresholds:
+
+# Poor = Less than 0.20
+
+# Fair = 0.20 to 0.40
+
+# Moderate = 0.40 to 0.60
+
+# Good = 0.60 to 0.80
+
+# Very good = 0.80 to 1.00
+
+# With a kappa value of 0.2, our model has poor accuracy. Now let's recapitulate:
+    
+#What do we mean by bias in a model?*
+    
+#The bias is the difference between the average prediction of our model and the true (observed) value. Minimising the bias is analogous to minimising the RMSE.  
+
+#What do we mean by variance in a model?*
+    
+#It is the observed variability of model prediction for a given data point. A model with high variance would yield low error values in the training data but high errors in the test data. 
+#Our Food Consumption prediction model therefore exhibits a low level of variance (and thus it extrapolates well to other datasets) but a high level of bias. We have created an **under-fitted model!**
+    
+### 7. Challenge!####
+    
+#How can we improve our model? We want to avoid under-fitting, i.e. what we did throughout this example. We also want to avoid over-fitting the model. 
+#Improve and assess your model following the example above. Here are some suggestions that you can use to improve the model:
+    
+#- Rethink the predictors: remember the zero-variance predictor in the 'continuous variables' correlation matrix? Perhaps it should be removed from the model. It adds nothing to our model and instead makes unstable predictions. You could also revisit the original dataset with more than 500 features and think of other variables that might be of interest. Finally, there were some factor features (a.k.a. categorical variables) that still had some missing values. Should we get rid of the features? Or get rid of the missing values and keep the features but decrease the sample size? This is up to you!
+    
+#- Include polynomial transformations: the relationship between any given predictor and the target feature (dependent variable) might be non-linear and thus better explained by a polynomial (squared, cubic) transformation.
+
+#- Other variable transformations: remember the distribution of our consumption variable? It was highly skewed. Perhaps a log transformation might be needed. 
+
+#- Include interaction terms: perhaps the true explanatory power of a feature comes from its interaction with another feature. Say, the effect of education on consumption is dominated by the gender of the household head. We know from previous [research](https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf) that when women are recipients of cash transfers from the government, households spent more of their budget on food. 
 
 
-### 5. Cross-validation ####
-set.seed(1607) #yes, again
-
-# You can also choose to make your life easier by doing all these steps in one go with the caret package:
-
-# 10-fold cross-validation
-
-# A way to improve the cross-validation of your models is to use multiple systematic test sets, rather than a single train/test split.
-
-tenfoldcv <- trainControl(## 10-fold CV
-    method = "repeatedcv",
-    number = 10,
-    ## repeated ten times
-    repeats = 10)
-
-
-mod1 <- train(sumConsumption ~ ., data = Train_df, 
-                 method = "lm", #linear model
-                 trControl = tenfoldcv, # we previously defined this guy
-                 )
-print(mod1)
-
-
-# The warnings are, again, indicating us that our model is not very good. Or rather, not good at all!
-# The performance metrics (close to what we estimated in a less elegant way without the package) also tell us our model is less than good
-# From the caret package: By default, the train function chooses the model with the largest performance value (or smallest, for mean squared error in regression models).
-
-
-# We could try to tune our parameters, but that is a different lesson. Let's fit the model instead:
-
-predict(mod1, newdata = head(Test_df))
-
-# According to our friend the internet: 
-# Model fitting is a measure of how well a machine learning model generalizes to similar data to that on which it was trained. A model that is well-fitted produces more accurate outcomes. A model that is overfitted matches the data too closely. A model that is underfitted doesn't match closely enough
-
-# what we're looking at is the first, seventh, twentythird etc predicted value of sumConsumption
-
-
-# Excercise: use this data and select a continious DV. Can you build a good predictive model?
