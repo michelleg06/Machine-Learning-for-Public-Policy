@@ -341,7 +341,7 @@ which( colnames(malawi)=="hh_t14") #507
 cols   <- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
 malawi <- malawi[,cols] 
 # The malawi dataframe should only have 25 (selected) features now
-# Also know that you can subset with the column name instead of the number of the column. In this excercise we use the number as a way to introduce the which() function, which may come in handy in the future. 
+# Also know that you can subset with the column name instead of the number of the column. In this exercise we use the number as a way to introduce the which() function, which may come in handy in the future. 
 ```
 
 *Missing values*

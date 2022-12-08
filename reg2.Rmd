@@ -1,15 +1,15 @@
 ---
-<<<<<<< HEAD
 title: "Supervised Machine Learning: Lasso and Ridge shrinkage methods (Regression II)"
-=======
-title: "Supervised Machine Learning: Linear Models (Regression II)"
->>>>>>> 8a3ac542642ede74c728d8ec3b855785f2a65632
 #author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
 ---
+<style>
+    body {
+    text-align: justify}
+</style>
 
-<<<<<<< HEAD
+
 An OLS regression is not the only model that can be written in the form of $Y_i = \alpha + \beta_1X_{1i}, \beta_2X_{2i},..., \beta_pX_{pi}+ u_i$. In this section we will discuss "penalised" models, which can also be expressed as a linear relationship between parameters. Penalised regression models are also known as regression shrinkage methods, and they take their name after the colloquial term for coefficient regularisation, "shrinkage" of estimated coefficients. The goal of penalised models, as opposed to a traditional linear model, is not to minimise bias, but to reduce variance by adding a constraint to the equation and effectively pushing coefficient parameters towards $0$. This results in the the worse model predictors having a coefficient of zero or close to zero. 
 
 
@@ -29,10 +29,7 @@ A ridge regression includes ALL predictors in a model, but penalises predictors 
 
 Selecting the value of $\lambda$ is critical for ridge regressions; when $\lambda = 0$, a ridge regression is essentially an OLS regression. As $\lambda \rightarrow \infty$, the penalty increases and the regression coefficients approximate zero.
 
-Our practical excercise in R will consist of running a Lasso model using the caret package.
+Our practical exercise in R will consist of running a Lasso model using the caret package.
 
 
 
-=======
-Section under construction.
->>>>>>> 8a3ac542642ede74c728d8ec3b855785f2a65632

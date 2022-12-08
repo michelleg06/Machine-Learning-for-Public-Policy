@@ -20,7 +20,7 @@ library(rmarkdown)
 
 <center>
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
-knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/ML4PP2.png")
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/ML4PP2.png")
 ```
 </center>
 

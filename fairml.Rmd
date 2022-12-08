@@ -26,7 +26,7 @@ Dr. [Juba Ziani](https://www.juba-ziani.com/), Assistant Professor at Georgia Te
 
 <center>
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
-knitr::include_graphics("/Users/michellegonzalez/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy/wombat.png")
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/wombat.png")
 ```
 </center>
 
