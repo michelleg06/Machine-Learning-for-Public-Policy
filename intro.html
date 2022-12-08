@@ -32,8 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -267,23 +266,16 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="reg1.html">
-    <span class="fa fa-gear"></span>
+    <span class="fa fa-line-chart"></span>
      
     Regression I
   </a>
 </li>
 <li>
   <a href="reg2.html">
-    <span class="fa fa-gear"></span>
+    <span class="fa fa-area-chart"></span>
      
     Regression II
-  </a>
-</li>
-<li>
-  <a href="classification.html">
-    <span class="fa fa-gear"></span>
-     
-    Classification
   </a>
 </li>
 <li>
@@ -291,6 +283,13 @@ $(document).ready(function () {
     <span class="fa fa-graduation-cap"></span>
      
     Fair ML/Data Ethics
+  </a>
+</li>
+<li>
+  <a href="classification.html">
+    <span class="fa fa-gear"></span>
+     
+    Classification
   </a>
 </li>
       </ul>
@@ -310,6 +309,10 @@ $(document).ready(function () {
 </div>
 
 
+<style>
+    body {
+    text-align: justify}
+</style>
 <p>At its core, machine learning is primarily interested in making sense
 of complex data. A machine learning algorithm’s job is to read data and
 identify patterns that can be used for: prediction, feature-relevance
@@ -711,6 +714,21 @@ p_ggplot &lt;- p_ggplot + scale_colour_manual(name = &quot;Automatic or Manual&q
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
+<pre class="r"><code># Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
+
+p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth() +
+  geom_point(alpha=0.5) +
+  theme(legend.position=&quot;right&quot;) +
+  theme_classic() + ggtitle(&quot;Scatterplot of mileage vs weight of car&quot;) +
+    xlab(&quot;Weight of car&quot;) + ylab(&quot;Miles per gallon&quot;) +
+    theme(plot.title = element_text(color=&quot;black&quot;, size=14, face=&quot;bold&quot;, hjust = 0.5)) + 
+    scale_colour_manual(name = &quot;Automatic or Manual&quot;, 
+                               labels = c(&quot;0.Automatic&quot;, &quot;1.Manual&quot;),
+                               values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
+print(p)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
 are going to be relevant for making algorithms of your own:</p>
@@ -890,10 +908,10 @@ print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)
 ##  9 Biggs Darklighter  Tall            183
 ## 10 Obi-Wan Kenobi     Tall            182
 ## # … with 77 more rows</code></pre>
-</div>
-<div id="merging-datasets-in-r-a-practical-example"
-class="section level3">
-<h3><strong>Merging datasets in R: a practical example</strong></h3>
+<p>You can download the R script by clicking on the button below.</p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Gentle Intro to R and Rstudio.R">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download Intro to R script (.R)</button>
+</a>
 </div>
 </div>
 

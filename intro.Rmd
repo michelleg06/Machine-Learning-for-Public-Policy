@@ -4,6 +4,10 @@ title: "Machine learning for policy analysis"
 #date: '2022-09-21'
 output: html_document
 ---
+<style>
+    body {
+    text-align: justify}
+</style>
 
 At its core, machine learning is primarily interested in making sense of complex data. A machine learning algorithm's job is to read data and identify patterns that can be used for: prediction, feature-relevance detection, model-free classification, among other actions. 
 
@@ -329,8 +333,19 @@ p_ggplot <- p_ggplot + scale_colour_manual(name = "Automatic or Manual",
 
 print(p_ggplot)
 
+# Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
 
-
+p <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth() +
+  geom_point(alpha=0.5) +
+  theme(legend.position="right") +
+  theme_classic() + ggtitle("Scatterplot of mileage vs weight of car") +
+    xlab("Weight of car") + ylab("Miles per gallon") +
+    theme(plot.title = element_text(color="black", size=14, face="bold", hjust = 0.5)) + 
+    scale_colour_manual(name = "Automatic or Manual", 
+                               labels = c("0.Automatic", "1.Manual"),
+                               values = c("darkorange2", "darkgoldenrod1"))
+print(p)
 
 ```
 
@@ -435,4 +450,16 @@ print(starwars[c("name", "height_judge", "height")])
 
 ```
 
-### **Merging datasets in R: a practical example** 
+You can download the R script by clicking on the button below.
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Gentle Intro to R and Rstudio.R",
+  button_label = "Download Intro to R script (.R)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
