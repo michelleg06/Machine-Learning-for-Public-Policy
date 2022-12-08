@@ -174,7 +174,10 @@ corrplot(M, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise
 
 # Let's compute the Spearman correlation coefficient between categorical variables
 malawi_factorC <- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+<<<<<<< HEAD
 malawi_factorC$sumConsumption <- malawi_continuous$sumConsumption
+=======
+>>>>>>> 8a3ac542642ede74c728d8ec3b855785f2a65632
 M2 <- cor(malawi_factorC, method = "spearman")
 corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise it in a nice way
 
