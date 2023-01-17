@@ -412,7 +412,7 @@ together. The code below does just that.</p>
 libraries</strong></p>
 <pre class="r"><code># 1.1 Cleaning the working environment and setting up the working directory path
 rm(list = ls())
-setwd(&quot;~/Desktop/Malawi2019&quot;)
+#setwd(&quot;~/Desktop/Malawi2019&quot;)
 # 1.2 Opening libraries
 
 #install.packages(&quot;tidyverse&quot;,&quot;data.table&quot;)
@@ -716,7 +716,7 @@ algorithm.</p>
 <p><strong>1. Preliminaries: working directory, libraries, data
 upload</strong></p>
 <pre class="r"><code>rm(list = ls())
-setwd(&quot;~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy&quot;)
+#setwd(&quot;~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy&quot;)
 
 # Libraries
 
@@ -729,7 +729,7 @@ library(corrplot)
 library(Hmisc)
 library(stargazer)
 
-malawi &lt;- read_rds(&quot;Malawi_2019.rds&quot;)</code></pre>
+malawi &lt;- read_rds(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Malawi_2019.rds&quot;)</code></pre>
 <p><strong>2. Data Pre-Processing: data visualisation and data
 wrangling</strong></p>
 <p>The Malawi dataset contains 50,476 observations and 514 features
@@ -811,7 +811,7 @@ which( colnames(malawi)==&quot;hh_t14&quot;) #507
 cols   &lt;- c(6,21,27,514,19,22,88,105,106,107,108,114,116,124,142,143,145,337,355,358,381,404,499,492,507)
 malawi &lt;- malawi[,cols] 
 # The malawi dataframe should only have 25 (selected) features now
-# Also know that you can subset with the column name instead of the number of the column. In this excercise we use the number as a way to introduce the which() function, which may come in handy in the future. </code></pre>
+# Also know that you can subset with the column name instead of the number of the column. In this exercise we use the number as a way to introduce the which() function, which may come in handy in the future. </code></pre>
 <p><em>Missing values</em></p>
 <p>In traditional econometric models, we often discuss what we can do in
 the presence of missing data. First and foremost, we should assess

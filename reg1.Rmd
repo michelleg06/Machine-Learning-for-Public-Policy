@@ -64,7 +64,7 @@ Many organisations, institutions, and firms around the world collect and, if we'
 ```{r, message=FALSE}
 # 1.1 Cleaning the working environment and setting up the working directory path
 rm(list = ls())
-setwd("~/Desktop/Malawi2019")
+#setwd("~/Desktop/Malawi2019")
 # 1.2 Opening libraries
 
 #install.packages("tidyverse","data.table")
@@ -98,6 +98,8 @@ head(datList[[1]]) # returns the first elements in the first dataframe from the 
 rm(filenames, filedir)
 
 ```
+
+
 Note that the order of the datasets within datList follows the order of the names in filenames, such that dataset hh_mod_a_filt.csv would be 1,  HH_MOD_B.csv would be 2, and so forth.
 
 **3. Merging data **
@@ -251,7 +253,7 @@ This code is a step by step on how to go about writing a predictive model using 
 
 ```{r, message=FALSE}
 rm(list = ls())
-setwd("~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy")
+#setwd("~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy")
 
 # Libraries
 
@@ -264,7 +266,7 @@ library(corrplot)
 library(Hmisc)
 library(stargazer)
 
-malawi <- read_rds("Malawi_2019.rds")
+malawi <- read_rds("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Malawi_2019.rds")
 ```
 
 **2. Data Pre-Processing: data visualisation and data wrangling**

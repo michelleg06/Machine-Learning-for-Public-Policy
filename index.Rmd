@@ -1,6 +1,6 @@
 ---
 title: "An introduction to Machine Learning for Public Policy"
-author: "Economics, Public Policy and Computational Social Sciences Collab"
+author: "Economics, Public Policy and Computational Social Sciences"
 #date: '2022-09-21'
 output: html_document
 
