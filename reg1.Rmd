@@ -639,7 +639,7 @@ llply(.data=malawi_factor2, .fun=table)
 
 Now that we have finally rid the entire data set from all missing values, we can proceed to improve our model with
 
-a) Data-specific knowledge: Currently, we have a Food Consumption variable per household. However, our dataset is not at the household level, but at the user level. This means that, for each user, we have the household spending, but not the share that would go to each user. Perhaps, a better alternative would be to create a new target variable which corresponds to the users' Food Consumption, and not their household consumption.
+a) Data-specific knowledge: Currently, we have a Food Consumption variable per household. However, our dataset is not at the household level, but at the user level. This means that, for each user, we have the household spending, but not the share that would go to them. Perhaps, a better alternative would be to create a new target variable which corresponds to the users' Food Consumption, and not their household consumption.
 
 b) Subject-specific knowledge: Usually, poverty measures look at daily spending on food, or income per day to assess whether a person has enough to cover their necessities. This [BBC article](https://www.bbc.com/news/magazine-17312819) tells us the story on how World Bank Economist Martin Ravallion came up with this measure and why it matters. 
 

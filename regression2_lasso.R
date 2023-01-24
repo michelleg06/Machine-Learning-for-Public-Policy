@@ -11,7 +11,7 @@
 ##
 ####################################################################################################
 rm(list=ls())
-setwd("~/Desktop/MachineLearning4PP/Machine-Learning-for-Public-Policy")
+setwd("~/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy")
 
 ### 0. Libraries ####
 #install.packages("glmnet", "AppliedPredictiveModeling")
@@ -20,7 +20,7 @@ library(tidyverse)
 library(data.table)
 library(caret)
 library(Hmisc)
-library(elasticnet) # works in conjuntion with caret for lasso models
+library(elasticnet) # works in conjunction with caret for lasso models
 library(corrplot)
 
 ### 1. Upload data and subset data ####
