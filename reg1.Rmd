@@ -165,7 +165,7 @@ which( colnames(datABCDE)=="HHID") # 187 (let's keep this guy)
 datABCDE <- datABCDE[,-c(3,23,74,129)] # this line removes the four selected duplicated columns.
 
 ```
-Note that as we continue to merge multiple modules these duplicated columns will reappear. This happens when two datasets containing the same vector name <besides the unique> identifier are merged.
+Note that as we continue to merge multiple modules these duplicated columns will reappear. This happens when two datasets containing the same vector name <besides the unique identifier> are merged.
 
 ```{r}
 #Merging Module F (Housing)
@@ -426,8 +426,13 @@ corrplot(M, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise
 
 # Let's compute the Spearman correlation coefficient between categorical variables
 malawi_factorC <- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+
+# add the target variable to the factor correlation matrix
+malawi_factorC <- cbind.data.frame(malawi_factorC,malawi_continuous$sumConsumption)
+names(malawi_factorC)[names(malawi_factorC) == "malawi_continuous$sumConsumption"] <- "sumConsumption"
+
 M2 <- cor(malawi_factorC, method = "spearman")
-corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise it in a nice way
+corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.7) # visualise it in a nice way
 
 ```
 
@@ -435,7 +440,7 @@ Notice how, in both matrices, but particularly that which contains our target va
 
 **3. Partition data into training and test datasets**
 
-When we are working with machine learning learning models, it is important to have two datasets. A training dataset from which our model will learn, and a test dataset containing the same features as our training dataset. To split our main dataset into two, we will work with an 80/20 split. 
+When we are working with machine learning learning models, it is important to have two data sets. A training data set from which our model will learn, and a test data set containing the same features as our training data set. To split our main data set into two, we will work with an 80/20 split. 
 
 The 80/20 split has its origins in the Pareto Principle, which states that "in most cases, 80% of effects from from 20% of causes". Without other relevant knowledge of the source or shape of the data, this partitioning method is a good place to start and indeed standard in the machine learning field.
 
@@ -455,9 +460,9 @@ Test_df  <- malawi[-train_idx,]
 
 **4. Creating our first predictive model and evaluating its performance: RMSE and R^2**
 
-We will start by fitting a predictive model using the training dataset; that is, our target variable *Total household food consumption in the past 7 days* or *sumConsumption* will be a $Y$ dependent variable in a linear model $Y = \alpha + x'\beta + \epsilon$, and the remaining features in the dataframe correspond to the row vectors $x'\beta$. 
+We will start by fitting a predictive model using the training dataset; that is, our target variable *Total household food consumption in the past 7 days* or *sumConsumption* will be a $Y$ dependent variable in a linear model $Y_i = \alpha + x'\beta_i + \epsilon_i$, and the remaining features in the data frame correspond to the row vectors $x'\beta$. 
 
-```{r}
+```{r, echo = TRUE, warning = FALSE}
 model1 <- lm(sumConsumption ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable sumConsumption
 stargazer(model1, type = "text")
 ```
@@ -470,7 +475,7 @@ The output of our model, obtained with the summary() command, or stargazer(), ha
 print(summary(model1$residuals))
 ```
 
-The max(imum) error of $3290.59$ suggests that the model under-predicted expenses by circa \$3,300 for at least one observation. Fifty percent of the predictions (between the first and third quartiles) over-predict the true consumption value by \$77 and \$12.50. From these data, we obtain the popular measure of perfomance evaluation known as the Root Mean Squared Error (RMSE, for short).
+The max(imum) error of $3923.07$ suggests that the model under-predicted expenses by circa \$4,000 for at least one observation. Fifty percent of the predictions (between the first and third quartiles) over-predict the true consumption value by \$76.74 and \$12.11. From these data, we obtain the popular measure of performance evaluation known as the Root Mean Squared Error (RMSE, for short).
 
 ```{r, warning=FALSE}
 # Calculate the RMSE for the training dataset, or the in-sample RMSE.
@@ -486,11 +491,11 @@ RMSE_insample <- sqrt(mean(error0 ^ 2))
 print(RMSE_insample)
 ```
 
-The RMSE ($227.528$) gives us an absolute number that indicates how much our predicted values deviate from the true (observed) number. Think of the question, *how far, on average, are the residuals away from zero?* Generally speaking, the lower the value, the better the model fit. Besides being a good measure of goodness of fit, the RMSE is also useful for comparing the ability of our model to make predictions on different (e.g. test) datasets. The in-sample RMSE should be close or equal to the out-of-sample RMSE.
+The RMSE ($228.4205$) gives us an absolute number that indicates how much our predicted values deviate from the true (observed) number. Think of the question, *how far, on average, are the residuals away from zero?* Generally speaking, the lower the value, the better the model fit. Besides being a good measure of goodness of fit, the RMSE is also useful for comparing the ability of our model to make predictions on different (e.g. test) data sets. The in-sample RMSE should be close or equal to the out-of-sample RMSE.
 
 - The *p-values*: represented by stars *** indicate the predictive power of each feature in the model. In the same line, the magnitude of the coefficient is also important, especially given that we are interested in explanatory power and not causality. 
 
-- The R-squared: arguably the go-to indicator for performance assessment. The total variance explained by our model (R^2) is ~ 10 percent (0.09986). Low R^2 values are not uncommon, especially in the social sciences. However, when hoping to use a model for predictive purposes, 10 percent might not be enough, large number of statistically significant features notwithstanding. The drawback from relying solely on this measure is that it does not take into consideration the problem of model over-fitting; i.e. you can inflate the R-squared by adding as many variables as you want, even if those variables have little predicting power. This method will yield great results in the training data, but will underperform when extrapolating the model to the test (or indeed any other) data.
+- The *R-squared*: arguably the go-to indicator for performance assessment. The total variance explained by our model (R^2) is ~ 10 percent (0.101). Low R^2 values are not uncommon, especially in the social sciences. However, when hoping to use a model for predictive purposes, 10 per cent might not be enough, the large number of statistically significant features notwithstanding. The drawback from relying solely on this measure is that it does not take into consideration the problem of model over-fitting; i.e. you can inflate the R-squared by adding as many variables as you want, even if those variables have little predicting power. This method will yield great results in the training data, but will under perform when extrapolating the model to the test (or indeed any other) data set.
 
 *Out of sample model predictions*
 
@@ -499,26 +504,26 @@ Now that we have built and evaluated our model, we can proceed to make out-of-sa
 ```{r}
 p <- predict(model1, Test_df)
 ```
-Notice that our prediction produces a warning. The warning is just that, a warning, and it does not stop the program from running or producing results. It does, however, indicate that those results may be meaningless. This is not big news for us at this point, since we have run into some interesting insights along the way: zero-variance predictors in the correlation matrix, a low R-squared value... 
+Notice that our prediction produces a warning. The warning is just that, a warning, and it does not stop the program from running or producing results. It does, however, indicate that those results may be meaningless. This is not big news for us at this point, since we have run into some interesting insights along the way: a zero-variance predictor in the correlation matrix, a low R-squared value... 
 
 *The bias-variance tradeoff in practice*
 
-We previously mentioned that the RMSE metric could also be used to compare between training and test model predictions. Let us estimate the ou-of-sample RMSE:
+We previously mentioned that the RMSE metric could also be used to compare between training and test model predictions. Let us estimate the out-of-sample RMSE:
 
 ```{r}
 error <- p - Test_df[["sumConsumption"]] # predicted values minus actual values
 RMSE_test <- sqrt(mean(error^2))
 print(RMSE_test) # this is known as the out-of-sample RMSE
 ```
-Notice that the *in-sample RMSE*[$227.528$] is very close to the *out-of-sample RMSE*[$235.9987$]. This means that our our model makes consistent predictions across different datasets. However, we also now by now that these predictions are not great. What we are observing here is a model that has not found a balance between bias and variance. 
+Notice that the *in-sample RMSE*[$228.4205$] is very close to the *out-of-sample RMSE*[$232.5525$]. This means that our model makes consistent predictions across different data sets. However, we also know by now that these predictions are not great. What we are observing here is a model that has not found a balance between bias and variance. 
 
-We can take a first glance at the realised household food consumption vs. the predicted food consumption stored in our object 'p' by selecting the first six elements of our dataset using the command head()
+We can take a first glance at the realised household food consumption vs. the predicted food consumption stored in our object 'p' by selecting the first six elements of our data set using the command head()
 
 ```{r}
 head(cbind(Test_df$sumConsumption,p))
 ```
 
-With the first six households, we're pretty far off the mark. Another way to visualise this is to use a *Confusion Matrix* (2×2 table that shows the predicted values from the model vs. the actual values from the test dataset). Remember we are trying to build a model that can accurately predict a household's food consumption needs. Assume that the government of Malawi has decided to give cash transfers to households who spend less than \$95 a week. Let's create binary variables for the realised outcome and the predicted outcome, which take on the value 1 if the household spends below \$95 a week and 0 otherwise. We can then use those binary variables to build a confusion matrix.
+With the first six households, we're pretty far off the mark. Another way to visualise this is to use a *Confusion Matrix* (2×2 table that shows the predicted values from the model vs. the actual values from the test data set). Remember we are trying to build a model that can accurately predict a household's food consumption needs. Assume that the government of Malawi has decided to give cash transfers to households who spend less than \$95 a week. Let's create binary variables for the realised outcome and the predicted outcome, which take on the value 1 if the household spends below \$95 a week and 0 otherwise. We can then use those binary variables to build a confusion matrix.
 
 ```{r}
 
@@ -532,7 +537,7 @@ Test_df$predicted_consumption <- ifelse(p<95,1,0)
 table(Test_df$predicted_consumption)
 # Answer: 3545!
 
-# Confusion Matrix manually (it's really just a crosstabulation!)
+# Confusion Matrix manually (it's really just a cross-tabulation!)
 table(Test_df$realised_consumption,Test_df$predicted_consumption)
 
 # Confusion Matrix from the caret package
@@ -540,7 +545,7 @@ confusionMatrix(as.factor(Test_df$realised_consumption), as.factor(Test_df$predi
 
 ```
 
-The confusion matrix already gives us a glimpse on how a bad prediction model can affect the lives of people in need. Beyond what we can read from the crosstabs (or confusion matrix), the caret package confusionMatrix() function also includes some statistical measures of performance. We won't discuss all of them, but focus on the Kappa statistic, a measure of model accuracy that is adjusted by accounting for the possibility of a correct prediction by chance alone. It ranges from 0 to 1, and can be interpreted using the following thresholds:
+The confusion matrix already gives us a glimpse at how a bad prediction model can affect the lives of people in need. Beyond what we can read from the cross-tabulation (or confusion matrix), the caret package confusionMatrix() function also includes some statistical measures of performance. We won't discuss all of them, but focus on the Kappa statistic, a measure of model accuracy that is adjusted by accounting for the possibility of a correct prediction by chance alone. It ranges from 0 to 1, and can be interpreted using the following thresholds:
 
 - Poor = Less than 0.20
 
@@ -552,7 +557,7 @@ The confusion matrix already gives us a glimpse on how a bad prediction model ca
 
 - Very good = 0.80 to 1.00
 
-With a kappa value of 0.2, our model has poor accuracy. Now let's recapitulate:
+With a kappa value of 0.2, our model has fair (borderline poor) accuracy. Now let's recapitulate:
 
 *What do we mean by bias in a model?*
 
@@ -560,21 +565,21 @@ The bias is the difference between the average prediction of our model and the t
 
 *What do we mean by variance in a model?*
 
-It is the observed variability of model prediction for a given data point. A model with high variance would yield low error values in the training data but high errors in the test data. 
+It is the observed variability of our model prediction for a given data point (how much the model can adjust given the data set). A model with high variance would yield low error values in the training data but high errors in the test data. 
 
-Our Food Consumption prediction model therefore exhibits a low level of variance (and thus it extrapolates well to other datasets) but a high level of bias. We have created an **under-fitted model!**
+Our Food Consumption prediction model therefore exhibits a low level of variance (and thus it extrapolates well to other data sets) but a high level of bias. We have created an **under-fitted model!**
 
 **5. Challenge!**
 
 How can we improve our model? We want to avoid under-fitting, i.e. what we did throughout this example. We also want to avoid over-fitting the model. Improve and assess your model following the example above. Here are some suggestions that you can use to improve the model:
 
-- Rethink the predictors: remember the zero-variance predictor in the 'continuous variables' correlation matrix? Perhaps it should be removed from the model. It adds nothing to our model and instead makes unstable predictions. You could also revisit the original dataset with more than 500 features and think of other variables that might be of interest. Finally, there were some factor features (a.k.a. categorical variables) that still had some missing values. Should we get rid of the features? Or get rid of the missing values and keep the features but decrease the sample size? This is up to you!
+- Rethink the predictors: remember the zero-variance predictors in the correlation matrices? Perhaps they should be removed from the model. They add nothing to our model and instead make unstable predictions. You could also revisit the original data set with more than 500 features and think of other variables that might be of interest. Finally, there were some factor features (a.k.a. categorical variables) that still had some missing values. Should we get rid of the features? Or get rid of the missing values and keep the features but decrease the sample size? This is up to you!
 
 - Include polynomial transformations: the relationship between any given predictor and the target feature (dependent variable) might be non-linear and thus better explained by a polynomial (squared, cubic) transformation.
 
-- Other variable transformations: remember the distribution of our consumption variable? It was highly skewed. Perhaps a log transformation might be needed. 
+- Other variable transformations: remember the distribution of our consumption variable? It was highly skewed. Perhaps a log transformation might be needed? 
 
-- Include interaction terms: perhaps the true explanatory power of a feature comes from its interaction with another feature. Say, the effect of education on consumption is dominated by the gender of the household head. We know from previous [research](https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf) that when women are recipients of cash transfers from the government, households spent more of their budget on food. 
+- Include interaction terms: perhaps the true explanatory power of a feature comes from its interaction with another feature. Say, the effect of education on consumption is dominated by the gender of the household head. We know from previous [research](https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf) that when women are recipients of cash transfers from the government, households spend more of their budget on food. 
 
 
 
@@ -590,3 +595,127 @@ download_link(
 )
 
 ```
+
+### **Challenge Solution**
+
+Here's a smart solution to the challenge: improving the prediction ability of the ML model. It was proposed by a team of students from the UNU-MERIT MPP 2022-2023 cohort. To run this code, you need to have ran all the previous lines in the *Machine Learning with linear regression* tab. 
+
+First, let's start by getting rid of those pesky missing values in the factor variables that we spotted earlier in our data exploration.
+
+```{r}
+# # # #
+table(malawi$hh_c09)
+levels(malawi$hh_c09)
+
+malawi$hh_c09 <- droplevels(malawi$hh_c09, "")
+
+# # # # 
+table(malawi$hh_c24)
+malawi$hh_c24 <- droplevels(malawi$hh_c24, "")
+
+# # # #
+table(malawi$hh_e70) # This variable has too many missings! 22,163! Perhaps it's best if we get rid of the variable instead of deleting the missing data
+
+malawi <- malawi[,-which( colnames(malawi)=="hh_e70")] # This is a more straightforward way of deleting the undesirable variable and avoid mistakes due to typos when writing down the name of the column.
+
+# # # #
+table(malawi$hh_t08)
+malawi$hh_t08 <- droplevels(malawi$hh_t08, "")
+
+# # # #
+table(malawi$hh_t01)
+malawi$hh_t01 <- droplevels(malawi$hh_t01, "")
+
+# # # #
+table(malawi$hh_t14)
+malawi$hh_t14 <- droplevels(malawi$hh_t14, "")
+
+# Let's quickly check if we have any other factor variables with missing data:
+
+malawi_factor2 <- malawi %>% select_if(~is.factor(.)) 
+llply(.data=malawi_factor2, .fun=table)
+
+```
+
+Now that we have finally rid the entire data set from all missing values, we can proceed to improve our model with
+
+a) Data-specific knowledge: Currently, we have a Food Consumption variable per household. However, our dataset is not at the household level, but at the user level. This means that, for each user, we have the household spending, but not the share that would go to each user. Perhaps, a better alternative would be to create a new target variable which corresponds to the users' Food Consumption, and not their household consumption.
+
+b) Subject-specific knowledge: Usually, poverty measures look at daily spending on food, or income per day to assess whether a person has enough to cover their necessities. This [BBC article](https://www.bbc.com/news/magazine-17312819) tells us the story on how World Bank Economist Martin Ravallion came up with this measure and why it matters. 
+
+```{r}
+
+# What is the daily, food Consumption per capita?
+malawi$Cons_pcpd <-(malawi$sumConsumption / malawi$hhsize)/7
+
+summary(malawi$Cons_pcpd)
+
+```
+
+Note that the median person in Malawi lives with a little over 1 USD per day. This seems consistent with World Bank [records](https://opportunity.org/our-impact/where-we-work/malawi-facts-about-poverty). In 2017, ca. 70 per cent of Malawians were living under the international poverty line of $1.90/day$.
+
+Now, let's proceed to run our model and assess it:
+
+```{r eval=FALSE, warning=FALSE}
+#Set a seed
+set.seed(1234777)
+
+# Split the data 
+
+train_idx <- createDataPartition(malawi$Cons_pcpd, p = .8, list = FALSE, times = 1)
+
+Train_df <- malawi[ train_idx,]
+Test_df  <- malawi[-train_idx,]
+
+# Run our model
+
+model_corrected <- lm(Cons_pcpd ~ .,Train_df)
+```
+
+```{r, echo=FALSE, warning=FALSE}
+stargazer(model_corrected, type = "text")
+
+```
+
+Note how the *R^2* has now significantly increased to $0.677$!. Let's not get our hopes up. A big driver of this increase is the fact that the variable, weekly household spending on food (our initial target variable), is used as a predictor. Notice also that there is a zero variance predictor in the model. We won't dwell on the latter and focus on the former. 
+
+```{r, warning=FALSE}
+Train_df <- Train_df[,-which(colnames(Train_df)=="sumConsumption")]
+Test_df  <- Test_df[,-which(colnames(Test_df)=="sumConsumption")]
+
+# This is a more direct way of deleting columns than what we had previously done. Just for your information, sumConsumption was column/vector number four in both dataframes, so we could have just removed column for instead of using the which() statement. 
+
+model_corrected <- lm(Cons_pcpd ~ .,Train_df)
+stargazer(model_corrected, type = "text")
+```
+
+Unfortunately, once we remove the weekly food consumption variable, from which the daily, per capita food consumption was derived, our R^2 drops down to similar levels as before: $0.105$, ca. ten per cent of the variance of our model explained.
+
+Let's take a look at the in-sample RMSE now: 
+
+```{r}
+# 1. Predict values on the training data set
+p00 <- predict(model_corrected, Train_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error00 <- p00 - Train_df[["Cons_pcpd"]]
+
+# 3. In-sample RMSE
+print(RMSE_insample_correctedmodel <- sqrt(mean(error00 ^ 2, na.rm = T)))
+```
+
+Despite our R^2 value being low, which, again, is not uncommon in the social sciences, our in-sample RMSE is also low! We have managed to decrease the bias in the model significantly from $228.4$, all the way down to $10.00681$. Let's see if we observe a similar trend in the test data set with the out of sample RMSE.
+
+```{r}
+
+# 1. Predict values on the training data set
+p00 <- predict(model_corrected, Test_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error00 <- p00 - Test_df[["Cons_pcpd"]]
+
+# 3. In-sample RMSE
+print(RMSE_outofsample_correctedmodel <- sqrt(mean(error00 ^ 2, na.rm = T)))
+```
+
+With an out of sample RMSE of $10.14351$, it seems like our model is consistent across data sets. So, whilst we were not able to increase the R^2, we did significantly decrease the bias in our model. This, to me, is a success! As we learn more techniques, we will be able to build from this - already highly improved model - to try to find the most accurate prediction. 

@@ -9,11 +9,13 @@ output: html_document
     text-align: justify}
 </style>
 
+## **An introduction to penalised models for Machine Learning** {.tabset .tabset-fade .tabset-pills}
 
 An OLS regression is not the only model that can be written in the form of $Y_i = \alpha + \beta_1X_{1i}, \beta_2X_{2i},..., \beta_pX_{pi}+ u_i$. In this section we will discuss "penalised" models, which can also be expressed as a linear relationship between parameters. Penalised regression models are also known as regression shrinkage methods, and they take their name after the colloquial term for coefficient regularisation, "shrinkage" of estimated coefficients. The goal of penalised models, as opposed to a traditional linear model, is not to minimise bias, but to reduce variance by adding a constraint to the equation and effectively pushing coefficient parameters towards $0$. This results in the the worse model predictors having a coefficient of zero or close to zero. 
 
+Our practical exercise in R will consist of running a Lasso model using the caret package.
 
-**Lasso**
+### **Lasso**
 
 Consider a scenario where you have dozens (maybe thousands?) of predictors. Which covariates are truly important for our known outcome? Including all of the predictors leads to *over-fitting*. We'll find that the R^2 value is high, and conclude that our in-sample fit is good. However, this may lead to bad out-of-sample predictions. *Model selection* is a particularly challenging endeavour when we encounter high-dimensional data: when the number of variables is close to or larger than the number of observations. Some examples where you may encounter high-dimensional data include:
 
@@ -23,13 +25,49 @@ Consider a scenario where you have dozens (maybe thousands?) of predictors. Whic
 
 The LASSO - Least Absolute Shrinkage and Selection Operator imposes a shrinking penalty to those predictors that do not actually belong in the model, and reduces the size of the estimated $\beta$ coefficients towards and including zero (when the tuning parameter / shrinkage penalty $\lambda$ is sufficiently large). Note that $lambda$ is the penalty term called *L1-norm*, and corresponds to the sum of the absolute coefficients. 
 
-**Ridge**
+
+**R practical tutorial**
+
+To exemplify the above, we will go through an exercise using the previously introduced LSMS data set. This might become relevant as there are many variables in the data set that we did not choose/consider before. Importantly, we had worked hard to try to find a way to increase the accurate prediction of Food Consumption. Including the improvements made by the transformation of the target variable, we were able to provide a model with low bias, a.k.a. a low RMSE value, but with a low R^2. Perhaps now, with the ability to include as many variables as we want in the model, and allowing the LASSO algorithm to select those which are relevant for the target variable, we might be able to increase the explained model variance!
+
+````{r eval=FALSE}
+rm(list=ls())
+
+# 0. Libraries
+
+library(plyr)
+library(tidyverse)
+library(data.table)
+library(caret)
+library(Hmisc)
+library(elasticnet) # works in conjunction with caret for lasso models
+library(corrplot)
+
+# 1. Upload data and subset
+
+malawi <- fread("/Users/michellegonzalez/Desktop/MachineLearning4PP 2/Machine-Learning-for-Public-Policy/malawi.csv", drop="V1")
+
+column_names <- c("reside","hhsize","hh_b05a","sumConsumption","hh_s01","hh_b03","hh_c09","hh_c24","hh_d10","hh_d11","hh_d12_1","hh_f19","hh_f34","hh_t08","hh_t01","hh_t14")
+malawi2 <- malawi[,column_names, with=FALSE]
+
+# adding new target vector
+
+malawi$Cons_pcpd  <-(malawi$sumConsumption / malawi$hhsize)/7
+malawi2$Cons_pcpd <-(malawi2$sumConsumption / malawi2$hhsize)/7
+
+````
+
+Notice that this time, we've kept two data sets. One containing the full set of variables (514), and another which contains only the variables that we had recognised as possibly relevant in the past.
+
+Our next step would be to clean the data by getting rid of missing values. A task that is easy for the 17 vector dataframe, but may seem daunting for the dataframe with 515 variables. How do we go about this? 
+
+
+### **Ridge**
 
 A ridge regression includes ALL predictors in a model, but penalises predictors that contribute less to the model by shrinking them close to (but never) zero. The penalty term $\lambda$ in a ridge regression is called the *L2-norm* and is the sum of the squared coefficients. The ridge regression is the predecessor to the lasso.
 
 Selecting the value of $\lambda$ is critical for ridge regressions; when $\lambda = 0$, a ridge regression is essentially an OLS regression. As $\lambda \rightarrow \infty$, the penalty increases and the regression coefficients approximate zero.
 
-Our practical exercise in R will consist of running a Lasso model using the caret package.
 
 
 
