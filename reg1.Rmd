@@ -245,7 +245,7 @@ download_link(
 
 ```
 
-### **Machine Learning with linear regression**
+### **Machine Learning with linear regression** {.active}
 
 This code is a step by step on how to go about writing a predictive model using a *linear regression*. Despite its simplicity and transparency, i.e. the ease with which we can interpret its results, a linear model is not without challenges in machine learning. Using the Malawi 2019-2020 LSMS data, we will predict a known outcome, *Food Consumption*, by training our model using correlates (i.e. features) that would explain the phenomenon; i.e. we will build a PMT algorithm.
 
@@ -602,6 +602,7 @@ Here's a smart solution to the challenge: improving the prediction ability of th
 
 First, let's start by getting rid of those pesky missing values in the factor variables that we spotted earlier in our data exploration.
 
+
 ```{r}
 # # # #
 table(malawi$hh_c09)
@@ -672,8 +673,8 @@ Test_df  <- malawi[-train_idx,]
 model_corrected <- lm(Cons_pcpd ~ .,Train_df)
 ```
 
-```{r, echo=FALSE, warning=FALSE}
-stargazer(model_corrected, type = "text")
+```{r}
+summary(model_corrected)
 
 ```
 
