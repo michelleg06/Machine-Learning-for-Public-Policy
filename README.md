@@ -16,3 +16,4 @@ The course consists of 5 workshops each consisting of a technical introductory l
 James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning: With Applications in R.](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)
 
 A final thought
+A final thought
