@@ -24,7 +24,8 @@ library(elasticnet) # works in conjunction with caret for lasso models
 library(corrplot)
 
 ### 1. Upload data and subset data ####
-malawi <- fread("malawi.csv")
+#malawi <- fread("malawi.csv")
+temp <- "pi"
 
 column_names <- c("sumConsumption", "hh_b05a", "reside", "region", "district","hhsize", "hh_s01", "hh_b03", "hh_c09", "hh_c24", "hh_d10", "hh_d11", "hh_d12_1", "hh_e70", "hh_f19", "hh_f34", "hh_t08", "hh_t01", "hh_t14")
 malawi <- malawi[,column_names, with=FALSE]
