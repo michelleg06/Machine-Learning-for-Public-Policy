@@ -315,6 +315,10 @@ Ridge shrinkage methods (Regression II)</h1>
     body {
     text-align: justify}
 </style>
+<div id="an-introduction-to-penalised-models-for-machine-learning"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills"><strong>An introduction to
+penalised models for Machine Learning</strong></h2>
 <p>An OLS regression is not the only model that can be written in the
 form of <span class="math inline">\(Y_i = \alpha + \beta_1X_{1i},
 \beta_2X_{2i},..., \beta_pX_{pi}+ u_i\)</span>. In this section we will
@@ -328,7 +332,10 @@ variance by adding a constraint to the equation and effectively pushing
 coefficient parameters towards <span class="math inline">\(0\)</span>.
 This results in the the worse model predictors having a coefficient of
 zero or close to zero.</p>
-<p><strong>Lasso</strong></p>
+<p>Our practical exercise in R will consist of running a Lasso model
+using the caret package.</p>
+<div id="lasso" class="section level3">
+<h3><strong>Lasso</strong></h3>
 <p>Consider a scenario where you have dozens (maybe thousands?) of
 predictors. Which covariates are truly important for our known outcome?
 Including all of the predictors leads to <em>over-fitting</em>. We’ll
@@ -358,7 +365,51 @@ class="math inline">\(\lambda\)</span> is sufficiently large). Note that
 <span class="math inline">\(lambda\)</span> is the penalty term called
 <em>L1-norm</em>, and corresponds to the sum of the absolute
 coefficients.</p>
-<p><strong>Ridge</strong></p>
+<p><strong>R practical tutorial</strong></p>
+<p>To exemplify the above, we will go through an exercise using the
+previously introduced LSMS data set. This might become relevant as there
+are many variables in the data set that we did not choose/consider
+before. Importantly, we had worked hard to try to find a way to increase
+the accurate prediction of Food Consumption. Including the improvements
+made by the transformation of the target variable, we were able to
+provide a model with low bias, a.k.a. a low RMSE value, but with a low
+R^2. Perhaps now, with the ability to include as many variables as we
+want in the model, and allowing the LASSO algorithm to select those
+which are relevant for the target variable, we might be able to increase
+the explained model variance!</p>
+<pre class="r"><code>rm(list=ls())
+
+# 0. Libraries
+
+library(plyr)
+library(tidyverse)
+library(data.table)
+library(caret)
+library(Hmisc)
+library(elasticnet) # works in conjunction with caret for lasso models
+library(corrplot)
+
+# 1. Upload data and subset
+
+malawi &lt;- fread(&quot;/Users/michellegonzalez/Desktop/MachineLearning4PP 2/Machine-Learning-for-Public-Policy/malawi.csv&quot;, drop=&quot;V1&quot;)
+
+column_names &lt;- c(&quot;reside&quot;,&quot;hhsize&quot;,&quot;hh_b05a&quot;,&quot;sumConsumption&quot;,&quot;hh_s01&quot;,&quot;hh_b03&quot;,&quot;hh_c09&quot;,&quot;hh_c24&quot;,&quot;hh_d10&quot;,&quot;hh_d11&quot;,&quot;hh_d12_1&quot;,&quot;hh_f19&quot;,&quot;hh_f34&quot;,&quot;hh_t08&quot;,&quot;hh_t01&quot;,&quot;hh_t14&quot;)
+malawi2 &lt;- malawi[,column_names, with=FALSE]
+
+# adding new target vector
+
+malawi$Cons_pcpd  &lt;-(malawi$sumConsumption / malawi$hhsize)/7
+malawi2$Cons_pcpd &lt;-(malawi2$sumConsumption / malawi2$hhsize)/7</code></pre>
+<p>Notice that this time, we’ve kept two data sets. One containing the
+full set of variables (514), and another which contains only the
+variables that we had recognised as possibly relevant in the past.</p>
+<p>Our next step would be to clean the data by getting rid of missing
+values. A task that is easy for the 17 vector dataframe, but may seem
+daunting for the dataframe with 515 variables. How do we go about
+this?</p>
+</div>
+<div id="ridge" class="section level3">
+<h3><strong>Ridge</strong></h3>
 <p>A ridge regression includes ALL predictors in a model, but penalises
 predictors that contribute less to the model by shrinking them close to
 (but never) zero. The penalty term <span
@@ -371,8 +422,8 @@ class="math inline">\(\lambda = 0\)</span>, a ridge regression is
 essentially an OLS regression. As <span class="math inline">\(\lambda
 \rightarrow \infty\)</span>, the penalty increases and the regression
 coefficients approximate zero.</p>
-<p>Our practical exercise in R will consist of running a Lasso model
-using the caret package.</p>
+</div>
+</div>
 
 <!DOCTYPE html>
 <hr>

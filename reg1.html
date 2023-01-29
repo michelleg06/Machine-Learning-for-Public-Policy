@@ -636,7 +636,7 @@ which( colnames(datABCDE)==&quot;HHID.x&quot;) # 3 and 74</code></pre>
 <pre class="r"><code>datABCDE &lt;- datABCDE[,-c(3,23,74,129)] # this line removes the four selected duplicated columns.</code></pre>
 <p>Note that as we continue to merge multiple modules these duplicated
 columns will reappear. This happens when two datasets containing the
-same vector name <besides the unique> identifier are merged.</p>
+same vector name <besides the unique identifier> are merged.</p>
 <pre class="r"><code>#Merging Module F (Housing)
 datABCDEF &lt;- merge(datABCDE, datList[[6]], by=&quot;case_id&quot;, all = TRUE)</code></pre>
 <p>Up until this point, the order of datList dataframes and Modules was
@@ -703,8 +703,9 @@ below.</p>
 </a>
 </div>
 <div id="machine-learning-with-linear-regression"
-class="section level3">
-<h3><strong>Machine Learning with linear regression</strong></h3>
+class="section level3 active">
+<h3 class="active"><strong>Machine Learning with linear
+regression</strong></h3>
 <p>This code is a step by step on how to go about writing a predictive
 model using a <em>linear regression</em>. Despite its simplicity and
 transparency, i.e. the ease with which we can interpret its results, a
@@ -1006,8 +1007,13 @@ corrplot(M, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.ce
 
 # Let&#39;s compute the Spearman correlation coefficient between categorical variables
 malawi_factorC &lt;- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+
+# add the target variable to the factor correlation matrix
+malawi_factorC &lt;- cbind.data.frame(malawi_factorC,malawi_continuous$sumConsumption)
+names(malawi_factorC)[names(malawi_factorC) == &quot;malawi_continuous$sumConsumption&quot;] &lt;- &quot;sumConsumption&quot;
+
 M2 &lt;- cor(malawi_factorC, method = &quot;spearman&quot;)
-corrplot(M2, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.8) # visualise it in a nice way</code></pre>
+corrplot(M2, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.7) # visualise it in a nice way</code></pre>
 <p><img src="reg1_files/figure-html/figures-side-1.png" width="50%" /><img src="reg1_files/figure-html/figures-side-2.png" width="50%" /></p>
 <p>Notice how, in both matrices, but particularly that which contains
 our target variable, we observe several instances were the correlation
@@ -1017,10 +1023,10 @@ the model to crash or the fit to be unstable.</p>
 <p><strong>3. Partition data into training and test
 datasets</strong></p>
 <p>When we are working with machine learning learning models, it is
-important to have two datasets. A training dataset from which our model
-will learn, and a test dataset containing the same features as our
-training dataset. To split our main dataset into two, we will work with
-an 80/20 split.</p>
+important to have two data sets. A training data set from which our
+model will learn, and a test data set containing the same features as
+our training data set. To split our main data set into two, we will work
+with an 80/20 split.</p>
 <p>The 80/20 split has its origins in the Pareto Principle, which states
 that “in most cases, 80% of effects from from 20% of causes”. Without
 other relevant knowledge of the source or shape of the data, this
@@ -1048,8 +1054,8 @@ performance: RMSE and R^2</strong></p>
 dataset; that is, our target variable <em>Total household food
 consumption in the past 7 days</em> or <em>sumConsumption</em> will be a
 <span class="math inline">\(Y\)</span> dependent variable in a linear
-model <span class="math inline">\(Y = \alpha + x&#39;\beta +
-\epsilon\)</span>, and the remaining features in the dataframe
+model <span class="math inline">\(Y_i = \alpha + x&#39;\beta_i +
+\epsilon_i\)</span>, and the remaining features in the data frame
 correspond to the row vectors <span
 class="math inline">\(x&#39;\beta\)</span>.</p>
 <pre class="r"><code>model1 &lt;- lm(sumConsumption ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable sumConsumption
@@ -1182,12 +1188,12 @@ minus the predicted value.</li>
 </ul>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ## -508.94  -76.74  -44.06    0.00  -12.11 3923.07</code></pre>
-<p>The max(imum) error of <span class="math inline">\(3290.59\)</span>
-suggests that the model under-predicted expenses by circa $3,300 for at
+<p>The max(imum) error of <span class="math inline">\(3923.07\)</span>
+suggests that the model under-predicted expenses by circa $4,000 for at
 least one observation. Fifty percent of the predictions (between the
 first and third quartiles) over-predict the true consumption value by
-$77 and $12.50. From these data, we obtain the popular measure of
-perfomance evaluation known as the Root Mean Squared Error (RMSE, for
+$76.74 and $12.11. From these data, we obtain the popular measure of
+performance evaluation known as the Root Mean Squared Error (RMSE, for
 short).</p>
 <pre class="r"><code># Calculate the RMSE for the training dataset, or the in-sample RMSE.
 
@@ -1201,31 +1207,31 @@ error0 &lt;- p0 - Train_df[[&quot;sumConsumption&quot;]]
 RMSE_insample &lt;- sqrt(mean(error0 ^ 2))
 print(RMSE_insample)</code></pre>
 <pre><code>## [1] 228.4205</code></pre>
-<p>The RMSE (<span class="math inline">\(227.528\)</span>) gives us an
+<p>The RMSE (<span class="math inline">\(228.4205\)</span>) gives us an
 absolute number that indicates how much our predicted values deviate
 from the true (observed) number. Think of the question, <em>how far, on
 average, are the residuals away from zero?</em> Generally speaking, the
 lower the value, the better the model fit. Besides being a good measure
 of goodness of fit, the RMSE is also useful for comparing the ability of
-our model to make predictions on different (e.g. test) datasets. The
+our model to make predictions on different (e.g. test) data sets. The
 in-sample RMSE should be close or equal to the out-of-sample RMSE.</p>
 <ul>
 <li><p>The <em>p-values</em>: represented by stars *** indicate the
 predictive power of each feature in the model. In the same line, the
 magnitude of the coefficient is also important, especially given that we
 are interested in explanatory power and not causality.</p></li>
-<li><p>The R-squared: arguably the go-to indicator for performance
-assessment. The total variance explained by our model (R^2) is ~ 10
-percent (0.09986). Low R^2 values are not uncommon, especially in the
-social sciences. However, when hoping to use a model for predictive
-purposes, 10 percent might not be enough, large number of statistically
-significant features notwithstanding. The drawback from relying solely
-on this measure is that it does not take into consideration the problem
-of model over-fitting; i.e. you can inflate the R-squared by adding as
-many variables as you want, even if those variables have little
-predicting power. This method will yield great results in the training
-data, but will underperform when extrapolating the model to the test (or
-indeed any other) data.</p></li>
+<li><p>The <em>R-squared</em>: arguably the go-to indicator for
+performance assessment. The total variance explained by our model (R^2)
+is ~ 10 percent (0.101). Low R^2 values are not uncommon, especially in
+the social sciences. However, when hoping to use a model for predictive
+purposes, 10 per cent might not be enough, the large number of
+statistically significant features notwithstanding. The drawback from
+relying solely on this measure is that it does not take into
+consideration the problem of model over-fitting; i.e. you can inflate
+the R-squared by adding as many variables as you want, even if those
+variables have little predicting power. This method will yield great
+results in the training data, but will under perform when extrapolating
+the model to the test (or indeed any other) data set.</p></li>
 </ul>
 <p><em>Out of sample model predictions</em></p>
 <p>Now that we have built and evaluated our model, we can proceed to
@@ -1237,27 +1243,27 @@ make out-of-sample predictions.</p>
 that, a warning, and it does not stop the program from running or
 producing results. It does, however, indicate that those results may be
 meaningless. This is not big news for us at this point, since we have
-run into some interesting insights along the way: zero-variance
-predictors in the correlation matrix, a low R-squared value…</p>
+run into some interesting insights along the way: a zero-variance
+predictor in the correlation matrix, a low R-squared value…</p>
 <p><em>The bias-variance tradeoff in practice</em></p>
 <p>We previously mentioned that the RMSE metric could also be used to
 compare between training and test model predictions. Let us estimate the
-ou-of-sample RMSE:</p>
+out-of-sample RMSE:</p>
 <pre class="r"><code>error &lt;- p - Test_df[[&quot;sumConsumption&quot;]] # predicted values minus actual values
 RMSE_test &lt;- sqrt(mean(error^2))
 print(RMSE_test) # this is known as the out-of-sample RMSE</code></pre>
 <pre><code>## [1] 232.5525</code></pre>
 <p>Notice that the <em>in-sample RMSE</em>[<span
-class="math inline">\(227.528\)</span>] is very close to the
+class="math inline">\(228.4205\)</span>] is very close to the
 <em>out-of-sample RMSE</em>[<span
-class="math inline">\(235.9987\)</span>]. This means that our our model
-makes consistent predictions across different datasets. However, we also
-now by now that these predictions are not great. What we are observing
-here is a model that has not found a balance between bias and
+class="math inline">\(232.5525\)</span>]. This means that our model
+makes consistent predictions across different data sets. However, we
+also know by now that these predictions are not great. What we are
+observing here is a model that has not found a balance between bias and
 variance.</p>
 <p>We can take a first glance at the realised household food consumption
 vs. the predicted food consumption stored in our object ‘p’ by selecting
-the first six elements of our dataset using the command head()</p>
+the first six elements of our data set using the command head()</p>
 <pre class="r"><code>head(cbind(Test_df$sumConsumption,p))</code></pre>
 <pre><code>##                  p
 ## 1  71.05 139.47176
@@ -1269,13 +1275,13 @@ the first six elements of our dataset using the command head()</p>
 <p>With the first six households, we’re pretty far off the mark. Another
 way to visualise this is to use a <em>Confusion Matrix</em> (2×2 table
 that shows the predicted values from the model vs. the actual values
-from the test dataset). Remember we are trying to build a model that can
-accurately predict a household’s food consumption needs. Assume that the
-government of Malawi has decided to give cash transfers to households
-who spend less than $95 a week. Let’s create binary variables for the
-realised outcome and the predicted outcome, which take on the value 1 if
-the household spends below $95 a week and 0 otherwise. We can then use
-those binary variables to build a confusion matrix.</p>
+from the test data set). Remember we are trying to build a model that
+can accurately predict a household’s food consumption needs. Assume that
+the government of Malawi has decided to give cash transfers to
+households who spend less than $95 a week. Let’s create binary variables
+for the realised outcome and the predicted outcome, which take on the
+value 1 if the household spends below $95 a week and 0 otherwise. We can
+then use those binary variables to build a confusion matrix.</p>
 <pre class="r"><code>Test_df$realised_consumption &lt;- ifelse(Test_df$sumConsumption&lt;95,1,0)
 # How many households spend less than $95 a week on food?
 table(Test_df$realised_consumption)</code></pre>
@@ -1292,7 +1298,7 @@ table(Test_df$predicted_consumption)</code></pre>
 ## 4739 3545</code></pre>
 <pre class="r"><code># Answer: 3545!
 
-# Confusion Matrix manually (it&#39;s really just a crosstabulation!)
+# Confusion Matrix manually (it&#39;s really just a cross-tabulation!)
 table(Test_df$realised_consumption,Test_df$predicted_consumption)</code></pre>
 <pre><code>##    
 ##        0    1
@@ -1327,14 +1333,15 @@ confusionMatrix(as.factor(Test_df$realised_consumption), as.factor(Test_df$predi
 ##                                              
 ##        &#39;Positive&#39; Class : 0                  
 ## </code></pre>
-<p>The confusion matrix already gives us a glimpse on how a bad
+<p>The confusion matrix already gives us a glimpse at how a bad
 prediction model can affect the lives of people in need. Beyond what we
-can read from the crosstabs (or confusion matrix), the caret package
-confusionMatrix() function also includes some statistical measures of
-performance. We won’t discuss all of them, but focus on the Kappa
-statistic, a measure of model accuracy that is adjusted by accounting
-for the possibility of a correct prediction by chance alone. It ranges
-from 0 to 1, and can be interpreted using the following thresholds:</p>
+can read from the cross-tabulation (or confusion matrix), the caret
+package confusionMatrix() function also includes some statistical
+measures of performance. We won’t discuss all of them, but focus on the
+Kappa statistic, a measure of model accuracy that is adjusted by
+accounting for the possibility of a correct prediction by chance alone.
+It ranges from 0 to 1, and can be interpreted using the following
+thresholds:</p>
 <ul>
 <li><p>Poor = Less than 0.20</p></li>
 <li><p>Fair = 0.20 to 0.40</p></li>
@@ -1342,19 +1349,20 @@ from 0 to 1, and can be interpreted using the following thresholds:</p>
 <li><p>Good = 0.60 to 0.80</p></li>
 <li><p>Very good = 0.80 to 1.00</p></li>
 </ul>
-<p>With a kappa value of 0.2, our model has poor accuracy. Now let’s
-recapitulate:</p>
+<p>With a kappa value of 0.2, our model has fair (borderline poor)
+accuracy. Now let’s recapitulate:</p>
 <p><em>What do we mean by bias in a model?</em></p>
 <p>The bias is the difference between the average prediction of our
 model and the true (observed) value. Minimising the bias is analogous to
 minimising the RMSE.</p>
 <p><em>What do we mean by variance in a model?</em></p>
-<p>It is the observed variability of model prediction for a given data
-point. A model with high variance would yield low error values in the
-training data but high errors in the test data.</p>
+<p>It is the observed variability of our model prediction for a given
+data point (how much the model can adjust given the data set). A model
+with high variance would yield low error values in the training data but
+high errors in the test data.</p>
 <p>Our Food Consumption prediction model therefore exhibits a low level
-of variance (and thus it extrapolates well to other datasets) but a high
-level of bias. We have created an <strong>under-fitted
+of variance (and thus it extrapolates well to other data sets) but a
+high level of bias. We have created an <strong>under-fitted
 model!</strong></p>
 <p><strong>5. Challenge!</strong></p>
 <p>How can we improve our model? We want to avoid under-fitting,
@@ -1363,33 +1371,568 @@ over-fitting the model. Improve and assess your model following the
 example above. Here are some suggestions that you can use to improve the
 model:</p>
 <ul>
-<li><p>Rethink the predictors: remember the zero-variance predictor in
-the ‘continuous variables’ correlation matrix? Perhaps it should be
-removed from the model. It adds nothing to our model and instead makes
-unstable predictions. You could also revisit the original dataset with
-more than 500 features and think of other variables that might be of
-interest. Finally, there were some factor features (a.k.a. categorical
-variables) that still had some missing values. Should we get rid of the
-features? Or get rid of the missing values and keep the features but
-decrease the sample size? This is up to you!</p></li>
+<li><p>Rethink the predictors: remember the zero-variance predictors in
+the correlation matrices? Perhaps they should be removed from the model.
+They add nothing to our model and instead make unstable predictions. You
+could also revisit the original data set with more than 500 features and
+think of other variables that might be of interest. Finally, there were
+some factor features (a.k.a. categorical variables) that still had some
+missing values. Should we get rid of the features? Or get rid of the
+missing values and keep the features but decrease the sample size? This
+is up to you!</p></li>
 <li><p>Include polynomial transformations: the relationship between any
 given predictor and the target feature (dependent variable) might be
 non-linear and thus better explained by a polynomial (squared, cubic)
 transformation.</p></li>
 <li><p>Other variable transformations: remember the distribution of our
 consumption variable? It was highly skewed. Perhaps a log transformation
-might be needed.</p></li>
+might be needed?</p></li>
 <li><p>Include interaction terms: perhaps the true explanatory power of
 a feature comes from its interaction with another feature. Say, the
 effect of education on consumption is dominated by the gender of the
 household head. We know from previous <a
 href="https://www.povertyactionlab.org/sites/default/files/publication/Briefcase_empowering-women-through-targeted-cash-transfers_north-macedonia_10152021.pdf">research</a>
 that when women are recipients of cash transfers from the government,
-households spent more of their budget on food.</p></li>
+households spend more of their budget on food.</p></li>
 </ul>
 <a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_regression1.R">
 <button class="btn btn-info"><i class="fa fa-save"></i> Download R script Regression 1: PMT</button>
 </a>
+</div>
+<div id="challenge-solution" class="section level3">
+<h3><strong>Challenge Solution</strong></h3>
+<p>Here’s a smart solution to the challenge: improving the prediction
+ability of the ML model. It was proposed by a team of students from the
+UNU-MERIT MPP 2022-2023 cohort. To run this code, you need to have ran
+all the previous lines in the <em>Machine Learning with linear
+regression</em> tab.</p>
+<p>First, let’s start by getting rid of those pesky missing values in
+the factor variables that we spotted earlier in our data
+exploration.</p>
+<pre class="r"><code># # # #
+table(malawi$hh_c09)</code></pre>
+<pre><code>## 
+##             A-LEVEL    DEGREE   DIPLOMA       JCE   MASTERS MSCE/GCSE      NONE 
+##     10012       115       104       263      1794        23      1677     24110 
+##       PhD      PSLC 
+##         4      3328</code></pre>
+<pre class="r"><code>levels(malawi$hh_c09)</code></pre>
+<pre><code>##  [1] &quot;&quot;          &quot;A-LEVEL&quot;   &quot;DEGREE&quot;    &quot;DIPLOMA&quot;   &quot;JCE&quot;       &quot;MASTERS&quot;  
+##  [7] &quot;MSCE/GCSE&quot; &quot;NONE&quot;      &quot;PhD&quot;       &quot;PSLC&quot;</code></pre>
+<pre class="r"><code>malawi$hh_c09 &lt;- droplevels(malawi$hh_c09, &quot;&quot;)
+
+# # # # 
+table(malawi$hh_c24)</code></pre>
+<pre><code>## 
+##          No   Yes 
+##  5655 34279  1496</code></pre>
+<pre class="r"><code>malawi$hh_c24 &lt;- droplevels(malawi$hh_c24, &quot;&quot;)
+
+# # # #
+table(malawi$hh_e70) # This variable has too many missings! 22,163! Perhaps it&#39;s best if we get rid of the variable instead of deleting the missing data</code></pre>
+<pre><code>## 
+##          No   Yes 
+## 22163 15720  3547</code></pre>
+<pre class="r"><code>malawi &lt;- malawi[,-which( colnames(malawi)==&quot;hh_e70&quot;)] # This is a more straightforward way of deleting the undesirable variable and avoid mistakes due to typos when writing down the name of the column.
+
+# # # #
+table(malawi$hh_t08)</code></pre>
+<pre><code>## 
+##                                                                     
+##                                                                   3 
+##                                    ALLOWS YOU TO BUILD YOUR SAVINGS 
+##                                                                2443 
+##                                    ALLOWS YOU TO SAVE JUST A LITTLE 
+##                                                                5762 
+## IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 
+##                                                                8147 
+##    IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES 
+##                                                                7760 
+##                                       ONLY JUST MEETS YOUR EXPENSES 
+##                                                               17315</code></pre>
+<pre class="r"><code>malawi$hh_t08 &lt;- droplevels(malawi$hh_t08, &quot;&quot;)
+
+# # # #
+table(malawi$hh_t01)</code></pre>
+<pre><code>## 
+##                                               
+##                                             3 
+##      It was just adequate for household needs 
+##                                         13520 
+## It was less than adequate for household needs 
+##                                         25794 
+## It was more than adequate for household needs 
+##                                          2113</code></pre>
+<pre class="r"><code>malawi$hh_t01 &lt;- droplevels(malawi$hh_t01, &quot;&quot;)
+
+# # # #
+table(malawi$hh_t14)</code></pre>
+<pre><code>## 
+##            DON&#39;T KNOW         NO        YES 
+##          3         25       7949      33453</code></pre>
+<pre class="r"><code>malawi$hh_t14 &lt;- droplevels(malawi$hh_t14, &quot;&quot;)
+
+# Let&#39;s quickly check if we have any other factor variables with missing data:
+
+malawi_factor2 &lt;- malawi %&gt;% select_if(~is.factor(.)) 
+llply(.data=malawi_factor2, .fun=table)</code></pre>
+<pre><code>## $reside
+## 
+## RURAL URBAN 
+## 35814  5616 
+## 
+## $hh_s01
+## 
+##    NO   YES 
+## 28946 12484 
+## 
+## $hh_b03
+## 
+## FEMALE   MALE 
+##  21501  19929 
+## 
+## $hh_c09
+## 
+##   A-LEVEL    DEGREE   DIPLOMA       JCE   MASTERS MSCE/GCSE      NONE       PhD 
+##       115       104       263      1794        23      1677     24110         4 
+##      PSLC 
+##      3328 
+## 
+## $hh_c24
+## 
+##    No   Yes 
+## 34279  1496 
+## 
+## $hh_f19
+## 
+##    NO   YES 
+## 36824  4606 
+## 
+## $hh_t08
+## 
+##                                    ALLOWS YOU TO BUILD YOUR SAVINGS 
+##                                                                2443 
+##                                    ALLOWS YOU TO SAVE JUST A LITTLE 
+##                                                                5762 
+## IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 
+##                                                                8147 
+##    IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES 
+##                                                                7760 
+##                                       ONLY JUST MEETS YOUR EXPENSES 
+##                                                               17315 
+## 
+## $hh_t01
+## 
+##      It was just adequate for household needs 
+##                                         13520 
+## It was less than adequate for household needs 
+##                                         25794 
+## It was more than adequate for household needs 
+##                                          2113 
+## 
+## $hh_t14
+## 
+## DON&#39;T KNOW         NO        YES 
+##         25       7949      33453</code></pre>
+<p>Now that we have finally rid the entire data set from all missing
+values, we can proceed to improve our model with</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Data-specific knowledge: Currently, we have a Food Consumption
+variable per household. However, our dataset is not at the household
+level, but at the user level. This means that, for each user, we have
+the household spending, but not the share that would go to them.
+Perhaps, a better alternative would be to create a new target variable
+which corresponds to the users’ Food Consumption, and not their
+household consumption.</p></li>
+<li><p>Subject-specific knowledge: Usually, poverty measures look at
+daily spending on food, or income per day to assess whether a person has
+enough to cover their necessities. This <a
+href="https://www.bbc.com/news/magazine-17312819">BBC article</a> tells
+us the story of how World Bank Economist Martin Ravallion came up with
+this measure and why it matters.</p></li>
+</ol>
+<pre class="r"><code># What is the daily, food Consumption per capita?
+malawi$Cons_pcpd &lt;-(malawi$sumConsumption / malawi$hhsize)/7
+
+summary(malawi$Cons_pcpd)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##   0.0000   0.9881   1.6518   4.0861   2.9643 314.1429</code></pre>
+<p>Note that the median person in Malawi lives with a little over 1 USD
+per day. This seems consistent with World Bank <a
+href="https://opportunity.org/our-impact/where-we-work/malawi-facts-about-poverty">records</a>.
+In 2017, ca. 70 per cent of Malawians were living under the
+international poverty line of <span
+class="math inline">\(1.90/day\)</span>.</p>
+<p>Now, let’s proceed to run our model and assess it:</p>
+<pre class="r"><code>#Set a seed
+set.seed(1234777)
+
+# Split the data 
+
+train_idx &lt;- createDataPartition(malawi$Cons_pcpd, p = .8, list = FALSE, times = 1)
+
+Train_df &lt;- malawi[ train_idx,]
+Test_df  &lt;- malawi[-train_idx,]
+
+# Run our model
+
+model_corrected &lt;- lm(Cons_pcpd ~ .,Train_df)</code></pre>
+<pre class="r"><code>stargazer::stargazer(model_corrected, type = &quot;text&quot;)</code></pre>
+<pre><code>## 
+## =======================================================================================================
+##                                                                                Dependent variable:     
+##                                                                           -----------------------------
+##                                                                                     Cons_pcpd          
+## -------------------------------------------------------------------------------------------------------
+## resideURBAN                                                                         0.324***           
+##                                                                                      (0.125)           
+##                                                                                                        
+## hhsize                                                                              -0.919***          
+##                                                                                      (0.018)           
+##                                                                                                        
+## hh_b05a                                                                             0.008***           
+##                                                                                      (0.002)           
+##                                                                                                        
+## sumConsumption                                                                      0.034***           
+##                                                                                     (0.0002)           
+##                                                                                                        
+## hh_s01YES                                                                            -0.137            
+##                                                                                      (0.085)           
+##                                                                                                        
+## hh_b03MALE                                                                          0.277***           
+##                                                                                      (0.078)           
+##                                                                                                        
+## hh_c09DEGREE                                                                          1.372            
+##                                                                                      (0.933)           
+##                                                                                                        
+## hh_c09DIPLOMA                                                                       3.088***           
+##                                                                                      (0.769)           
+##                                                                                                        
+## hh_c09JCE                                                                             0.299            
+##                                                                                      (0.661)           
+##                                                                                                        
+## hh_c09MASTERS                                                                       7.614***           
+##                                                                                      (1.880)           
+##                                                                                                        
+## hh_c09MSCE/GCSE                                                                      1.324**           
+##                                                                                      (0.657)           
+##                                                                                                        
+## hh_c09NONE                                                                           -0.245            
+##                                                                                      (0.650)           
+##                                                                                                        
+## hh_c09PhD                                                                            -2.040            
+##                                                                                      (6.149)           
+##                                                                                                        
+## hh_c09PSLC                                                                            0.081            
+##                                                                                      (0.655)           
+##                                                                                                        
+## hh_c24Yes                                                                             0.273            
+##                                                                                      (0.221)           
+##                                                                                                        
+## hh_d10                                                                              -0.00003           
+##                                                                                     (0.00003)          
+##                                                                                                        
+## hh_d11                                                                               0.0001*           
+##                                                                                     (0.00003)          
+##                                                                                                        
+## hh_d12_1                                                                             0.00000           
+##                                                                                     (0.00000)          
+##                                                                                                        
+## hh_f19YES                                                                            -0.121            
+##                                                                                      (0.146)           
+##                                                                                                        
+## hh_f34                                                                              -0.456***          
+##                                                                                      (0.043)           
+##                                                                                                        
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                               -0.101            
+##                                                                                      (0.188)           
+##                                                                                                        
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES             0.200            
+##                                                                                      (0.189)           
+##                                                                                                        
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES               0.344*            
+##                                                                                      (0.194)           
+##                                                                                                        
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                   0.187            
+##                                                                                      (0.175)           
+##                                                                                                        
+## hh_t01It was less than adequate for household needs                                  -0.180*           
+##                                                                                      (0.093)           
+##                                                                                                        
+## hh_t01It was more than adequate for household needs                                  -0.268            
+##                                                                                      (0.181)           
+##                                                                                                        
+## hh_t14NO                                                                             2.479*            
+##                                                                                      (1.446)           
+##                                                                                                        
+## hh_t14YES                                                                            2.401*            
+##                                                                                      (1.442)           
+##                                                                                                        
+## Constant                                                                              2.430            
+##                                                                                      (1.598)           
+##                                                                                                        
+## -------------------------------------------------------------------------------------------------------
+## Observations                                                                         25,103            
+## R2                                                                                    0.676            
+## Adjusted R2                                                                           0.676            
+## Residual Std. Error                                                            6.112 (df = 25074)      
+## F Statistic                                                               1,867.736*** (df = 28; 25074)
+## =======================================================================================================
+## Note:                                                                       *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Note how the <em>R^2</em> has now significantly increased to <span
+class="math inline">\(0.67\)</span>! Let’s not get our hopes up. A big
+driver of this increase is the fact that the variable, weekly household
+spending on food (our initial target variable), is used as a predictor.
+Notice also that there is a zero variance predictor in the model. We
+won’t dwell on the latter and focus on the former.</p>
+<pre class="r"><code>Train_df &lt;- Train_df[,-which(colnames(Train_df)==&quot;sumConsumption&quot;)]
+Test_df  &lt;- Test_df[,-which(colnames(Test_df)==&quot;sumConsumption&quot;)]
+
+# This is a more direct way of deleting columns than what we had previously done. Just for your information, sumConsumption was column/vector number four in both dataframes, so we could have just removed column for instead of using the which() statement. 
+
+model_corrected &lt;- lm(Cons_pcpd ~ .,Train_df)
+stargazer(model_corrected, type = &quot;text&quot;)</code></pre>
+<pre><code>## 
+## =====================================================================================================
+##                                                                               Dependent variable:    
+##                                                                           ---------------------------
+##                                                                                    Cons_pcpd         
+## -----------------------------------------------------------------------------------------------------
+## resideURBAN                                                                        0.767***          
+##                                                                                     (0.209)          
+##                                                                                                      
+## hhsize                                                                             -0.863***         
+##                                                                                     (0.030)          
+##                                                                                                      
+## hh_b05a                                                                              0.006           
+##                                                                                     (0.004)          
+##                                                                                                      
+## hh_s01YES                                                                            0.217           
+##                                                                                     (0.142)          
+##                                                                                                      
+## hh_b03MALE                                                                         0.406***          
+##                                                                                     (0.129)          
+##                                                                                                      
+## hh_c09DEGREE                                                                         0.749           
+##                                                                                     (1.555)          
+##                                                                                                      
+## hh_c09DIPLOMA                                                                      6.510***          
+##                                                                                     (1.281)          
+##                                                                                                      
+## hh_c09JCE                                                                            1.795           
+##                                                                                     (1.102)          
+##                                                                                                      
+## hh_c09MASTERS                                                                      8.829***          
+##                                                                                     (3.133)          
+##                                                                                                      
+## hh_c09MSCE/GCSE                                                                     2.723**          
+##                                                                                     (1.096)          
+##                                                                                                      
+## hh_c09NONE                                                                           0.814           
+##                                                                                     (1.083)          
+##                                                                                                      
+## hh_c09PhD                                                                            4.474           
+##                                                                                    (10.247)          
+##                                                                                                      
+## hh_c09PSLC                                                                           1.259           
+##                                                                                     (1.091)          
+##                                                                                                      
+## hh_c24Yes                                                                          3.203***          
+##                                                                                     (0.368)          
+##                                                                                                      
+## hh_d10                                                                              0.0001           
+##                                                                                    (0.00004)         
+##                                                                                                      
+## hh_d11                                                                              0.00001          
+##                                                                                    (0.00005)         
+##                                                                                                      
+## hh_d12_1                                                                            0.00000          
+##                                                                                    (0.00000)         
+##                                                                                                      
+## hh_f19YES                                                                          2.350***          
+##                                                                                     (0.243)          
+##                                                                                                      
+## hh_f34                                                                             0.370***          
+##                                                                                     (0.072)          
+##                                                                                                      
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                             -1.009***         
+##                                                                                     (0.313)          
+##                                                                                                      
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES          -1.912***         
+##                                                                                     (0.315)          
+##                                                                                                      
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES             -1.427***         
+##                                                                                     (0.322)          
+##                                                                                                      
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                -1.522***         
+##                                                                                     (0.292)          
+##                                                                                                      
+## hh_t01It was less than adequate for household needs                                -0.586***         
+##                                                                                     (0.155)          
+##                                                                                                      
+## hh_t01It was more than adequate for household needs                                1.782***          
+##                                                                                     (0.302)          
+##                                                                                                      
+## hh_t14NO                                                                            -3.098           
+##                                                                                     (2.409)          
+##                                                                                                      
+## hh_t14YES                                                                           -4.538*          
+##                                                                                     (2.403)          
+##                                                                                                      
+## Constant                                                                           12.561***         
+##                                                                                     (2.662)          
+##                                                                                                      
+## -----------------------------------------------------------------------------------------------------
+## Observations                                                                        25,103           
+## R2                                                                                   0.100           
+## Adjusted R2                                                                          0.099           
+## Residual Std. Error                                                           10.186 (df = 25075)    
+## F Statistic                                                               102.942*** (df = 27; 25075)
+## =====================================================================================================
+## Note:                                                                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Unfortunately, once we remove the weekly food consumption variable,
+from which the daily, per capita food consumption was derived, our R^2
+drops down to similar levels as before: <span
+class="math inline">\(0.10\)</span>, ca. ten per cent of the variance of
+our model explained.</p>
+<p>What woule happen if we also got rid of the zero-variance predictor?
+As a reminder, the variable “hh_d12_1” measures: How much in total did
+[NAME] spend..for medical insurance?</p>
+<pre class="r"><code>Train_df &lt;- Train_df[,-which(colnames(Train_df)==&quot;hh_d12_1&quot;)]
+Test_df  &lt;- Test_df[,-which(colnames(Test_df)==&quot;hh_d12_1&quot;)]
+
+
+model_corrected &lt;- lm(Cons_pcpd ~ .,Train_df)
+stargazer(model_corrected, type = &quot;text&quot;)</code></pre>
+<pre><code>## 
+## =====================================================================================================
+##                                                                               Dependent variable:    
+##                                                                           ---------------------------
+##                                                                                    Cons_pcpd         
+## -----------------------------------------------------------------------------------------------------
+## resideURBAN                                                                        0.767***          
+##                                                                                     (0.209)          
+##                                                                                                      
+## hhsize                                                                             -0.863***         
+##                                                                                     (0.030)          
+##                                                                                                      
+## hh_b05a                                                                              0.006           
+##                                                                                     (0.004)          
+##                                                                                                      
+## hh_s01YES                                                                            0.217           
+##                                                                                     (0.142)          
+##                                                                                                      
+## hh_b03MALE                                                                         0.406***          
+##                                                                                     (0.129)          
+##                                                                                                      
+## hh_c09DEGREE                                                                         0.841           
+##                                                                                     (1.552)          
+##                                                                                                      
+## hh_c09DIPLOMA                                                                      6.513***          
+##                                                                                     (1.281)          
+##                                                                                                      
+## hh_c09JCE                                                                            1.791           
+##                                                                                     (1.102)          
+##                                                                                                      
+## hh_c09MASTERS                                                                      9.959***          
+##                                                                                     (2.893)          
+##                                                                                                      
+## hh_c09MSCE/GCSE                                                                     2.720**          
+##                                                                                     (1.096)          
+##                                                                                                      
+## hh_c09NONE                                                                           0.813           
+##                                                                                     (1.083)          
+##                                                                                                      
+## hh_c09PhD                                                                            4.477           
+##                                                                                    (10.247)          
+##                                                                                                      
+## hh_c09PSLC                                                                           1.257           
+##                                                                                     (1.091)          
+##                                                                                                      
+## hh_c24Yes                                                                          3.208***          
+##                                                                                     (0.368)          
+##                                                                                                      
+## hh_d10                                                                             0.0001**          
+##                                                                                    (0.00004)         
+##                                                                                                      
+## hh_d11                                                                              0.00001          
+##                                                                                    (0.00005)         
+##                                                                                                      
+## hh_f19YES                                                                          2.348***          
+##                                                                                     (0.243)          
+##                                                                                                      
+## hh_f34                                                                             0.370***          
+##                                                                                     (0.072)          
+##                                                                                                      
+## hh_t08ALLOWS YOU TO SAVE JUST A LITTLE                                             -1.011***         
+##                                                                                     (0.313)          
+##                                                                                                      
+## hh_t08IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES          -1.914***         
+##                                                                                     (0.315)          
+##                                                                                                      
+## hh_t08IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES             -1.429***         
+##                                                                                     (0.322)          
+##                                                                                                      
+## hh_t08ONLY JUST MEETS YOUR EXPENSES                                                -1.525***         
+##                                                                                     (0.292)          
+##                                                                                                      
+## hh_t01It was less than adequate for household needs                                -0.586***         
+##                                                                                     (0.155)          
+##                                                                                                      
+## hh_t01It was more than adequate for household needs                                1.790***          
+##                                                                                     (0.302)          
+##                                                                                                      
+## hh_t14NO                                                                            -3.094           
+##                                                                                     (2.409)          
+##                                                                                                      
+## hh_t14YES                                                                           -4.535*          
+##                                                                                     (2.403)          
+##                                                                                                      
+## Constant                                                                           12.561***         
+##                                                                                     (2.662)          
+##                                                                                                      
+## -----------------------------------------------------------------------------------------------------
+## Observations                                                                        25,103           
+## R2                                                                                   0.100           
+## Adjusted R2                                                                          0.099           
+## Residual Std. Error                                                           10.186 (df = 25076)    
+## F Statistic                                                               106.867*** (df = 26; 25076)
+## =====================================================================================================
+## Note:                                                                     *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Not much. The R^2 remains the same.</p>
+<p>Let’s take a look at the in-sample RMSE now:</p>
+<pre class="r"><code># 1. Predict values on the training data set
+p00 &lt;- predict(model_corrected, Train_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error00 &lt;- p00 - Train_df[[&quot;Cons_pcpd&quot;]]
+
+# 3. In-sample RMSE
+print(RMSE_insample_correctedmodel &lt;- sqrt(mean(error00 ^ 2, na.rm = T)))</code></pre>
+<pre><code>## [1] 10.18081</code></pre>
+<p>Despite our R^2 value being low, which, again, is not uncommon in the
+social sciences, our in-sample RMSE is also low! We have managed to
+decrease the bias in the model significantly from <span
+class="math inline">\(228.4\)</span>, all the way down to <span
+class="math inline">\(10.18\)</span>. Let’s see if we observe a similar
+trend in the test data set with the out of sample RMSE.</p>
+<pre class="r"><code># 1. Predict values on the training data set
+p00 &lt;- predict(model_corrected, Test_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error00 &lt;- p00 - Test_df[[&quot;Cons_pcpd&quot;]]
+
+# 3. In-sample RMSE
+print(RMSE_outofsample_correctedmodel &lt;- sqrt(mean(error00 ^ 2, na.rm = T)))</code></pre>
+<pre><code>## [1] 9.427004</code></pre>
+<p>With an out of sample RMSE of <span
+class="math inline">\(10.18\)</span>, and an in-sample RMSE of <span
+class="math inline">\(9.42\)</span>, it seems like our model is
+consistent across data sets. So, whilst we were not able to increase the
+R^2, we did significantly decrease the bias in our model. This, to me,
+is a success! As we learn more techniques, we will be able to build from
+this - already highly improved model - to try to find the most accurate
+prediction.</p>
 </div>
 </div>
 

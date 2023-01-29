@@ -674,14 +674,14 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color
   geom_point(alpha=0.5) + #alpha controls transparency of the geom (a.k.a. data point)
   theme(legend.position=&quot;none&quot;) #removing legend
 print(p_ggplot)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Thanks to the grammar of graphics, we can continue to edit the plot
 after we have finished it. Perhaps we’ve come up with ideas to make it
 more stylish? Or helpful? Let’s see an example:</p>
 <pre class="r"><code>p_ggplot &lt;- p_ggplot + theme(legend.position = &quot;right&quot;) # I am saving it with the same name again, but I could easily choose another name and keep two versions of the plot. 
 print(p_ggplot) # the legend we just added is NOT helpful. Why is that? </code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <pre class="r"><code># Remember when we talked about data types?!
 
@@ -698,7 +698,7 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
   theme_classic() 
 
 print(p_ggplot)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
 <pre class="r"><code># Shall we continue?
 
@@ -712,7 +712,7 @@ p_ggplot &lt;- p_ggplot + scale_colour_manual(name = &quot;Automatic or Manual&q
                                values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
 
 print(p_ggplot)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
 <pre class="r"><code># Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
 
@@ -727,7 +727,8 @@ p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
                                labels = c(&quot;0.Automatic&quot;, &quot;1.Manual&quot;),
                                values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
 print(p)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and
+## formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
