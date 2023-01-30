@@ -32,8 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -311,7 +310,36 @@ Classification</h1>
 </div>
 
 
-<p>Section under construction.</p>
+<p>Have you heard the English proverb, “Birds of a feather flock
+together”? It references and old saying that indicates that people with
+similar characteristics tend to group and stay together. In Machine
+Learning, Classification problems deal with the evaluation of models of
+categorical response, such as:</p>
+<ul>
+<li><p>Predictive classification: E.g. is this spam or not? Predictive
+classification concerns itself with unlabeled data, and groups them by
+the proportion of characteristics they commonly share. After which, it
+classifies them into some predetermined category. A common, ‘lazy’
+method is kNearest Neighbors.</p></li>
+<li><p>Binary classification: You may already be familiar with profit or
+logistic regression models. You obtain two types of predictions from
+such models: proportions, and the generation of a predicted discrete
+choice. For Policy purposes, we are interested in the discrete choice.
+E.g. filtering low-income individuals to select those who will receive
+social assistance and those who will not, based on some income
+threshold. But, we still need the probability estimates of each of the
+two categories. They are relevant when working out the model’s
+confidence about the predicted discrete choice.</p></li>
+<li><p>Multi-label classification: Not unlike binary classification, it
+is a labeled data model that relies on techniques such as multinomial
+logistic regression. It deals with data with more than two categories,
+and generates discrete choices, which policymakers then rely on to make
+decisions.</p></li>
+</ul>
+<p><strong>R practical Excercise</strong></p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Classification.R">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download R script Classification: ProbitLogit</button>
+</a>
 
 <!DOCTYPE html>
 <hr>

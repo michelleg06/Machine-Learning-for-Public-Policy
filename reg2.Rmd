@@ -318,8 +318,8 @@ In the end, Lasso has not helped us improve our prediction abilities more than t
 ```{r, echo=FALSE}
 library(downloadthis)
 download_link(
-  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_regression1.R",
-  button_label = "Download R script Regression 1: PMT",
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/regression2_lasso.R",
+  button_label = "Download R script Regression 2: Lasso",
   button_type = "info",
   has_icon = TRUE,
   icon = "fa fa-save",
