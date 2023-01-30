@@ -32,8 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -386,27 +385,511 @@ library(tidyverse)
 library(data.table)
 library(caret)
 library(Hmisc)
-library(elasticnet) # works in conjunction with caret for lasso models
-library(corrplot)
+library(elasticnet) # works in conjunction with caret for lasso models</code></pre>
+<pre><code>## Loading required package: lars</code></pre>
+<pre><code>## Loaded lars 1.2</code></pre>
+<pre class="r"><code>library(corrplot)
+library(Amelia)</code></pre>
+<pre><code>## Loading required package: Rcpp</code></pre>
+<pre><code>## ## 
+## ## Amelia II: Multiple Imputation
+## ## (Version 1.8.0, built: 2021-05-26)
+## ## Copyright (C) 2005-2023 James Honaker, Gary King and Matthew Blackwell
+## ## Refer to http://gking.harvard.edu/amelia/ for more information
+## ##</code></pre>
+<pre class="r"><code>library(knitr)
+library(skimr)
+
 
 # 1. Upload data and subset
 
 malawi &lt;- fread(&quot;/Users/michellegonzalez/Desktop/MachineLearning4PP 2/Machine-Learning-for-Public-Policy/malawi.csv&quot;, drop=&quot;V1&quot;)
 
 column_names &lt;- c(&quot;reside&quot;,&quot;hhsize&quot;,&quot;hh_b05a&quot;,&quot;sumConsumption&quot;,&quot;hh_s01&quot;,&quot;hh_b03&quot;,&quot;hh_c09&quot;,&quot;hh_c24&quot;,&quot;hh_d10&quot;,&quot;hh_d11&quot;,&quot;hh_d12_1&quot;,&quot;hh_f19&quot;,&quot;hh_f34&quot;,&quot;hh_t08&quot;,&quot;hh_t01&quot;,&quot;hh_t14&quot;)
-malawi2 &lt;- malawi[,column_names, with=FALSE]
-
-# adding new target vector
-
-malawi$Cons_pcpd  &lt;-(malawi$sumConsumption / malawi$hhsize)/7
-malawi2$Cons_pcpd &lt;-(malawi2$sumConsumption / malawi2$hhsize)/7</code></pre>
+malawi2 &lt;- malawi[,column_names, with=FALSE]</code></pre>
 <p>Notice that this time, we’ve kept two data sets. One containing the
 full set of variables (514), and another which contains only the
 variables that we had recognised as possibly relevant in the past.</p>
 <p>Our next step would be to clean the data by getting rid of missing
 values. A task that is easy for the 17 vector dataframe, but may seem
-daunting for the dataframe with 515 variables. How do we go about
-this?</p>
+daunting for the dataframe with 515 variables. How do we go about this?
+Let’s first find interesting ways of visualising missing data in a
+compact way.</p>
+<p><strong>For small dataframes: skimr</strong></p>
+<pre class="r"><code>str(malawi2)</code></pre>
+<pre><code>## Classes &#39;data.table&#39; and &#39;data.frame&#39;:   50476 obs. of  16 variables:
+##  $ reside        : chr  &quot;RURAL&quot; &quot;RURAL&quot; &quot;RURAL&quot; &quot;RURAL&quot; ...
+##  $ hhsize        : int  4 4 4 4 4 4 4 4 4 4 ...
+##  $ hh_b05a       : int  11 41 34 4 13 55 18 13 0 25 ...
+##  $ sumConsumption: num  71 71 71 71 37.5 ...
+##  $ hh_s01        : chr  &quot;YES&quot; &quot;YES&quot; &quot;YES&quot; &quot;YES&quot; ...
+##  $ hh_b03        : chr  &quot;MALE&quot; &quot;MALE&quot; &quot;FEMALE&quot; &quot;MALE&quot; ...
+##  $ hh_c09        : chr  &quot;NONE&quot; &quot;NONE&quot; &quot;NONE&quot; &quot;&quot; ...
+##  $ hh_c24        : chr  &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;&quot; ...
+##  $ hh_d10        : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ hh_d11        : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ hh_d12_1      : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ hh_f19        : chr  &quot;NO&quot; &quot;NO&quot; &quot;NO&quot; &quot;NO&quot; ...
+##  $ hh_f34        : int  1 1 1 1 0 0 0 0 1 1 ...
+##  $ hh_t08        : chr  &quot;IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES&quot; &quot;IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES&quot; &quot;IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES&quot; &quot;IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES&quot; ...
+##  $ hh_t01        : chr  &quot;It was just adequate for household needs&quot; &quot;It was just adequate for household needs&quot; &quot;It was just adequate for household needs&quot; &quot;It was just adequate for household needs&quot; ...
+##  $ hh_t14        : chr  &quot;NO&quot; &quot;NO&quot; &quot;NO&quot; &quot;NO&quot; ...
+##  - attr(*, &quot;.internal.selfref&quot;)=&lt;externalptr&gt;</code></pre>
+<p>This package is a combination of the commands str(x) and
+colSums(is.na(x)), which we had previously used to explore the data
+(vector class, dataframe dimension), and the number of missing values
+per vector. What is the advantage? It also includes the parameter
+`empty’, for character vectors. Before, we had to plot tables of all our
+vector characters to find out that there were empty rows that were not
+being recognised as missing values.</p>
+<p>Another great feature of this package is that it allows us to see the
+complete rate of a variable. We had previously ignored the possibility
+of imputing data, claiming we had too many missing values. Now, we can
+make that claim with some statistical certainty, or disprove it and
+choose to impute values. For example, our target variable has about 80%
+of its values. With as many complete cases, I would try to impute the
+remaining 20%. Note that there us no consensus on a cutoff of
+missingness that is valid to impute, but I once heard a professor say 20
+or less, and that’s what I go by (therefore, take this ‘rule of thumb’
+with a grain of salt). The handling of missing data is a whole lecture
+in itself, so we will do as before and simply delete all missing values,
+an approach that is the default for many statistical packages. In
+general, when imputing data (which the caret pkg can do for you!), you
+should consider two things: 1) What you are trying to do with your model
+(causality, or prediction?); and 2) whether the Missing At Random (MAR)
+assumption holds for you to attempt multiple imputation. To read more
+about this topic for your future research, I recommend you read the book
+<a href="https://stefvanbuuren.name/fimd/sec-MCAR.html">Flexible
+Imputation of Missing Data</a>, which also comes with examples in R.</p>
+<p>*Unfortunately, I can’t render skim() objects on the website, but the
+code works just fine in the R script.</p>
+<p><strong>For large dataframes: Amelia</strong></p>
+<pre class="r"><code>missmap(malawi)</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+The `missingness map’ produced by the Amelia pkg (which is, in fact, a
+package for multiple imputation), is a good way to start eyeing if there
+are certain variables – say, a large set – that we should not even
+consider. The actual image is only showing a subset of the tens of
+thousands of observations (y-axis) and hundreds of variables (x-axis).
+However, given that the missing values seem to be mostly concentrated in
+full variables rather than spread across the dataframe, we should
+probably select some variables from the dataframe rather than throwing
+the roughly 500 variables (most of which are empty) into a Lasso
+regression. In sum, our original approach of subsetting the dataframe by
+looking at variables that might be good predictors (based on our expert
+knowledge, of course) was not that bad given this dataframe.</p>
+<p><strong>Adding new variables to our 17-vector malawi
+dataframe</strong></p>
+<p>Because we have already done the cleaning of this data set, we know
+that we will end up with less that 17 vectors. Before we fully forget
+about the larger 515 data set and, indeed, before we start the cleaning
+process, I’d like to add some other predictors. I’ll focus on variables
+from Module E: Time Use and Labour (from which we have none).</p>
+<ul>
+<li>Does [NAME] want to change his/her current employment situation?
+(hh_e70)</li>
+<li>Would [NAME] want to work more hours per week than usual?
+(hh_e67)</li>
+<li>During the last four weeks, did [NAME] looked for additional paid
+work? (hh_e66)</li>
+<li>How many hours did [NAME] spend yesterday collecting water?
+(hh_e05)</li>
+<li>..hours did [NAME]spend yesterday collecting firewood(or other fuel
+materials)? (hh_e06)</li>
+</ul>
+<pre class="r"><code>column_names &lt;- c(&quot;reside&quot;,&quot;hhsize&quot;,&quot;hh_b05a&quot;,&quot;sumConsumption&quot;,&quot;hh_s01&quot;,&quot;hh_b03&quot;,&quot;hh_c24&quot;,&quot;hh_d10&quot;,&quot;hh_d11&quot;,&quot;hh_d12_1&quot;,&quot;hh_f19&quot;,&quot;hh_f34&quot;,&quot;hh_t08&quot;,&quot;hh_t01&quot;,&quot;hh_t14&quot;, &quot;hh_e70&quot;, &quot;hh_e67&quot;, &quot;hh_e66&quot;, &quot;hh_e05&quot;, &quot;hh_e06&quot;)
+malawi &lt;- malawi[,column_names, with=FALSE]
+
+# Note that I also deleted a predictor with zero variance from this list. We caught the intruder in Regression I: hh_c09</code></pre>
+<p>Now, we will do our missing value clean-up. Since you should already
+know how to do this, I won’t add much explanation to the code below:</p>
+<pre class="r"><code># While skimr is a great pkg, I love the simplicity of colSums(is.na(x)) right before I clean a df. 
+colSums(is.na(malawi))</code></pre>
+<pre><code>##         reside         hhsize        hh_b05a sumConsumption         hh_s01 
+##              0              0              0           9046              0 
+##         hh_b03         hh_c24         hh_d10         hh_d11       hh_d12_1 
+##              0              0              0              0              0 
+##         hh_f19         hh_f34         hh_t08         hh_t01         hh_t14 
+##              0              0              0              0              0 
+##         hh_e70         hh_e67         hh_e66         hh_e05         hh_e06 
+##              0              0              0           6879           6880</code></pre>
+<pre class="r"><code>malawi &lt;- malawi[-which(is.na(malawi$sumConsumption)),]
+
+# With the line above, I have just gotten rid of the missing values from our target variable. According to our colSums(is.na(x)) there are still two other vectors with missing values. Luckily, they seem to be few - from the same E module - and in similar quantities. These two are the variables that asked about time spent collecting water or wood. My assumption is that they&#39;re the same people in both questions that are not giving us a response. 
+
+malawi &lt;- na.omit(malawi)
+
+# This line deletes ALL missing values from the entire data set. In this specific case, it only applied to two variables since we had already gotten rid all the missingn values from the target variable. Take a glimpse:
+
+colSums(is.na(malawi))</code></pre>
+<pre><code>##         reside         hhsize        hh_b05a sumConsumption         hh_s01 
+##              0              0              0              0              0 
+##         hh_b03         hh_c24         hh_d10         hh_d11       hh_d12_1 
+##              0              0              0              0              0 
+##         hh_f19         hh_f34         hh_t08         hh_t01         hh_t14 
+##              0              0              0              0              0 
+##         hh_e70         hh_e67         hh_e66         hh_e05         hh_e06 
+##              0              0              0              0              0</code></pre>
+<p>Now let’s do a quick visualisation to see if we catch anything else.
+Again, I expect you to be able to interpret histograms and tables, since
+this is a repetition of what we already did in Regression I. I won’t
+expand on the explanations. We will start with numeric and integer
+vectors (i.e. continuous distributions).</p>
+<pre class="r"><code>malawi_continuous &lt;- malawi %&gt;% select_if(~is.integer(.) | is.numeric(.)) 
+hist.data.frame(malawi_continuous)</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+The only thing we did not do last time, was try to understand the
+distributions which bunched at the zero value. We will do that now.</p>
+<pre class="r"><code>summary(malawi$hh_d10) #Amt [NAME] spent in the past 4 weeks for all illnesses and injuries?</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##      0.0      0.0      0.0    124.4      0.0 220000.0</code></pre>
+<pre class="r"><code>unique(malawi$hh_d10) # variable distribution is legitimate.</code></pre>
+<pre><code>##   [1]      0   2800    250   1300   1100   1000    300      8    600  10000
+##  [11]   1500   2500   2000   3000    100    200    500   6000   3500   7500
+##  [21]   4500  25000  13000   8000    800   4000   4800  11000   6300   5000
+##  [31]      4    400     14   4100   1200   1800   2700   3800   6500   7000
+##  [41]   3400   5500   1350    900   5200   6800  15000     12   3850    350
+##  [51]     50      7  75000   3700   2300      3   2100    150    700  30000
+##  [61]  34750    240   9000    450  12000   2400   2200   9950   8600      2
+##  [71]   5300      9   2650   9750   4250      5   5900      1   5400   1600
+##  [81]  14000  10500   7140   1050    750   3600   2900   1400     80    180
+##  [91]  48000   2850  11200   1950   1250   2350   2230   7550   1700   3440
+## [101]   3200   7700  20000   7800   4400   9600   1550  23000  17000   3085
+## [111]   2600   6400   2550   3950   2450 220000   5800   8500  39000  18000
+## [121]  28000    850   2250   9500   2220  16500   3880  43000   5040   3750
+## [131]      6   6875   4600   1850     25   2150   6200   5080  13500   9900
+## [141]  12500  16400    550    320   8550   1900    120  14200  29000</code></pre>
+<pre class="r"><code>ill_people_spentCash &lt;- length(which(malawi$hh_d10!=0))
+cat(sprintf(&quot;%.0f people/households spent money on an illness, out of 41,430, in the past 4 weeks.&quot;, ill_people_spentCash))</code></pre>
+<pre><code>## 1301 people/households spent money on an illness, out of 41,430, in the past 4 weeks.</code></pre>
+<pre class="r"><code>cat(&quot;Variables from the H section of the Household module all follow similar distributions due to the type of question asked.&quot;)</code></pre>
+<pre><code>## Variables from the H section of the Household module all follow similar distributions due to the type of question asked.</code></pre>
+<pre class="r"><code>names(malawi)[names(malawi) == &quot;hh_d10&quot;] &lt;- &quot;total_spent_on_illness&quot;
+names(malawi)[names(malawi) == &quot;hh_d11&quot;] &lt;- &quot;total_spent_on_non_illness_medicalcare&quot;
+names(malawi)[names(malawi) == &quot;hh_d12_1&quot;] &lt;- &quot;total_spent_on_medicalinsurance&quot;</code></pre>
+<p>Let’s visualise factor vectors:</p>
+<pre class="r"><code>malawi_factor &lt;- malawi %&gt;% select_if(~is.character(.))
+malawi_factor &lt;- as.data.frame(unclass(malawi_factor),stringsAsFactors=TRUE)
+llply(.data=malawi_factor, .fun=table)</code></pre>
+<pre><code>## $reside
+## 
+## RURAL URBAN 
+## 30873  4901 
+## 
+## $hh_s01
+## 
+##    NO   YES 
+## 25094 10680 
+## 
+## $hh_b03
+## 
+## FEMALE   MALE 
+##  18629  17145 
+## 
+## $hh_c24
+## 
+##    No   Yes 
+## 34278  1496 
+## 
+## $hh_f19
+## 
+##    NO   YES 
+## 31682  4092 
+## 
+## $hh_t08
+## 
+##                                                                     
+##                                                                   3 
+##                                    ALLOWS YOU TO BUILD YOUR SAVINGS 
+##                                                                2141 
+##                                    ALLOWS YOU TO SAVE JUST A LITTLE 
+##                                                                4963 
+## IS NOT SUFFICIENT, SO YOU NEED TO USE YOUR SAVINGS TO MEET EXPENSES 
+##                                                                7028 
+##    IS REALLY NOT SUFFICIENT, SO YOU NEED TO BORROW TO MEET EXPENSES 
+##                                                                6641 
+##                                       ONLY JUST MEETS YOUR EXPENSES 
+##                                                               14998 
+## 
+## $hh_t01
+## 
+##                                               
+##                                             3 
+##      It was just adequate for household needs 
+##                                         11739 
+## It was less than adequate for household needs 
+##                                         22182 
+## It was more than adequate for household needs 
+##                                          1850 
+## 
+## $hh_t14
+## 
+##            DON&#39;T KNOW         NO        YES 
+##          3         23       6938      28810 
+## 
+## $hh_e70
+## 
+##          No   Yes 
+## 16508 15719  3547 
+## 
+## $hh_e67
+## 
+##    No   Yes 
+## 31833  3941 
+## 
+## $hh_e66
+## 
+##    No   Yes 
+## 34496  1278</code></pre>
+<p>The following variables contain missing data (empty spaces that were
+recognised by R as a category and not a missing value): “hh_c09, hh_e70
+(too many, delete variable), hh_t14, hh_t01, hh_t08”. Let’s rid them of
+those pesky empty spaces.</p>
+<pre class="r"><code>malawi &lt;- as.data.frame(unclass(malawi),stringsAsFactors=TRUE) # Convert character vectors into factors in malawi dataframe
+malawi &lt;- malawi[,-which(colnames(malawi)==&quot;hh_e70&quot;)]
+
+# In the Challenge Solution tab of Regression I we used the command droplevels() to delete the level recognised as an empty space from each variable. This is another way of doing this which will also allow us to keep track of how many values we delete.
+
+length(which(malawi$hh_t14==&quot;&quot;)) # 3 empty spaces</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>levels(malawi$hh_t14)[levels(malawi$hh_t14)==&quot;&quot;] &lt;- NA
+sum(is.na(malawi$hh_t14)) # 3 missing values </code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>length(which(malawi$hh_t01==&quot;&quot;)) # 3 empty spaces</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>levels(malawi$hh_t01)[levels(malawi$hh_t01)==&quot;&quot;] &lt;- NA
+sum(is.na(malawi$hh_t01)) # 3 missing values</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>length(which(malawi$hh_t08==&quot;&quot;)) # 3 empty spaces</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>levels(malawi$hh_t08)[levels(malawi$hh_t08)==&quot;&quot;] &lt;- NA
+sum(is.na(malawi$hh_t08)) # 3 missing values</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>colSums(is.na(malawi)) # Some of these missings are overlapping.</code></pre>
+<pre><code>##                                 reside                                 hhsize 
+##                                      0                                      0 
+##                                hh_b05a                         sumConsumption 
+##                                      0                                      0 
+##                                 hh_s01                                 hh_b03 
+##                                      0                                      0 
+##                                 hh_c24                 total_spent_on_illness 
+##                                      0                                      0 
+## total_spent_on_non_illness_medicalcare        total_spent_on_medicalinsurance 
+##                                      0                                      0 
+##                                 hh_f19                                 hh_f34 
+##                                      0                                      0 
+##                                 hh_t08                                 hh_t01 
+##                                      3                                      3 
+##                                 hh_t14                                 hh_e67 
+##                                      3                                      0 
+##                                 hh_e66                                 hh_e05 
+##                                      0                                      0 
+##                                 hh_e06 
+##                                      0</code></pre>
+<pre class="r"><code>malawi &lt;- na.omit(malawi)
+colSums(is.na(malawi))</code></pre>
+<pre><code>##                                 reside                                 hhsize 
+##                                      0                                      0 
+##                                hh_b05a                         sumConsumption 
+##                                      0                                      0 
+##                                 hh_s01                                 hh_b03 
+##                                      0                                      0 
+##                                 hh_c24                 total_spent_on_illness 
+##                                      0                                      0 
+## total_spent_on_non_illness_medicalcare        total_spent_on_medicalinsurance 
+##                                      0                                      0 
+##                                 hh_f19                                 hh_f34 
+##                                      0                                      0 
+##                                 hh_t08                                 hh_t01 
+##                                      0                                      0 
+##                                 hh_t14                                 hh_e67 
+##                                      0                                      0 
+##                                 hh_e66                                 hh_e05 
+##                                      0                                      0 
+##                                 hh_e06 
+##                                      0</code></pre>
+<p><strong>Lasso model with caret package</strong></p>
+<p>First, we will create a new target vector, as per the solution to our
+challenge in Regression I.</p>
+<pre class="r"><code># Per capita food consumption, per day
+malawi$Cons_pcpd  &lt;-(malawi$sumConsumption / malawi$hhsize)/7
+
+# Now let&#39;s get rid of household food consumption, weekly
+malawi &lt;- malawi[,-which(colnames(malawi)==&quot;sumConsumption&quot;)]</code></pre>
+<p>Next, we will partition our data into train and test sets:</p>
+<pre class="r"><code>set.seed(12345) # Recall that using a seed allows us to replicate the exact partition (which relies on a random rample selection) every time we run the model
+
+train_idx &lt;- createDataPartition(malawi$Cons_pcpd, p = .8, list = FALSE, times = 1) 
+
+Train_df &lt;- malawi[ train_idx,]
+Test_df  &lt;- malawi[-train_idx,]</code></pre>
+<p>Are you ready to rumble? We can now use the train() function from the
+caret package to create our Lasso model.</p>
+<pre class="r"><code>model_lasso &lt;- train(
+    Cons_pcpd ~ .,
+    data = Train_df,
+    method = &#39;lasso&#39;,
+    preProcess = c(&quot;center&quot;, &quot;scale&quot;) #This will scale and center all relevant variables in the model
+)
+
+print(model_lasso)</code></pre>
+<pre><code>## The lasso 
+## 
+## 28619 samples
+##    18 predictor
+## 
+## Pre-processing: centered (23), scaled (23) 
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 28619, 28619, 28619, 28619, 28619, 28619, ... 
+## Resampling results across tuning parameters:
+## 
+##   fraction  RMSE       Rsquared    MAE     
+##   0.1       10.092773  0.07371647  4.031321
+##   0.5        9.831111  0.08741114  3.979380
+##   0.9        9.825472  0.08801205  4.011744
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final value used for the model was fraction = 0.9.</code></pre>
+<p>If we look at the performance of our Lasso model with 1) new
+predictors, 2) a more ad-hoc target variable, and c) properly clean
+data, we have managed to decrease the bias all the way down to <span
+class="math inline">\(9,8\)</span>! Unfortunately, after the
+penalisation the R^2 value is <span class="math inline">\(0.08\)</span>,
+or roughly eight percent of the variance explained. Importantly, we did
+something that we have not yet explained: centered and scaled the
+selected predictors.</p>
+<p><em>Centering and Scaling in Lasso</em>: Recall that the L1-norm puts
+constraints on the size of the coefficients of the Lasso regression. The
+size, of course, differs based on the different scales the variables are
+measured. Having 1 and up to 55 electric gadgets at home is not the same
+as earning between 1000 and 100,000 monthly (of whichever currency you
+want to imagine here). There are two immediate consequences of centering
+and scaling (or normalising). 1) There is no longer an intercept. 2) It
+is easier to rank the relative magnitude of the coefficients
+post-shrinkage.</p>
+<p>Now let’s take a look at our model:</p>
+<pre class="r"><code>plot(model_lasso)</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>cat(&quot;The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)&quot;)</code></pre>
+<pre><code>## The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)</code></pre>
+<p>So, did the Lasso model penalised or got rid of some variables? Let’s
+take a look.</p>
+<pre class="r"><code>plot(varImp(model_lasso))</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+We can clearly see the non-relevance of certain variables, and that the
+variable hh_e06 was deleted. It’s coefficient was shrunk to 0. Recall
+that the optimal model had a fraction of .9, so we knew (!=1) that at
+least one variable was deleted.</p>
+<p>It seems like our prediction abilities take one step forward, two
+steps back…</p>
+<p><strong>Make predictions with the test data set</strong></p>
+<pre class="r"><code>test_features &lt;- subset(Test_df, select=-c(Cons_pcpd))
+test_target   &lt;- subset(Test_df, select=Cons_pcpd)[,1]
+
+lasso_predictions &lt;-  predict(model_lasso, newdata = test_features)
+
+# RMSE
+sqrt(mean((test_target - lasso_predictions)^2))</code></pre>
+<pre><code>## [1] 9.883564</code></pre>
+<pre class="r"><code># R^2
+cor(test_target, lasso_predictions) ^ 2</code></pre>
+<pre><code>## [1] 0.106319</code></pre>
+<p>Our manual results are much like what we observed from printing the
+model.</p>
+<p><strong>Cross validation: k-fold with caret()</strong></p>
+<p>What is cross-validation? Broadly speaking, it is a technique that
+allows us to assess the performance of our machine learning model. How
+so? Well, it looks at the “stability” of the model. It’s a measure of
+how well our model would work on new, unseen data; i.e. it has correctly
+observed and recorded the patterns in the data and has not captured too
+much noise (what we know as the error term, or what we are unable to
+explain with our model). K-fold cross validation is a good place to
+start for such a thing. In the words of <a
+href="https://www.javatpoint.com/cross-validation-in-machine-learning">The
+Internet™</a>, what k-fold cross validation does is:</p>
+<pre><code>Split the input dataset into K groups
+- For each group:
+        -Take one group as the reserve or test data set.
+        -Use remaining groups as the training dataset.
+        -Fit the model on the training set and evaluate the performance of the model using the test set.</code></pre>
+<p>An Illustration by <a
+href="https://eugenia-anello.medium.com/">Eugenia Anello</a></p>
+<center>
+<div class="figure">
+<img src="kfold_crossvalidation.png" alt=" " width="65%" />
+<p class="caption">
+</p>
+</div>
+</center>
+<p><strong>Now let’s apply this to our model (a.k.a. let’s
+rumble!)</strong></p>
+<p>Beyond training and testing dataframes, what a k-fold (commonly
+10-fold) cross validation does is resample the data to find an optimal
+(λ) lambda/penalisation for the lasso model and assess its predictive
+error. Recall: The optimal λ (lambda)/penalisation minimizes the
+out-of-sample (or test) mean prediction error.</p>
+<pre class="r"><code>set.seed(12345)
+
+cv_10fold &lt;- trainControl(
+    method = &quot;cv&quot;, #cross-validation
+    number = 10, # k-fold = 10-fold (split the data into 10 similar-sized samples)
+)
+
+set.seed(12345)
+
+lasso_kfold &lt;- train(
+    Cons_pcpd ~ .,
+    data = Train_df,
+    method = &#39;lasso&#39;,
+    preProcess = c(&quot;center&quot;, &quot;scale&quot;),
+    trControl = cv_10fold
+)
+print(lasso_kfold)</code></pre>
+<pre><code>## The lasso 
+## 
+## 28619 samples
+##    18 predictor
+## 
+## Pre-processing: centered (23), scaled (23) 
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 25756, 25757, 25756, 25758, 25756, 25756, ... 
+## Resampling results across tuning parameters:
+## 
+##   fraction  RMSE      Rsquared    MAE     
+##   0.1       9.860599  0.07771201  4.024508
+##   0.5       9.585335  0.09210399  3.969800
+##   0.9       9.580216  0.09289392  4.002871
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final value used for the model was fraction = 0.9.</code></pre>
+<pre class="r"><code># The R^2 value has slightly improved. Hurray!
+
+plot(lasso_kfold)</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>plot(varImp(lasso_kfold))</code></pre>
+<p><img src="reg2_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
+<pre class="r"><code># We got rid of the same variable as before the cross validation. 
+
+lasso_10kpredictions &lt;- predict(lasso_kfold, newdata = test_features)
+
+# RMSE
+sqrt(mean((test_target - lasso_10kpredictions)^2))</code></pre>
+<pre><code>## [1] 9.883564</code></pre>
+<pre class="r"><code># R2
+cor(test_target, lasso_10kpredictions) ^ 2</code></pre>
+<pre><code>## [1] 0.106319</code></pre>
+<p>A final note: there is some discussion over whether k-fold or really
+any cross validation technique is optimal for choosing the lambda
+parameter in Lasso models (see for example, this Coursera <a
+href="https://www.coursera.org/lecture/ml-regression/choosing-the-penalty-strength-and-other-practical-issues-with-lasso-SPr8p">video</a>).
+It is true that cross validation is something that we want to do for ALL
+our machine learning models. Just make sure to make an informed choice
+of which cross validation technique you’ll implement in your model.</p>
+<p>In the end, Lasso has not helped us improve our prediction abilities
+more than the proper choice of target variable.</p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Malawi_regression1.R">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download R script Regression 1: PMT</button>
+</a>
 </div>
 <div id="ridge" class="section level3">
 <h3><strong>Ridge</strong></h3>
