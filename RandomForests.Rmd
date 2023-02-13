@@ -5,7 +5,7 @@ title: "Random Forests"
 output: html_document
 ---
 
-Below you will find a simple excercise on Random Forests with an easy challenge. Please download the script and the data.
+Below you will find a simple exercise on Random Forests with an easy challenge. Please download the script and the data.
 
 **R data**
 
