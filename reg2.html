@@ -13,7 +13,7 @@
 
 <title>Supervised Machine Learning: Lasso and Ridge shrinkage methods (Regression II)</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -179,8 +179,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -188,16 +188,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -290,6 +283,13 @@ $(document).ready(function () {
     <span class="fa fa-gear"></span>
      
     Classification
+  </a>
+</li>
+<li>
+  <a href="randomforests.html">
+    <span class="fa fa-tree"></span>
+     
+    Random Forests
   </a>
 </li>
       </ul>
@@ -387,13 +387,13 @@ library(caret)
 library(Hmisc)
 library(elasticnet) # works in conjunction with caret for lasso models</code></pre>
 <pre><code>## Loading required package: lars</code></pre>
-<pre><code>## Loaded lars 1.2</code></pre>
+<pre><code>## Loaded lars 1.3</code></pre>
 <pre class="r"><code>library(corrplot)
 library(Amelia)</code></pre>
 <pre><code>## Loading required package: Rcpp</code></pre>
 <pre><code>## ## 
 ## ## Amelia II: Multiple Imputation
-## ## (Version 1.8.0, built: 2021-05-26)
+## ## (Version 1.8.1, built: 2022-11-18)
 ## ## Copyright (C) 2005-2023 James Honaker, Gary King and Matthew Blackwell
 ## ## Refer to http://gking.harvard.edu/amelia/ for more information
 ## ##</code></pre>
@@ -743,10 +743,10 @@ print(model_lasso)</code></pre>
 ## Summary of sample sizes: 28619, 28619, 28619, 28619, 28619, 28619, ... 
 ## Resampling results across tuning parameters:
 ## 
-##   fraction  RMSE       Rsquared    MAE     
-##   0.1       10.092773  0.07371647  4.031321
-##   0.5        9.831111  0.08741114  3.979380
-##   0.9        9.825472  0.08801205  4.011744
+##   fraction  RMSE      Rsquared    MAE     
+##   0.1       9.864623  0.07498428  4.017711
+##   0.5       9.595137  0.09158449  3.978529
+##   0.9       9.588421  0.09240227  4.010338
 ## 
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final value used for the model was fraction = 0.9.</code></pre>
@@ -790,10 +790,10 @@ lasso_predictions &lt;-  predict(model_lasso, newdata = test_features)
 
 # RMSE
 sqrt(mean((test_target - lasso_predictions)^2))</code></pre>
-<pre><code>## [1] 9.883564</code></pre>
+<pre><code>## [1] 9.888506</code></pre>
 <pre class="r"><code># R^2
 cor(test_target, lasso_predictions) ^ 2</code></pre>
-<pre><code>## [1] 0.106319</code></pre>
+<pre><code>## [1] 0.1051635</code></pre>
 <p>Our manual results are much like what we observed from printing the
 model.</p>
 <p><strong>Cross validation: k-fold with caret()</strong></p>
@@ -852,13 +852,13 @@ print(lasso_kfold)</code></pre>
 ## 
 ## Pre-processing: centered (23), scaled (23) 
 ## Resampling: Cross-Validated (10 fold) 
-## Summary of sample sizes: 25756, 25757, 25756, 25758, 25756, 25756, ... 
+## Summary of sample sizes: 25758, 25757, 25757, 25759, 25756, 25756, ... 
 ## Resampling results across tuning parameters:
 ## 
 ##   fraction  RMSE      Rsquared    MAE     
-##   0.1       9.860599  0.07771201  4.024508
-##   0.5       9.585335  0.09210399  3.969800
-##   0.9       9.580216  0.09289392  4.002871
+##   0.1       9.859488  0.07799664  4.019956
+##   0.5       9.590976  0.09166445  3.974331
+##   0.9       9.584186  0.09290247  4.002476
 ## 
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final value used for the model was fraction = 0.9.</code></pre>
@@ -874,10 +874,10 @@ lasso_10kpredictions &lt;- predict(lasso_kfold, newdata = test_features)
 
 # RMSE
 sqrt(mean((test_target - lasso_10kpredictions)^2))</code></pre>
-<pre><code>## [1] 9.883564</code></pre>
+<pre><code>## [1] 9.888506</code></pre>
 <pre class="r"><code># R2
 cor(test_target, lasso_10kpredictions) ^ 2</code></pre>
-<pre><code>## [1] 0.106319</code></pre>
+<pre><code>## [1] 0.1051635</code></pre>
 <p>A final note: there is some discussion over whether k-fold or really
 any cross validation technique is optimal for choosing the lambda
 parameter in Lasso models (see for example, this Coursera <a

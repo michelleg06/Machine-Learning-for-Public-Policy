@@ -1,0 +1,38 @@
+---
+title: "Random Forests"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+
+Below you will find a simple excercise on Random Forests with an easy challenge. Please download the script and the data.
+
+**R data**
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/malawi_2005.RDS",
+  button_label = "Download malawi_2005 data (RDS)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
+
+**R script**
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/RandomForests.R",
+  button_label = "Download RandomForests.R script",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```

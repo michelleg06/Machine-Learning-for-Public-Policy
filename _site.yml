@@ -25,4 +25,7 @@ navbar:
         - text: "Classification"
           href: classification.html
           icon: fa-gear
+        - text: "Random Forests"
+          href: randomforests.html
+          icon: fa-tree
 output_dir: "." # if publishing on Github pages
