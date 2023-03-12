@@ -18,6 +18,7 @@ download_link(
   icon = "fa fa-save",
   self_contained = FALSE
 )
+```
 
 Below you will find a simple exercise on Random Forests with an easy challenge. Please download the script and the data.
 
