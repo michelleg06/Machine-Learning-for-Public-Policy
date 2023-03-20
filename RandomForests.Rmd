@@ -8,6 +8,7 @@ output: html_document
 An introduction on Decision Trees and Random Forests was given to us by [Dr. Francisco Rosales](https://www.linkedin.com/in/fraroma/), Assistant Professor at ESAN University (Perú) and Lead Data Scientist ([BREIN](https://www.linkedin.com/company/breinhub/)). The session was not recorded, but the slides are available. 
 
 **Lecture Slides**
+Feel free to reach out to us if you have issues following the slides!
 ```{r, echo=FALSE}
 library(downloadthis)
 download_link(
