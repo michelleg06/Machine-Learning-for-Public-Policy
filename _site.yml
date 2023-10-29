@@ -10,22 +10,22 @@ navbar:
         - text: "Home"
           href: index.html
           icon: fa-home
-        - text: "Introduction"
-          href: intro.html
-          icon: fa-duotone fa-robot
-        - text: "Regression I"
-          href: reg1.html
-          icon: fa fa-line-chart
-        - text: "Regression II"
-          href: reg2.html
-          icon: fa fa-area-chart
-        - text: "Fair ML/Data Ethics"
-          href: fairml.html
-          icon: fa fa-graduation-cap
-        - text: "Classification"
-          href: classification.html
-          icon: fa-gear
-        - text: "Random Forests"
-          href: RandomForests.html
-          icon: fa-tree
+       # - text: "Introduction"
+        #  href: intro.html
+         # icon: fa-duotone fa-robot
+        #- text: "Regression I"
+        #  href: reg1.html
+        #  icon: fa fa-line-chart
+        #- text: "Regression II"
+        #  href: reg2.html
+        #  icon: fa fa-area-chart
+        #- text: "Fair ML/Data Ethics"
+        #  href: fairml.html
+        #  icon: fa fa-graduation-cap
+        #- text: "Classification"
+        #  href: classification.html
+        #  icon: fa-gear
+        #- text: "Random Forests"
+        #  href: RandomForests.html
+        #  icon: fa-tree
 output_dir: "." # if publishing on Github pages

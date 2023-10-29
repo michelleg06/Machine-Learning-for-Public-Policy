@@ -13,7 +13,7 @@
 
 <title>Machine learning for policy analysis</title>
 
-<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -32,7 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/font-awesome-5.13.0/js/script.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -248,48 +249,6 @@ $(document).ready(function () {
     <span class="fa fa-home"></span>
      
     Home
-  </a>
-</li>
-<li>
-  <a href="intro.html">
-    <span class="fa fa-duotone fa-robot"></span>
-     
-    Introduction
-  </a>
-</li>
-<li>
-  <a href="reg1.html">
-    <span class="fa fa-line-chart"></span>
-     
-    Regression I
-  </a>
-</li>
-<li>
-  <a href="reg2.html">
-    <span class="fa fa-area-chart"></span>
-     
-    Regression II
-  </a>
-</li>
-<li>
-  <a href="fairml.html">
-    <span class="fa fa-graduation-cap"></span>
-     
-    Fair ML/Data Ethics
-  </a>
-</li>
-<li>
-  <a href="classification.html">
-    <span class="fa fa-gear"></span>
-     
-    Classification
-  </a>
-</li>
-<li>
-  <a href="RandomForests.html">
-    <span class="fa fa-tree"></span>
-     
-    Random Forests
   </a>
 </li>
       </ul>
@@ -767,17 +726,16 @@ tidyverse language). As long as you have loaded the tidyverse library,
 you can use it.</p>
 <pre class="r"><code>head(starwars) # print the first 5 elements of the dataframe/tibble</code></pre>
 <pre><code>## # A tibble: 6 × 14
-##   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-## 1 Luke Skywal…    172    77 blond   fair    blue       19   male  mascu… Tatooi…
-## 2 C-3PO           167    75 &lt;NA&gt;    gold    yellow    112   none  mascu… Tatooi…
-## 3 R2-D2            96    32 &lt;NA&gt;    white,… red        33   none  mascu… Naboo  
-## 4 Darth Vader     202   136 none    white   yellow     41.9 male  mascu… Tatooi…
-## 5 Leia Organa     150    49 brown   light   brown      19   fema… femin… Aldera…
-## 6 Owen Lars       178   120 brown,… light   blue       52   male  mascu… Tatooi…
-## # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-## #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-## #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+##   name      height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Luke Sky…    172    77 blond      fair       blue            19   male  mascu…
+## 2 C-3PO        167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
+## 3 R2-D2         96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
+## 4 Darth Va…    202   136 none       white      yellow          41.9 male  mascu…
+## 5 Leia Org…    150    49 brown      light      brown           19   fema… femin…
+## 6 Owen Lars    178   120 brown, gr… light      blue            52   male  mascu…
+## # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <pre class="r"><code>starwars$name[1] #indexing: extract the first element in the &quot;name&quot; vector from the starwars dataframe</code></pre>
 <pre><code>## [1] &quot;Luke Skywalker&quot;</code></pre>
 <pre class="r"><code>starwars[1,1] #alternative indexing: extract the element of row 1, col 1</code></pre>
@@ -801,15 +759,14 @@ you can use it.</p>
 ##  8 R5-D4             
 ##  9 Biggs Darklighter 
 ## 10 Obi-Wan Kenobi    
-## # … with 77 more rows</code></pre>
+## # ℹ 77 more rows</code></pre>
 <pre class="r"><code>starwars[1,] #extract all elements from row 1</code></pre>
 <pre><code>## # A tibble: 1 × 14
-##   name         height  mass hair_…¹ skin_…² eye_c…³ birth…⁴ sex   gender homew…⁵
-##   &lt;chr&gt;         &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  
-## 1 Luke Skywal…    172    77 blond   fair    blue         19 male  mascu… Tatooi…
-## # … with 4 more variables: species &lt;chr&gt;, films &lt;list&gt;, vehicles &lt;list&gt;,
-## #   starships &lt;list&gt;, and abbreviated variable names ¹​hair_color, ²​skin_color,
-## #   ³​eye_color, ⁴​birth_year, ⁵​homeworld</code></pre>
+##   name      height  mass hair_color skin_color eye_color birth_year sex   gender
+##   &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+## 1 Luke Sky…    172    77 blond      fair       blue              19 male  mascu…
+## # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 <pre class="r"><code>starwars$height[starwars$height&lt;150] # returns a logical vector TRUE for elements &gt;150 in height vector</code></pre>
 <pre><code>##  [1]  96  97  66  NA  88 137 112  94 122  79  96  NA  NA  NA  NA  NA</code></pre>
 <pre class="r"><code>starwars[c(&#39;height&#39;, &#39;name&#39;)] #returns c(oncatenated) vectors</code></pre>
@@ -826,7 +783,7 @@ you can use it.</p>
 ##  8     97 R5-D4             
 ##  9    183 Biggs Darklighter 
 ## 10    182 Obi-Wan Kenobi    
-## # … with 77 more rows</code></pre>
+## # ℹ 77 more rows</code></pre>
 <p>We are now reaching the end of this brief introduction to R and
 Rstudio. We will not go into the fun stuff you can do with data.table,
 you can find that out on your own if you need to (but know it is a
@@ -907,7 +864,7 @@ print(starwars[c(&quot;name&quot;, &quot;height_judge&quot;, &quot;height&quot;)
 ##  8 R5-D4              Short            97
 ##  9 Biggs Darklighter  Tall            183
 ## 10 Obi-Wan Kenobi     Tall            182
-## # … with 77 more rows</code></pre>
+## # ℹ 77 more rows</code></pre>
 <p>You can download the R script by clicking on the button below.</p>
 <a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Gentle Intro to R and Rstudio.R">
 <button class="btn btn-info"><i class="fa fa-save"></i> Download Intro to R script (.R)</button>
