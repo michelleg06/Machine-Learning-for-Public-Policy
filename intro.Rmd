@@ -80,7 +80,7 @@ Reinforcement learning is categorised as Artificial Intelligence. It is more foc
 ::::
 <center>
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
-knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/sup_unsup_re.png")
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/sup_unsup_re.png")
 ```
 </center>
 

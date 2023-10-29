@@ -265,7 +265,7 @@ An Illustration by [Eugenia Anello](https://eugenia-anello.medium.com/)
 
 <center>
 ```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
-knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/kfold_crossvalidation.png")
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/kfold_crossvalidation.png")
 ```
 </center>
 
