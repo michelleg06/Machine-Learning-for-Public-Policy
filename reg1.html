@@ -252,6 +252,9 @@ $(document).ready(function () {
     Home
   </a>
 </li>
+<li>
+  <a href="intro.html">Introduction</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -1198,8 +1201,6 @@ the model to the test (or indeed any other) data set.</p></li>
 <p>Now that we have built and evaluated our model, we can proceed to
 make out-of-sample predictions.</p>
 <pre class="r"><code>p &lt;- predict(model1, Test_df)</code></pre>
-<pre><code>## Warning in predict.lm(model1, Test_df): prediction from a rank-deficient fit
-## may be misleading</code></pre>
 <p>Notice that our prediction produces a warning. The warning is just
 that, a warning, and it does not stop the program from running or
 producing results. It does, however, indicate that those results may be

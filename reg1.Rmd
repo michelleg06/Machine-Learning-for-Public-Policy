@@ -19,6 +19,8 @@ In the video-lecture below you'll be given a brief introduction to the predictio
 ```{r, echo=FALSE}
 library("vembedr")
 embed_url("https://www.youtube.com/watch?v=aA7tLQxf1xE")
+
+
 ```
 </center>
 

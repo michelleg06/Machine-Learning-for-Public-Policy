@@ -49,6 +49,8 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 **Instructors:** Stephan, Alex and Michelle (who will give you a warm welcome!)
 
+<span style="color: orange;"> **Office hours: Monday, 4 December at 6pm CET / 11am GMT-6. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
+
 
 ## 2. Introduction to Machine Learning for Public Policy
 
@@ -80,7 +82,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 **Release date: 7 December, 2023.**
 
-
+<span style="color: orange;"> **Office hours: Thursday, 14 December at 6pm CET / 11am GMT-6. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
 ## 3. Classification
 
     ·  	Crossvalidation
