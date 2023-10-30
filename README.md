@@ -10,10 +10,8 @@ Machine learning has become an increasingly integral part of public policies. It
 + Developing skills necessary to train and assess the performance of selected popular machine learning algorithms for solving public policy problems
 + Gaining an understanding of the benefits and risks of applying machine learning algorithms to public policy problems
 
-The course consists of 5 workshops each consisting of a technical introductory lecture and a hands-on application of the topics to a real-world policy problem. Students will be working with the programming language R, but coding is not the primary focus of the course.
+The course consists of 6 lessons each consisting of a technical introductory lecture and a hands-on application of the topics to a real-world policy problem. Students will be working with the programming language R (and optionally, Python), but coding is not the primary focus of the course.
 
 **Course textbook (ebook available for free):**
 James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning: With Applications in R.](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)
 
-A final thought
-A final thought
