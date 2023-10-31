@@ -83,6 +83,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 **Release date: 7 December, 2023.**
 
 <span style="color: orange;"> **Office hours: Thursday, 14 December at 6pm CET / 11am GMT-6. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
+
 ## 3. Classification
 
     ·  	Crossvalidation
@@ -98,6 +99,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - Athey, S., & Imbens, G. W. (2019). [Machine learning methods that economists should know about.](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433) Annual Review of Economics, 11, 685-725.
 
+<span style="color: orange;"> **Office hours: tbd. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
 
 ## 4. Decision Trees
 
