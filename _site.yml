@@ -6,13 +6,13 @@ output:
             after_body: footer.html
 navbar:
     title: "Machine Learning for Public Policy"
-    left:
+    right:
         - text: "Home"
           href: index.html
           icon: fa-home
         - text: "Introduction"
           href: intro.html
-         # icon: fa-duotone fa-robot
+          icon: fa-duotone fa-robot
         #- text: "Regression I"
         #  href: reg1.html
         #  icon: fa fa-line-chart
