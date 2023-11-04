@@ -1,0 +1,29 @@
+---
+title: "Supervised Machine Learning: Classification"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+
+Have you heard the English proverb, “Birds of a feather flock together”? It references and old saying that indicates that people with similar characteristics tend to group and stay together. In Machine Learning, Classification problems deal with the evaluation of models of categorical response, such as: 
+
+- Predictive classification: E.g. is this spam or not? Predictive classification concerns itself with unlabeled data, and groups them by the proportion of characteristics they commonly share. After which, it classifies them into some predetermined category. A common, ‘lazy’ method is kNearest Neighbors. 
+
+- Binary classification: You may already be familiar with profit or logistic regression models. You obtain two types of predictions from such models: proportions, and the generation of a predicted discrete choice. For Policy purposes, we are interested in the discrete choice. E.g. filtering low-income individuals to select those who will receive social assistance and those who will not, based on some income threshold. But, we still need the probability estimates of each of the two categories. They are relevant when working out the model’s confidence about the predicted discrete choice. 
+
+- Multi-label classification: Not unlike binary classification, it is a labeled data model that relies on techniques such as multinomial logistic regression. It deals with data with more than two categories, and generates discrete choices, which policymakers then rely on to make decisions.
+
+**R practical Excercise**
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Classification.R",
+  button_label = "Download R script Classification: ProbitLogit",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```

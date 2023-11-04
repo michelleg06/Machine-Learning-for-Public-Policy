@@ -1,0 +1,744 @@
+---
+title: "Machine learning for policy analysis"
+#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+<style>
+    body {
+    text-align: justify}
+</style>
+
+At its core, machine learning is primarily interested in making sense of complex data. A machine learning algorithm's job is to read data and identify patterns that can be used for: prediction, feature-relevance detection, model-free classification, among other actions. 
+
+<span style="color:  #7a3b2e;">**Got any questions or thoughts you want to share? Go to our [blog-style discussion board](https://www.ml4pp-blog.com/) and leave a comment underneath the post dedicated to the introduction tab of this site.**</span>
+
+## **A general introduction** {.tabset .tabset-fade .tabset-pills}
+
+### **Machine Learning for Public Policy**:
+
+
+Empirical Public Policy research is primarily concerned with causality and understanding counterfactuals. What is the impact of Policy or Programme X on Population Outcome Y? What would have happened in the absence of such a policy? However, there are policy problems that may be solved without necessarily looking for a causal link. We call these `prediction policy problems' ([Kleinberg et al. 2015](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023)). Some examples include: 
+
+
++ Allocating fire and health inspectors in cities ([Glaeser et al.    2016](https://www.aeaweb.org/articles?id=10.1257/aer.p20161027)).
+
+
++ Predicting unemployment spell length to help workers decide on savings rates and job search strategies.
+
+
++ Predicting highest risk youth for targeting interventions ([Chandler,Levitt, and List 2011](https://www.aeaweb.org/articles?id=10.1257/aer.101.3.288)).
+
+
+***How does a Machine Learn?***
+
+
+Machine learning is classified in three major branches: 
+
+:::: {style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-column-gap: 8px"}
+
+::: {}
+
+
+**Supervised Learning**:
+
+
+This course will be primarily concerned with supervised learning. Supervised learning is analogous to statistical learning: suppose that we observe a quantitative response $Y$ and $p$ predictors, $X_1, X_2,..., X_p$.
+
+
+We can rewrite this in a general linear form as:
+
+
+$$Y = f(X) + u$$
+where $u$ is an error term. 
+
+:::
+
+::: {}
+**Unsupervised Learning**:
+
+
+Unsupervised learning is known for reading data without labels; it is more computationally complex than supervised learning (because it will look for all possible patterns in the data), but it is also more flexible than supervised learning. You can think of clustering, anomaly detection, neural networks, etc.  
+:::
+
+::: {}
+**Reinforcement Learning**: 
+
+
+Reinforcement learning is categorised as Artificial Intelligence. It is more focused on goal-directed learning from interaction than are other approaches to machine learning. As per [Sutton and Barto (2015)](https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf), the three most distinguishing features of reinforcement learning are:
+
+
+1. Being closed-loop; i.e. the learning system's actions influence its later inputs.
+        
+        
+2. Does not have direct instructions as to what actions to take; instead it must discover which actions yield the most reward by trying them out.
+        
+        
+3. Not knowing where the consequences of actions, including reward signals, play out over extended time periods.
+
+
+:::
+
+::::
+<center>
+```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/sup_unsup_re.png")
+```
+</center>
+
+
+**Relevant trade-offs in Machine Learning**
+
+
++ Flexibility vs. interpretability: not all found patterns are directly interpretable.
+
+
++ Prediction vs. inference: high predictive power does not allow for proper inference. 
+
+
++ Goodness-of-fit vs. over-fitting: how do we know *when* the fit is good?
+
+
+### **An introduction to R programming**
+
+For the purposes of this course, we will be working with the integrated development environment (IDE) Rstudio. Make sure you have [downloaded it](https://www.rstudio.com/products/rstudio/download/) and have familiarised yourself with the interface before proceeding.
+
+**Features of R**
+
+R is a statistical programming language. As such, it understands and categorises its input as **data types**:
+
+*(Note that R is not too strict about data types, but you need to be able to identify them to use them in math operations.)*
+
+
+Exammples of data types:
+```{r}
+# Numeric (or double): 
+numeric_vector <- c(1, 1.0, 65.5)
+print(numeric_vector)
+
+#Integers: 
+integer_vector <- c(1L, 3L, 45L)
+print(integer_vector)
+
+#Logical (or boolean): 
+boolean_vector <- c(TRUE, FALSE)
+print(boolean_vector)
+
+#Character: 
+character_vector <- c("Harry Potter", "Star Wars", "Lord of the Rings")
+print(character_vector)
+
+#Factor: (also knows as categorical variables)
+factor_vector <- as.factor(c("male","female"))
+print(factor_vector)
+
+#Missing: 
+NA
+```
+
+... and **data structures**. A data structure is either homogeneous (all elements are of the same data type) or heterogeneous (elements can be of more than one data type).
+
+
+Examples of data structures:
+
+
+*Vectors*: think of a row, or a column of the same element.
+
+```{r}
+
+#Vectors: 
+x <- c(1L,3L,5L,7L,9L) # we call this an integer vector
+y <- c(1.3, 1, 5, 7, 11.2) # we call this a numerical (or double) vector
+
+print(x)
+print(y)
+```
+
+
+*Matrices*: they have rows and columns containing elements of the same type.
+```{r}
+#Matrices: 
+A <- matrix(1:9, ncol=3, nrow=3, byrow= TRUE)
+print(A)
+```
+
+
+*Arrays*: A vector is a one-dimensional array. A matrix is a two-dimensional array. In short, an array is a collection of data of the same type.
+```{r}
+#Arrays:
+n <- 5*5*3 
+B <- array(1:n, c(5,5,3))
+print(B)
+```
+
+
+*Lists*: a list is a one-dimensional, heterogeneous data structure. Basically, it is an object that stores all object types. 
+```{r}
+my_list <- list(42, "The answer is", TRUE)
+print(my_list)
+```
+
+
+*Data frames*: a data frame is a list of  column vectors. Each vector must contain the same data type, but the different vectors can store different data types. Note, however, that in a data frame all vectors must have the same length. 
+```{r}
+a <- 1L:5L
+class(a)
+b <- c("a1", "b2", "c3", "d4", "e5")
+class(b)
+c <- c(TRUE, TRUE, FALSE, TRUE, FALSE)
+class(c)
+
+df <- as.data.frame(cbind(a,b,c))
+
+str(df)
+```
+Notice that even though vector *a* in dataframe *df* is of class integer, vector *b* is of class character, and vector ^*c* is of class boolean/logical, when binding them together they have been coerced into factors. You'll have to manually transform them into their original class to be able to use them in math operations.
+```{r}
+df$a <- as.integer(df$a)
+df$b <- as.character(df$b)
+df$c <- as.logical(df$c)
+
+str(df)
+```
+
+
+From here on, we will write an R script together, and learn some basic commands and tools that will allow you to explore and manipulate data. Please note that this is **not** an exhaustive tutorial. It is nonetheless a good place to start.
+
+
+**1. Setting up the Rstudio working environment**
+
+
+It is good practice to make sure that the working environment is empty/clean before you start running any code.
+```{r}
+# The r base command rm() stands for remove
+rm(list = ls()) # this line indicates R to clear absolutely everything from the environment
+
+```
+Once that has been taken care of, you need to load the libraries you will be working with. While r base has a large number of commands to explore, wrangle, and manipulate data, the **open source** feature of R means that people all over the world are constantly working on packages and functions to make our lives easier. These can be used by calling the libraries in which they are stored:
+
+```{r}
+#  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
+library(tidyverse)
+library(data.table)
+
+```
+If you're working with an imported data set, you should probably set up your working directory as well:
+```{r}
+setwd("~/Desktop/") #Note that the squiggly symbol is a shortcut for Mac users, if you're a Windows user, please write the whole path.
+```
+
+From the working directory, you can call documents: .csv files, .xls and .xlsx, images, .txt, .dta (yes, STATA files!), and more. You'll need to use the right libraries to do so. For instance: *readxl* (from the Tidyverse) uses the function *read_excel()* to import .xlsx and .xls files. If you want to export a data frame in .xlsx format, you can use the package *write_xlsx()*.
+
+
+**2. R base commands for data set exploration**
+
+
+Now that we have all the basic stuff set up, let's start with some basic r base commands that will allow us to explore our data. To do so, we will work with the toy data set *mtcars* that can be called from R without the need to upload data or call data from a website. 
+
+```{r}
+
+# some basics to explore your data 
+str(mtcars) # show the structure of the object in a compact format
+dim(mtcars) # inspect the dimension of the dataset (returns #rows, #columns)
+class(mtcars) # evaluate the class of the object (e.g. numeric, factor, character...)
+View(mtcars$mpg) # Try to avoid running this one in big and complex databases.
+length(mtcars$mpg) # evaluate the number of elements in vector mpg
+mean(mtcars$mpg) # mean of all elements in vector mpg
+sum(mtcars$mpg) # sum of all elements in vector mpg (similar to a column sum)
+sd(mtcars$mpg) # standard deviation
+median(mtcars$mpg) # median
+cor(mtcars$mpg, mtcars$wt) # default is pearson correlation, specify method within function to change it.  
+table(mtcars$am) #categorical data in a table: counts
+prop.table(table(mtcars$am)) #categorical data in a table: proportions
+```
+
+
+**3. Objects and assignments**
+
+
+Another important feature of the R programming language is that it is *object oriented*. For the most part, for every function used, there must be an object assigned! Let's see an example of object assignment with a bivariate linear regression model:
+
+```{r}
+ols_model <- lm(mpg ~ wt, data = mtcars) # lm stands for linear model. In parenthesis, dependent variable first, independent variable after the squiggly.
+summary(ols_model)
+```
+If you would like to see the results from your regression, you do not need to run it again. Instead, you print the object (ols_model) you have assigned for the linear model function. Similarly, you can call information stored in that object at any time, for example, the estimated coefficients:
+
+```{r}
+ols_model$coefficients
+```
+*If you want to read more about object oriented programming in R, check out [Hadley Whickam's site](https://adv-r.hadley.nz/oo.html)*
+
+
+**4. Plotting with and without special libraries**
+
+
+We had previously loaded a couple of libraries. Why did we do that if we've only used r base commands so far? We're going to exemplify the power of libraries by drawing plots using r base, and ggplot2. Ggplot2 is the plotting function from the Tidyverse, and arguably one of the best data visualisation tools across programming languages. If you'd like to read more about why that is the case, check out the [Grammar of Graphics](https://ggplot2.tidyverse.org/) site.
+
+
+Plotting with R base
+```{r}
+plot(mtcars$wt, mtcars$mpg, pch = 14, col = "grey", main ="Mileage and Weight")
+abline(ols_model, col ="blue") # Note that to add a line of best fit, we had to call our previously estimate linear model, stored in the ols_model object-
+# with base R, you cannot directly assign an object to a plot, you need to use...
+p_rbase <- recordPlot()
+# plot.new() # don't forget to clean up your device afterwards!
+```
+
+Plotting with ggplot2, using the grammar of graphics
+```{r}
+# Steps in the Grammar of Graphics
+# 1: linking plot to dataset, 
+# 2: defining (aes)thetic mapping, 
+# 3: use (geom)etric objects such as points, bars, etc. as markers, 
+# 4: the plot has layers
+
+p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color is defined by car type (automatic 0 or manual 1)
+  geom_smooth(method = "lm", col= "orange") + # no need to run a regression ex-ante to add a line of best fit 
+  geom_point(alpha=0.5) + #alpha controls transparency of the geom (a.k.a. data point)
+  theme(legend.position="none") #removing legend
+print(p_ggplot)
+```
+
+
+Thanks to the grammar of graphics, we can continue to edit the plot after we have finished it. Perhaps we've come up with ideas to make it more stylish? Or helpful? Let's see an example:
+
+```{r}
+p_ggplot <- p_ggplot + theme(legend.position = "right") # I am saving it with the same name again, but I could easily choose another name and keep two versions of the plot. 
+print(p_ggplot) # the legend we just added is NOT helpful. Why is that? 
+
+# Remember when we talked about data types?!
+
+class(mtcars$am) #for legends, we might prefer levels/categories 
+mtcars$am <- as.factor(mtcars$am) # we have now transformed the numeric am into a factor variable 
+#the importance of assigning objects :)
+
+#  Now we can plot our scatterplot without issues
+p_ggplot <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth(method = "lm", col= "red") +
+  geom_point(alpha=0.5) +
+  theme(legend.position="right") +
+  theme_classic() 
+
+print(p_ggplot)
+
+# Shall we continue?
+
+p_ggplot <- p_ggplot + ggtitle("Scatterplot of mileage vs weight of car") +
+    xlab("Weight of car") + ylab("Miles per gallon") +
+    theme(plot.title = element_text(color="black", size=14, face="bold", hjust = 0.5))
+
+
+p_ggplot <- p_ggplot + scale_colour_manual(name = "Automatic or Manual", 
+                               labels = c("0.Automatic", "1.Manual"),
+                               values = c("darkorange2", "darkgoldenrod1"))
+
+print(p_ggplot)
+
+# Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
+
+p <- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
+  geom_smooth() +
+  geom_point(alpha=0.5) +
+  theme(legend.position="right") +
+  theme_classic() + ggtitle("Scatterplot of mileage vs weight of car") +
+    xlab("Weight of car") + ylab("Miles per gallon") +
+    theme(plot.title = element_text(color="black", size=14, face="bold", hjust = 0.5)) + 
+    scale_colour_manual(name = "Automatic or Manual", 
+                               labels = c("0.Automatic", "1.Manual"),
+                               values = c("darkorange2", "darkgoldenrod1"))
+print(p)
+
+```
+
+
+**5. R base capabilities and reserved names**
+
+
+We've had some fun, now let's go back to some r base basics. These are going to be relevant for making algorithms of your own:
+
+*Arithmetic and other operations*
+
+```{r}
+
+2+2 #addition
+5-2 #subtraction
+33.3/2 #division
+5^2 #exponentiation
+200 %/% 60 #integer division  [or, how many full hours in 200 minutes?]/aka quotient
+200 %% 60 #remainder [or, how many minutes are left over? ]
+```
+
+*Logical operators*
+
+```{r}
+34 < 35 #smaller than
+34 < 35 | 33 #smaller than OR than (returns true if it is smaller than any one of them)
+34 > 35 & 33 #bigger than AND than (returns true only if both conditions apply)
+34 != 34 #negation
+34 %in% 1:100 #value matching (is the object contained in the list of items?)
+`%ni%` <- Negate(`%in%`) #let's create a function for NOT IN
+1001 %ni% 1:100 # home-made function! :)
+34==34 #evaluation
+```
+
+
+*Indexing*
+
+
+The tidyverse comes with a cool Starwars dataframe (or tibble, in the tidyverse language). As long as you have loaded the tidyverse library, you can use it.
+
+```{r}
+head(starwars) # print the first 5 elements of the dataframe/tibble
+starwars$name[1] #indexing: extract the first element in the "name" vector from the starwars dataframe
+starwars[1,1] #alternative indexing: extract the element of row 1, col 1
+starwars$name[2:4] # elements 2, 3, 4 of "name" vector
+starwars[,1] #extract all elements from column 1
+starwars[1,] #extract all elements from row 1
+starwars$height[starwars$height<150] # returns a logical vector TRUE for elements >150 in height vector
+starwars[c('height', 'name')] #returns c(oncatenated) vectors
+
+```
+
+We are now reaching the end of this brief introduction to R and Rstudio. We will not go into the fun stuff you can do with data.table, you can find that out on your own if you need to (but know it is a powerful data wrangling package), and instead we will finalise with *Reserved Names* in R. These are names you cannot use for your objects, because they serve a programming purpose.
+
+
+*1. Not-observed data* 
+```{r}
+# 1.1 NaN: results that cannot be reasonably defined
+h <- 0/0
+is.nan(h)
+class(h)
+print(h)
+
+# 1.2 NA: missing data
+colSums(is.na(starwars)) #How many missings in the starwars tibble*?
+mean(starwars$height) # evaluation gives NA? Does that mean that the height vector is empty?!
+is.na(starwars$height) # logical vector returns 6 true statements for is.na (coincides with colSums table)
+class(starwars$height) # class evaluation returns integer...
+mean(as.integer(starwars$height), na.rm = TRUE) # read as integer, ignore NAs :) (rm stands for remove)
+# missing values (NA) are regarded by R as non comparables, even to themselves, so if you ever encounter a missing values in a vector, make sure tto explicitly tell the function you are using what to do with them.
+```
+
+*2. if, else, ifelse, function, for, print, length (etc...)*
+These words are reserved for control flow and looping. 
+```{r}
+# if else statements
+meanheight <- 174.358
+
+if ( meanheight < 175) {
+  print('very tall!')
+  } else {
+      print('average height')
+    } 
+# a note on using if else: else should be on the same line as if, otherwise it is not recognised
+
+# home-made functions
+f1 <- function(x){
+  return(sum(x+1))
+}
+print(f1(5)) # returns value of x+1 when x = 5
+
+# for loops
+class(starwars$height) # if it is not integer or numeric, then transform it! 
+starwars$height <- as.numeric(as.character(starwars$height)) # transforming the height vector to numeric
+starwars$height_judge = NA # if you're using a new object within a for loop, make sure you initialize it before running it
+
+for (i in 1:length(starwars$height)) {
+    
+    starwars$height_judge[i] <- ifelse(starwars$height[i]<100, "Short", "Tall")
+}
+print(starwars[c("name", "height_judge", "height")])
+
+```
+
+You can download the R script by clicking on the button below.
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Gentle Intro to R and Rstudio.R",
+  button_label = "Download Intro to R script (.R)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
+
+### **An introduction to Python programming**
+```{r, setup, include = FALSE}
+library(reticulate)
+#use_python("/Users/michellegonzalez/.pyenv/versions/3.9.18/bin/python3.9", required = T)
+use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
+
+
+```
+If you would like to follow the course with Python, we will offer some guidance. Bear in mind that the R and Python scripts are not meant to be exact replicas of one another, this is because the languages offer different data wrangling packages. However, you'll be able to get to the core of the course content.
+
+With that said, let's start with the first difference. Python does not have a standard IDE like Rstudio for R. You can choose to work directly with the console REPL, with Jupyter notebooks or the IDE Visual Studio Code. We recommend to use VSCode, because it offers many functionalities for code-sharing and collaboration, and you can integrate AI-helpers to guide you throughout your coding tasks. 
+
+**Download VSCode and let's get started! **
+
+When you open the IDE VSCode, you'll receive a prompt to start a new project.
+Please make sure that when you do, you automatically save it in a dedicated folder. This will be relevant for many reasons, but the most pressing one is that you'll want to create a Virtual Environment before starting your script. 
+
+---
+A **Python Virtual Environment**, also referred to as venv(s), is there to help us decouple and isolate package installs and manage them, independently from pkgs that are provided by the system or used by other projects. Although not strictly necessary, it is a good practice that will save us a few headaches in the future. 
+---
+
+To create a virtual environment, once you've opened a new blank project in VSC, click on shift + cmd + P (or F1) to open the Command Palette (it should display from the top of VSC). Type "Python" and select create python terminal. In the terminal, type `` python -m venv venv '' and that's it! You'll notice the appearance of a venv folder in your dedicated project folder.
+
+Now, you'll need to install and load the libraries you'll need for your project. Yo install them, use the python terminal you have opened. It should be displayed in the bottom of the working environment. Use the following (which should work with both Windows and Macbook, although Mac users can also use the general brew installer): 
+
+`` pip install pkg_name '' 
+
+```{python}
+# Now, we can load the libraries
+
+import numpy as np # can be used to perform a wide variety of mathematical operations on arrays.
+import pandas as pd # mainly used for data analysis and associated manipulation of tabular data in DataFrames
+import matplotlib as mpl # comprehensive library for creating static, animated, and interactive visualizations in Python
+import sklearn as sk #  implement machine learning models and statistical modelling.
+
+```
+
+With some basic libraries open, let's start with a brief introduction to Python programming. Like R, it is object oriented programming. But we call its elements differently. Python uses the following list of elements:
+
+- literals, variables, operators, delimiters, keywords, comments
+
+```{python}
+# Assigning VARIABLES with LITERALS
+an_integer = 4 # integer
+a_float = 4.5 # numeric/float
+a_boolean = False # boolean, true or false
+a_string = "Number of literals:"
+
+print(a_string , an_integer)
+```
+
+You'll notice that what we call an object in R, is a variable in Python. Likewise, an element in R is now a literal in Python. We'll stop with the comparisons and proceed to work with Python language for now.
+
+* In Python, the data type is derived from the literal and does not have to be described explicitly.
+
+* You can overwrite a variable (i.e. an object) with new information.
+
+e.g.
+```{python}
+an_integer = 7
+print(an_integer)
+```
+
+If you're working with a VSC script, you'll want to select a snippet of the script and use shift + enter to only run that snippet (and not the whole code chunk).
+
+Some basics:
+
+**Arithmetic operators**
+```{python}
+5 + 1 
+5*3 
+6 == 100 # returns FALSE
+6 != 100 # returns TRUE
+20 / 2
+2 ** 3 # 2 to the power of 3, ** is used for exponentiation
+
+```
+
+**Keywords and comments**
+
+```{Python}
+
+a_var = "This is a variable, which contains a string."
+#and this is a comment about the string variable
+print(a_var)
+
+
+# lists: they are ordered arrays of elements, accesible via an index, e.g.
+
+
+many_strings = ["Tolkien", "Orwell", "Austen"]
+many_strings[0] # returns first element of list
+# note that python starts counting from zero
+
+many_strings.append("Mephistopheles")
+print(many_strings) # we have succesfully appended an element to our list
+
+many_strings.insert(2,"Shrek") # Insert element Shrek in position 3 of list (0,1,2)
+print(many_strings)
+
+# finally, sort the list... 
+many_strings.sort()
+print(many_strings)
+# python orders alphabetically :) 
+
+```
+Let's use a toy dataset from the sklearn package to practice some basic estimations. 
+
+```{python}
+ # import sklearn dataset
+from sklearn.datasets import load_diabetes
+ 
+ # load the  dataset, assign it to an object
+
+diabetes = load_diabetes()
+print(diabetes.DESCR) # DESCR is a description option from sklearn library. Be mindful of the Note!
+
+```
+
+Whilst there are many things you can do directly with the sklearn package options, the pandas library is the best for dataframe manipulation. 
+
+```{python}
+# 1. convert the dataframe object into a pandas dataframe object
+pandas_diabetes = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
+
+# now we can use the handy describe() and info() options from pandas
+pandas_diabetes.describe() # returns descriptive statistics of variables in dataframe (df)
+pandas_diabetes.info() # returns basic information about observations and variable names/types
+len(pandas_diabetes) # returns the length of the object (aka the number of observations in df)
+pandas_diabetes.head() # print the first 4 observations of the variables (glimpse of your df)
+
+```
+If you're working with VSC and you'd like to get a nice display of your data:
+
+install the pkg 'tabulate' (pip install tabulate) using the terminal. You may have to open a new bash terminal (that is not using the Python REPL) to install packages. If that is the case (i.e. you could not pip install in the terminal you are using), you can 'split' the terminal using the interface split prompt.
+
+```{python}
+# this prints the dataframe nicely (but remember to only print the head/first observations, otherwise you display a large table!)
+print(pandas_diabetes.head().to_markdown())
+
+```
+Some basic operations and estimation of a linear model:
+
+*Indexig with pandas is done using the .iloc[] call. 
+*To estimate a linear model (OLS), you'll need to split your data into a dependent Y and independent X variables.
+
+---
+Luckily for us, because the diabetes toy dataframe is from the sklearn library, you can use the target and data functions. For the same reason, we will use the diabetes dataset and not the pandas-converted dataset.
+---
+
+```{python}
+
+pandas_diabetes.iloc[:,1] # print first column: Name: sex, Length: 442, dtype: float64
+pandas_diabetes.iloc[:,1].mean() # get the mean of the first column: 1.2307902309192911e-17
+
+# Linear Model (OLS), split data into dep Y and indep X variables
+
+Y = diabetes.target # define targer/ Y var
+X = diabetes.data # all remaining variables in the dataset are now X covariates
+
+print(Y.shape, X.shape) # y is one column with 442 observations, X is 10 columns with 442 observations
+print(Y) # prints all the vaues of Y
+```
+
+To estimate a linear model, we'll need t load the function from the sklearn library.
+
+```{python}
+from sklearn.linear_model import LinearRegression
+
+lm = LinearRegression(fit_intercept=True).fit(X, Y)
+
+#print model coefficients using pandas
+
+print(lm.coef_) # displayed in the order of the column names
+print(lm.intercept_) # model intercept = 152.133
+
+# in a nicer way
+column_names = pandas_diabetes.columns # to retrieve column names we should use the pandas dataset
+coefficients = pd.concat([pd.DataFrame(column_names),pd.DataFrame(np.transpose(lm.coef_))], axis = 1)
+print(coefficients) # displays variable name and it's estimated coefficient. 
+
+```
+The sklearn library will be our trusted Machine Learning ally. However, for general statistical analysis and easier to interpret output, there are other libraries. E.g.
+
+```{python}
+# an ever more intuitive output would look like this ->
+# remember to pip install the libraries before importing them! And to do so in a different terminal (open a new bash terminal)
+import statsmodels.api as sm
+from scipy import stats
+
+constant = sm.add_constant(X) # create a new X (covariate) object that includes all our variables and allow for this object to also display an estimated constant
+est = sm.OLS(Y, constant) # estimate a linear regression model with dep Y and indep Xs (now constant)
+lm_2 = est.fit() # create an object that contains all the models' parameters
+print(lm_2.summary()) # print linear model parameters
+
+```
+This displayed output contains all the information we may need to interpret the suitability of our linear model.
+
+We're at the end of this brief intro to Python. Notice that there's a forward structure throughout. We create an object X, which we define to be of class, say, pandas. It's class will let us use that class/library's functions by calling them after a dot: X.summary() will display a summary of the X object. 
+** Visualisation with matplotlib **
+```{python}
+import matplotlib.pyplot as plt
+
+pandas_diabetes.head() # to remember our variables
+
+bmi = pandas_diabetes.iloc[:,2] # select and store bmi variable
+age = pandas_diabetes.iloc[:,0] # select and store age variable
+
+plt.hist(bmi)
+plt.show() 
+
+plt.clf()
+
+plt.scatter(age,bmi) # order is x,y
+plt.show()
+
+# let's add some elements#add line of best fit to plot
+
+# find line of best fit
+a, b = np.polyfit(age, bmi, 1)
+
+# add the points to the plot
+plt.scatter(age,bmi) # order is x,y
+# add the line and then display
+plt.plot(age, a*age+b, color='red', linestyle='--', linewidth=2)
+plt.show()
+```
+
+**Defining functions and loops**
+
+The last useful tip before we begin to use Python in earnest, is to remember that we can define functions or use loops (general flow control) to help us with our data wrangling:
+
+```{python}
+# for loops, to iterate over some length and repeat an operation, e.g.
+count = 0 # initialize empty variable
+nums = [1,2,3,4,5,6,7,8,9,10]
+
+for i in nums:
+    count += i
+    
+print(f"We have a total sum of: {count}.")
+
+# we've essentially set a counter: 1 + 2 + 3 + 4  + ... 10 = 55!
+
+if 101 == 100: 
+    print("Hello, 5!")
+elif 101 > 100:
+    print("Much gold!")
+
+# if logical statement is true, print(), else if new logical statement is true, print()
+
+# defining functions: lottery draw!
+
+
+def French_talk(name,age):
+    print("Je m'appelle", name)
+    print("Mon âge est", age)
+    
+French_talk("Saruman",1000)
+```
+
+
+
+You can download the Python script by clicking on the button below.
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Python code/Intro2Python.py",
+  button_label = "Download Intro to Python script (.py)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
