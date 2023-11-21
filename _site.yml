@@ -13,9 +13,9 @@ navbar:
         - text: "Introduction"
           href: intro.html
           icon: fa-duotone fa-robot
-        #- text: "Regression I"
-        #  href: reg1.html
-        #  icon: fa fa-line-chart
+        - text: "Prediction Policy Problems"
+          href: predictionpolicy.html
+          icon: fa fa-line-chart
         #- text: "Regression II"
         #  href: reg2.html
         #  icon: fa fa-area-chart

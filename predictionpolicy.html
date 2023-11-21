@@ -1,0 +1,5142 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>predictionpolicy.knit</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Machine Learning for Public Policy</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="intro.html">
+    <span class="fa fa-duotone fa-robot"></span>
+     
+    Introduction
+  </a>
+</li>
+<li>
+  <a href="predictionpolicy.html">Prediction Policy Problems</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+
+</div>
+
+
+<style>
+    body {
+    text-align: justify}
+</style>
+<div id="prediction-policy-problems-linear-models-lasso-regression"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills"><strong>Prediction Policy
+Problems:: Linear Models Lasso Regression</strong></h2>
+<p><strong>Introducing the Prediction Policy Framework</strong></p>
+<p>In the video-lecture below you’ll be given a brief introduction to
+the prediction policy framework, and a primer on machine learning.
+Please take a moment to watch the 10 minute video.</p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/aA7tLQxf1xE" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
+<p>After watching the video, we have a practical excercise.</p>
+<p><strong>Predicting social assistance beneficiaries</strong></p>
+<p>A key problem in the design of Social Policies is the identification
+of people in need of social assistance. Social policies usually work
+with tight budgets and limited fiscal space. To allocate resources
+efficiently, benefits need to be targeted to those who need them most.
+Yet, identifying needs isn’t easy and misclassifications can have severe
+and irreversible effects on people in need.</p>
+<p>Think of a social protection programme that allocates food vouchers
+to families with children at risk of malnutrition, or a programme that
+establishes needs-based school grants. What happens when these limited
+and finite resources are given to people that could do without, and
+those who need them most are excluded from them?</p>
+<p>In this block we’ll work with real-world data from the country of
+Malawi to predict cash-transfer programme beneficiaries: People who live
+in poverty and need government assistance to make ends meet. The data
+comes from McBride and Nichol’s (2018) paper <a
+href="https://elibrary.worldbank.org/doi/abs/10.1093/wber/lhw056">Retooling
+poverty targeting using out-of-sample validation and machine
+learning</a>.</p>
+<p><strong>Discussion Points</strong></p>
+<ul>
+<li>
+Why is this a prediction policy problem? What would be a causal
+inference problem in this setting? Is it a regression or a
+classification problem?
+</li>
+<li>
+Which variables and characteristics that we include in the prediction
+model can make a big difference.
+<ul>
+<li>
+Programmatically and conceptually, which type of characteristics do we
+want to consider for the prediction model?
+</li>
+<li>
+Technically, how do we select which variables to include in a prediction
+model? How is this different from a causal inference problem?
+</li>
+</ul>
+</li>
+<li>
+What are the practical implications of the bias-variance tradeoff in
+this application?
+</li>
+<li>
+What are potential risks of such a data driven targeting approach?
+</li>
+</ul>
+<p><br></p>
+<div id="r-practical" class="section level3">
+<h3><strong>R practical</strong></h3>
+<p>You can download the dataset by clicking on the button below.
+<br></p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/malawi.csv">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download malawi df (.csv)</button>
+</a>
+<p>The script below is a step by step on how to go about coding a
+predictive model using a <em>linear regression</em>. Despite its
+simplicity and transparency, i.e. the ease with which we can interpret
+its results, a linear model is not without challenges in machine
+learning.</p>
+<h3>
+<ol style="list-style-type: decimal">
+<li>Preliminaries: working directory, libraries, data upload
+</h3>
+<br></li>
+</ol>
+<pre class="r"><code>rm(list = ls()) # this line cleans your Global Environment.
+setwd(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy&quot;) # set your working directory
+
+# Libraries
+cat(&quot;
+If this is your first time using R, you need to install the libraries before loading them. 
+To do that, you can uncomment the line that starts with install.packages(...) by removing the # symbol.    
+    &quot;)</code></pre>
+<pre><code>## 
+## If this is your first time using R, you need to install the libraries before loading them. 
+## To do that, you can uncomment the line that starts with install.packages(...) by removing the # symbol.    
+## </code></pre>
+<pre class="r"><code>#install.packages(&quot;dplyr&quot;, &quot;tidyverse&quot;, &quot;caret&quot;, &quot;corrplot&quot;, &quot;Hmisc&quot;, &quot;modelsummary&quot;, &quot;plyr&quot;, &quot;gt&quot;, &quot;stargazer&quot;, elasticnet&quot;)
+
+library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
+library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
+library(caret) # a package with key functions that streamline the process for predictive modelling 
+library(corrplot) # a package to plot correlation matrices
+library(Hmisc) # a package for general-purpose data analysis 
+library(modelsummary) # a package to describe model outputs
+library(skimr) # a package to describe dataframes
+library(plyr) # a package for data wrangling
+library(gt) # a package to edit modelsummary (and other) tables
+library(stargazer) # a package to visualise model output
+
+data_malawi &lt;- read_csv(&quot;malawi.csv&quot;) # the file is directly read from the working directory/folder previously set</code></pre>
+<h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Get to know your data: visualisation and pre-processing
+</h3>
+<br></li>
+</ol>
+<pre class="r"><code>skim(data_malawi) # describes the dataset in a nice format </code></pre>
+<table style="width: auto;" class="table table-condensed">
+<caption>
+Data summary
+</caption>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+data_malawi
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+11280
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+character
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+36
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+None
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+min
+</th>
+<th style="text-align:right;">
+max
+</th>
+<th style="text-align:right;">
+empty
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:right;">
+whitespace
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+region
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+eatype
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+lnexp_pc_month
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.360000e+00
+</td>
+<td style="text-align:right;">
+6.800000e-01
+</td>
+<td style="text-align:right;">
+4.7800e+00
+</td>
+<td style="text-align:right;">
+6.890000e+00
+</td>
+<td style="text-align:right;">
+7.310000e+00
+</td>
+<td style="text-align:right;">
+7.760000e+00
+</td>
+<td style="text-align:right;">
+1.106000e+01
+</td>
+<td style="text-align:left;">
+▁▇▇▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.550000e+00
+</td>
+<td style="text-align:right;">
+2.340000e+00
+</td>
+<td style="text-align:right;">
+1.0000e+00
+</td>
+<td style="text-align:right;">
+3.000000e+00
+</td>
+<td style="text-align:right;">
+4.000000e+00
+</td>
+<td style="text-align:right;">
+6.000000e+00
+</td>
+<td style="text-align:right;">
+2.700000e+01
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.613000e+01
+</td>
+<td style="text-align:right;">
+2.799000e+01
+</td>
+<td style="text-align:right;">
+1.0000e+00
+</td>
+<td style="text-align:right;">
+9.000000e+00
+</td>
+<td style="text-align:right;">
+1.600000e+01
+</td>
+<td style="text-align:right;">
+3.600000e+01
+</td>
+<td style="text-align:right;">
+7.290000e+02
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.246000e+01
+</td>
+<td style="text-align:right;">
+1.636000e+01
+</td>
+<td style="text-align:right;">
+1.0000e+01
+</td>
+<td style="text-align:right;">
+2.900000e+01
+</td>
+<td style="text-align:right;">
+3.900000e+01
+</td>
+<td style="text-align:right;">
+5.400000e+01
+</td>
+<td style="text-align:right;">
+1.040000e+02
+</td>
+<td style="text-align:left;">
+▅▇▅▂▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.070610e+03
+</td>
+<td style="text-align:right;">
+1.618600e+03
+</td>
+<td style="text-align:right;">
+1.0000e+02
+</td>
+<td style="text-align:right;">
+8.410000e+02
+</td>
+<td style="text-align:right;">
+1.521000e+03
+</td>
+<td style="text-align:right;">
+2.916000e+03
+</td>
+<td style="text-align:right;">
+1.081600e+04
+</td>
+<td style="text-align:left;">
+▇▃▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+north
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.500000e-01
+</td>
+<td style="text-align:right;">
+3.600000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+central
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.800000e-01
+</td>
+<td style="text-align:right;">
+4.900000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▅
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rural
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8.700000e-01
+</td>
+<td style="text-align:right;">
+3.300000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▁▁▁▁▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nevermarried
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.000000e-02
+</td>
+<td style="text-align:right;">
+1.700000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sharenoedu
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.700000e-01
+</td>
+<td style="text-align:right;">
+2.600000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+2.500000e-01
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+shareread
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.100000e-01
+</td>
+<td style="text-align:right;">
+3.800000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+3.300000e-01
+</td>
+<td style="text-align:right;">
+6.700000e-01
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▅▁▅▂▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nrooms
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.500000e+00
+</td>
+<td style="text-align:right;">
+1.300000e+00
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+2.000000e+00
+</td>
+<td style="text-align:right;">
+2.000000e+00
+</td>
+<td style="text-align:right;">
+3.000000e+00
+</td>
+<td style="text-align:right;">
+1.600000e+01
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+floor_cement
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.000000e-01
+</td>
+<td style="text-align:right;">
+4.000000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricity
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.000000e-02
+</td>
+<td style="text-align:right;">
+2.300000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+flushtoilet
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.000000e-02
+</td>
+<td style="text-align:right;">
+1.700000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soap
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.400000e-01
+</td>
+<td style="text-align:right;">
+3.400000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bed
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.200000e-01
+</td>
+<td style="text-align:right;">
+4.700000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▃
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bike
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.600000e-01
+</td>
+<td style="text-align:right;">
+4.800000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▅
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+musicplayer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.600000e-01
+</td>
+<td style="text-align:right;">
+3.700000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coffeetable
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.200000e-01
+</td>
+<td style="text-align:right;">
+3.200000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+iron
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.100000e-01
+</td>
+<td style="text-align:right;">
+4.000000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dimbagarden
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.200000e-01
+</td>
+<td style="text-align:right;">
+4.700000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▃
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+goats
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.100000e-01
+</td>
+<td style="text-align:right;">
+4.100000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dependratio
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.120000e+00
+</td>
+<td style="text-align:right;">
+9.500000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+5.000000e-01
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.500000e+00
+</td>
+<td style="text-align:right;">
+9.000000e+00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hfem
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.300000e-01
+</td>
+<td style="text-align:right;">
+4.200000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grassroof
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.400000e-01
+</td>
+<td style="text-align:right;">
+4.400000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▃▁▁▁▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mortarpestle
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5.000000e-01
+</td>
+<td style="text-align:right;">
+5.000000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+table
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3.600000e-01
+</td>
+<td style="text-align:right;">
+4.800000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▅
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+clock
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.000000e-01
+</td>
+<td style="text-align:right;">
+4.000000e-01
+</td>
+<td style="text-align:right;">
+0.0000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+1.000000e+00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ea
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.606000e+01
+</td>
+<td style="text-align:right;">
+1.885500e+02
+</td>
+<td style="text-align:right;">
+1.0000e+00
+</td>
+<td style="text-align:right;">
+8.000000e+00
+</td>
+<td style="text-align:right;">
+1.900000e+01
+</td>
+<td style="text-align:right;">
+4.525000e+01
+</td>
+<td style="text-align:right;">
+9.010000e+02
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EA
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.372322e+07
+</td>
+<td style="text-align:right;">
+7.241514e+06
+</td>
+<td style="text-align:right;">
+1.0101e+07
+</td>
+<td style="text-align:right;">
+2.040204e+07
+</td>
+<td style="text-align:right;">
+2.090352e+07
+</td>
+<td style="text-align:right;">
+3.053301e+07
+</td>
+<td style="text-align:right;">
+3.120209e+07
+</td>
+<td style="text-align:left;">
+▂▁▆▁▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhwght
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.387900e+02
+</td>
+<td style="text-align:right;">
+7.001000e+01
+</td>
+<td style="text-align:right;">
+7.9000e+01
+</td>
+<td style="text-align:right;">
+2.076000e+02
+</td>
+<td style="text-align:right;">
+2.471000e+02
+</td>
+<td style="text-align:right;">
+2.913000e+02
+</td>
+<td style="text-align:right;">
+3.587000e+02
+</td>
+<td style="text-align:left;">
+▂▁▇▇▂
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+psu
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.372322e+07
+</td>
+<td style="text-align:right;">
+7.241514e+06
+</td>
+<td style="text-align:right;">
+1.0101e+07
+</td>
+<td style="text-align:right;">
+2.040204e+07
+</td>
+<td style="text-align:right;">
+2.090352e+07
+</td>
+<td style="text-align:right;">
+3.053301e+07
+</td>
+<td style="text-align:right;">
+3.120209e+07
+</td>
+<td style="text-align:left;">
+▂▁▆▁▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+strataid
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.560000e+01
+</td>
+<td style="text-align:right;">
+8.090000e+00
+</td>
+<td style="text-align:right;">
+1.0000e+00
+</td>
+<td style="text-align:right;">
+9.000000e+00
+</td>
+<td style="text-align:right;">
+1.500000e+01
+</td>
+<td style="text-align:right;">
+2.200000e+01
+</td>
+<td style="text-align:right;">
+3.000000e+01
+</td>
+<td style="text-align:left;">
+▅▇▇▆▅
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lnzline
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.550000e+00
+</td>
+<td style="text-align:right;">
+0.000000e+00
+</td>
+<td style="text-align:right;">
+7.5500e+00
+</td>
+<td style="text-align:right;">
+7.550000e+00
+</td>
+<td style="text-align:right;">
+7.550000e+00
+</td>
+<td style="text-align:right;">
+7.550000e+00
+</td>
+<td style="text-align:right;">
+7.550000e+00
+</td>
+<td style="text-align:left;">
+▁▁▇▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+case_id
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.372322e+10
+</td>
+<td style="text-align:right;">
+7.241514e+09
+</td>
+<td style="text-align:right;">
+1.0101e+10
+</td>
+<td style="text-align:right;">
+2.040204e+10
+</td>
+<td style="text-align:right;">
+2.090352e+10
+</td>
+<td style="text-align:right;">
+3.053301e+10
+</td>
+<td style="text-align:right;">
+3.120209e+10
+</td>
+<td style="text-align:left;">
+▂▁▆▁▇
+</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>The dataset contains 38 variables and 11,280
+observations.</p></li>
+<li><p>Not all of these variables are relevant for our prediction
+model.</p></li>
+<li><p>To find the labels and description of the variables, you can
+refer to the <a
+href="https://academic.oup.com/wber/article-abstract/32/3/531/2447896">paper</a>.
+<br></p></li>
+</ul>
+<p>[hhsize, hhsize2, age_head, age_head2, regions, rural, never married,
+share_of_adults_without_education, share_of_adults_who_can_read, number
+of rooms, cement floor, electricity, flush toilet, soap, bed, bike,
+music player, coffee table, iron, garden, goats] <br></p>
+<ul>
+<li>Luckily for us, we have no missing values (n_missing in summary
+output)!</li>
+</ul>
+<ol style="list-style-type: upper-alpha">
+<li><p>Machine learning models cannot be trained when missing values are
+present.</p></li>
+<li><p>Dealing with missingness is a non-trivial task: First and
+foremost, we should assess whether there is a pattern to missingness and
+if so, what that means to what we can learn from our (sub)population. If
+there is no discernible pattern, we can proceed to delete the missing
+values or impute them. A more detailed explanation and course of action
+can be found <a
+href="https://stefvanbuuren.name/fimd/sec-MCAR.html">here</a>.</p></li>
+</ol>
+<p><strong>Feature selection: subsetting the dataset </strong></p>
+<p>As part of our data pre-processing we will subset the dataframe, such
+that only relevant variables are left. * Relevant: variables/features
+about a household that could help us determine whether they are in
+poverty. That way, we save some memory space; but also, we can call the
+full set of variables in a dataframe in one go!</p>
+<p>variables to delete (not included in the identified set above): [ea,
+EA, hhwght, psu, strataid, lnzline, case_id, eatype]</p>
+<p><strong>N/B</strong>: Feature selection is a <em>critical
+process</em> (and we normally don’t have a paper to guide us through
+it): from a practical point of view, a model with less predictors may be
+easier to interpret. Also, some models may be negatively affected by
+non-informative predictors. This process is similar to traditional
+econometric modelling, but we should not conflate predictive and
+explanatory modelling. Importantly, please note that we are not
+interested in knowing why something happens, but rather in what is
+likely to happen given some known data. Hence:</p>
+<pre class="r"><code># object:vector that contains the names of the variables that we want to get rid of
+
+cols &lt;- c(&quot;ea&quot;, &quot;EA&quot;, &quot;psu&quot;,&quot;hhwght&quot;, &quot;strataid&quot;, &quot;lnzline&quot;, &quot;case_id&quot;,&quot;eatype&quot;)
+
+
+# subset of the data_malawi object:datframe
+data_malawi &lt;- data_malawi[,-which(colnames(data_malawi) %in% cols)] # 30 variables remain</code></pre>
+<p>A few notes for you:</p>
+<ul>
+<li><p>a dataframe follows the form data[rows,colums]</p></li>
+<li><p>colnames() is a function that identifies the column names of an
+object of class dataframe</p></li>
+<li><p>which() is an R base function that gives you the position of some
+value</p></li>
+<li><p>a minus sign will delete either the identified position in the
+row or the column space</p></li>
+</ul>
+<p><strong>Data visualisation</strong></p>
+<p>A quick and effective way to take a first glance at our data is to
+plot histograms of relevant (numeric) features.</p>
+<p>Recall (from the skim() dataframe summary output) that only two
+variables are non-numeric. However, we need to make a distinction
+between class factor and class numeric/numeric.</p>
+<pre class="r"><code># identify categorical variables to transform from class numeric to factor
+# using a for-loop: print the number of unique values by variable
+
+for (i in 1:ncol(data_malawi)) { # iterate over the length of columns in the data_malawi df
+    
+    # store the number of unique values in column.i 
+    x &lt;- length(unique(data_malawi[[i]]))
+    
+    # print the name of column.i
+    print(colnames(data_malawi[i]))
+    # print the number of unique values in column.i
+    print(x)
+    
+}</code></pre>
+<pre><code>## [1] &quot;lnexp_pc_month&quot;
+## [1] 11266
+## [1] &quot;hhsize&quot;
+## [1] 19
+## [1] &quot;hhsize2&quot;
+## [1] 19
+## [1] &quot;agehead&quot;
+## [1] 88
+## [1] &quot;agehead2&quot;
+## [1] 88
+## [1] &quot;north&quot;
+## [1] 2
+## [1] &quot;central&quot;
+## [1] 2
+## [1] &quot;rural&quot;
+## [1] 2
+## [1] &quot;nevermarried&quot;
+## [1] 2
+## [1] &quot;sharenoedu&quot;
+## [1] 47
+## [1] &quot;shareread&quot;
+## [1] 28
+## [1] &quot;nrooms&quot;
+## [1] 16
+## [1] &quot;floor_cement&quot;
+## [1] 2
+## [1] &quot;electricity&quot;
+## [1] 2
+## [1] &quot;flushtoilet&quot;
+## [1] 2
+## [1] &quot;soap&quot;
+## [1] 2
+## [1] &quot;bed&quot;
+## [1] 2
+## [1] &quot;bike&quot;
+## [1] 2
+## [1] &quot;musicplayer&quot;
+## [1] 2
+## [1] &quot;coffeetable&quot;
+## [1] 2
+## [1] &quot;iron&quot;
+## [1] 2
+## [1] &quot;dimbagarden&quot;
+## [1] 2
+## [1] &quot;goats&quot;
+## [1] 2
+## [1] &quot;dependratio&quot;
+## [1] 62
+## [1] &quot;hfem&quot;
+## [1] 2
+## [1] &quot;grassroof&quot;
+## [1] 2
+## [1] &quot;mortarpestle&quot;
+## [1] 2
+## [1] &quot;table&quot;
+## [1] 2
+## [1] &quot;clock&quot;
+## [1] 2
+## [1] &quot;region&quot;
+## [1] 3</code></pre>
+<p><br> Notice that we have a few variables with 2 unique values and one
+variable with 3 unique values. We should transform these into factor()
+class. We can do this one by one, or in one shot. I’ll give an example
+of both:</p>
+<pre class="r"><code>data_malawi$north &lt;- factor(data_malawi$north)
+str(data_malawi$north) # 2 is labelled as &quot;1&quot; and 1 is labelled as &quot;0&quot;. This is not an issue. For future reference, you can label the categories.</code></pre>
+<pre><code>##  Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<pre class="r"><code>head(data_malawi$north) # first 6 observations are 1 = north</code></pre>
+<pre><code>## [1] 1 1 1 1 1 1
+## Levels: 0 1</code></pre>
+<pre class="r"><code>tail(data_malawi$north) # last 6 observations are 0 = not north</code></pre>
+<pre><code>## [1] 0 0 0 0 0 0
+## Levels: 0 1</code></pre>
+<pre class="r"><code>levels(data_malawi$north) &lt;- c(&quot;not_north&quot;,&quot;north&quot;) # the order of the label matters (label for &quot;0&quot; comes firts.)
+head(data_malawi$north) # first 6 observations are north</code></pre>
+<pre><code>## [1] north north north north north north
+## Levels: not_north north</code></pre>
+<pre class="r"><code>tail(data_malawi$north) # last 6 observations are not north</code></pre>
+<pre><code>## [1] not_north not_north not_north not_north not_north not_north
+## Levels: not_north north</code></pre>
+<pre class="r"><code># long story short, R stores factors as 1...n; but the label remains the numeric value assigned (1 for true, 0 false)
+
+# transform all binary/categorical data into factor class
+
+min_count &lt;- 3 # vector: 3 categories is our max number of categories found
+
+# apply a lenght(unique(x)) function to all the columns (rows = 1, columns = 2) of the data_malawi dataframe, then
+# store boolean (true/false) if the number of unique values is lower or equal to the min_count vector
+n_distinct2 &lt;- apply(data_malawi, 2, function(x) length(unique(x))) &lt;= min_count
+
+# print(n_distinct2) # prints boolean indicator object (so you know what object you have created)
+
+# select the identified categorical variables and transform them into factors
+data_malawi[n_distinct2] &lt;- lapply(data_malawi[n_distinct2], factor) 
+
+# skim your dataframe 
+skim(data_malawi) #success!</code></pre>
+<table style="width: auto;" class="table table-condensed">
+<caption>
+Data summary
+</caption>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Name
+</td>
+<td style="text-align:left;">
+data_malawi
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of rows
+</td>
+<td style="text-align:left;">
+11280
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Number of columns
+</td>
+<td style="text-align:left;">
+30
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_______________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Column type frequency:
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+factor
+</td>
+<td style="text-align:left;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+numeric
+</td>
+<td style="text-align:left;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+________________________
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Group variables
+</td>
+<td style="text-align:left;">
+None
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:left;">
+ordered
+</th>
+<th style="text-align:right;">
+n_unique
+</th>
+<th style="text-align:left;">
+top_counts
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+north
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+not: 9600, nor: 1680
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+central
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 6960, 1: 4320
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+rural
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+1: 9840, 0: 1440
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nevermarried
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 10930, 1: 350
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+floor_cement
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 9036, 1: 2244
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricity
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 10620, 1: 660
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+flushtoilet
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 10962, 1: 318
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soap
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 9740, 1: 1540
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bed
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 7653, 1: 3627
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bike
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 7194, 1: 4086
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+musicplayer
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 9426, 1: 1854
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+coffeetable
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 9956, 1: 1324
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+iron
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 8962, 1: 2318
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dimbagarden
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 7658, 1: 3622
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+goats
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 8856, 1: 2424
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hfem
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 8697, 1: 2583
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grassroof
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+1: 8327, 0: 2953
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mortarpestle
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+1: 5645, 0: 5635
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+table
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 7249, 1: 4031
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+clock
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+0: 9039, 1: 2241
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+region
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Sou: 5280, Cen: 4320, Nor: 1680
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+skim_variable
+</th>
+<th style="text-align:right;">
+n_missing
+</th>
+<th style="text-align:right;">
+complete_rate
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+p0
+</th>
+<th style="text-align:right;">
+p25
+</th>
+<th style="text-align:right;">
+p50
+</th>
+<th style="text-align:right;">
+p75
+</th>
+<th style="text-align:right;">
+p100
+</th>
+<th style="text-align:left;">
+hist
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+lnexp_pc_month
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7.36
+</td>
+<td style="text-align:right;">
+0.68
+</td>
+<td style="text-align:right;">
+4.78
+</td>
+<td style="text-align:right;">
+6.89
+</td>
+<td style="text-align:right;">
+7.31
+</td>
+<td style="text-align:right;">
+7.76
+</td>
+<td style="text-align:right;">
+11.06
+</td>
+<td style="text-align:left;">
+▁▇▇▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4.55
+</td>
+<td style="text-align:right;">
+2.34
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+4.00
+</td>
+<td style="text-align:right;">
+6.00
+</td>
+<td style="text-align:right;">
+27.00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+26.13
+</td>
+<td style="text-align:right;">
+27.99
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+9.00
+</td>
+<td style="text-align:right;">
+16.00
+</td>
+<td style="text-align:right;">
+36.00
+</td>
+<td style="text-align:right;">
+729.00
+</td>
+<td style="text-align:left;">
+▇▁▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+42.46
+</td>
+<td style="text-align:right;">
+16.36
+</td>
+<td style="text-align:right;">
+10.00
+</td>
+<td style="text-align:right;">
+29.00
+</td>
+<td style="text-align:right;">
+39.00
+</td>
+<td style="text-align:right;">
+54.00
+</td>
+<td style="text-align:right;">
+104.00
+</td>
+<td style="text-align:left;">
+▅▇▅▂▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2070.61
+</td>
+<td style="text-align:right;">
+1618.60
+</td>
+<td style="text-align:right;">
+100.00
+</td>
+<td style="text-align:right;">
+841.00
+</td>
+<td style="text-align:right;">
+1521.00
+</td>
+<td style="text-align:right;">
+2916.00
+</td>
+<td style="text-align:right;">
+10816.00
+</td>
+<td style="text-align:left;">
+▇▃▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sharenoedu
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+0.26
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+shareread
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.61
+</td>
+<td style="text-align:right;">
+0.38
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.33
+</td>
+<td style="text-align:right;">
+0.67
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:left;">
+▅▁▅▂▇
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nrooms
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.50
+</td>
+<td style="text-align:right;">
+1.30
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+2.00
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+16.00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dependratio
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.12
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.50
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.50
+</td>
+<td style="text-align:right;">
+9.00
+</td>
+<td style="text-align:left;">
+▇▂▁▁▁
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Visualise your data: histograms, bar plots,
+tables</strong></p>
+<p>Let’s start with histograms of numeric (continuous) variables.</p>
+<pre class="r"><code># == HISTOGRAMS == #
+
+# Select all variables in the dataframe which are numeric, and can therefore be plotted as a histogram.
+malawi_continuous &lt;- as.data.frame(data_malawi %&gt;% select_if(~is.numeric(.))) 
+
+# a quick glance at the summary statistics of our continuous variables
+datasummary_skim(malawi_continuous) # from modelsummary pkg, output as plot in Plot Viewer</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Unique (#)
+</th>
+<th style="text-align:right;">
+Missing (%)
+</th>
+<th style="text-align:right;">
+Mean
+</th>
+<th style="text-align:right;">
+SD
+</th>
+<th style="text-align:right;">
+Min
+</th>
+<th style="text-align:right;">
+Median
+</th>
+<th style="text-align:right;">
+Max
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+lnexp_pc_month
+</td>
+<td style="text-align:right;">
+11266
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+7.3
+</td>
+<td style="text-align:right;">
+11.1
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="-0.18" y="11.66" width="3.53" height="0.0024" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="3.36" y="11.65" width="3.53" height="0.0098" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.89" y="11.45" width="3.53" height="0.21" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.42" y="9.61" width="3.53" height="2.06" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="13.96" y="5.37" width="3.53" height="6.29" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.49" y="3.22" width="3.53" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.03" y="5.57" width="3.53" height="6.10" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.56" y="8.72" width="3.53" height="2.95" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="28.10" y="10.71" width="3.53" height="0.95" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="31.63" y="11.33" width="3.53" height="0.33" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.17" y="11.52" width="3.53" height="0.14" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.70" y="11.62" width="3.53" height="0.039" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="42.24" y="11.65" width="3.53" height="0.0073" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="45.77" y="11.66" width="3.53" height="0.0024" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4.5
+</td>
+<td style="text-align:right;">
+2.3
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+<td style="text-align:right;">
+27.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="0.068" y="6.85" width="3.42" height="4.82" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="3.49" y="3.22" width="3.42" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.91" y="4.69" width="3.42" height="6.97" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.32" y="8.48" width="3.42" height="3.18" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="13.74" y="10.70" width="3.42" height="0.97" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.16" y="11.43" width="3.42" height="0.23" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="20.58" y="11.57" width="3.42" height="0.088" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.62" width="3.42" height="0.046" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="27.42" y="11.66" width="3.42" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.84" y="11.66" width="3.42" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="34.26" y="11.66" width="3.42" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.68" y="11.66" width="3.42" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.09" y="11.66" width="3.42" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="44.51" y="11.66" width="3.42" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hhsize2
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+26.1
+</td>
+<td style="text-align:right;">
+28.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+16.0
+</td>
+<td style="text-align:right;">
+729.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.72" y="3.22" width="3.05" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.77" y="10.83" width="3.05" height="0.84" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="7.82" y="11.58" width="3.05" height="0.087" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.87" y="11.63" width="3.05" height="0.033" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="13.93" y="11.65" width="3.05" height="0.012" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="16.98" y="11.66" width="3.05" height="0.0058" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="20.03" y="11.66" width="3.05" height="0.00084" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="23.08" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.14" y="11.66" width="3.05" height="0.00084" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="29.19" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.24" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.29" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.35" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.40" y="11.66" width="3.05" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="44.45" y="11.66" width="3.05" height="0.00084" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+42.5
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+10.0
+</td>
+<td style="text-align:right;">
+39.0
+</td>
+<td style="text-align:right;">
+104.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="11.64" width="2.36" height="0.019" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.14" y="10.75" width="2.36" height="0.91" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.51" y="5.39" width="2.36" height="6.27" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="8.87" y="3.22" width="2.36" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="11.23" y="4.36" width="2.36" height="7.30" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="13.60" y="5.97" width="2.36" height="5.69" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="15.96" y="7.14" width="2.36" height="4.52" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="18.33" y="7.82" width="2.36" height="3.84" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="20.69" y="7.71" width="2.36" height="3.96" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="23.05" y="8.32" width="2.36" height="3.34" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="25.42" y="8.84" width="2.36" height="2.83" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="27.78" y="9.88" width="2.36" height="1.78" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.15" y="9.99" width="2.36" height="1.67" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.51" y="10.72" width="2.36" height="0.94" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="34.87" y="11.05" width="2.36" height="0.62" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.24" y="11.27" width="2.36" height="0.40" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="39.60" y="11.55" width="2.36" height="0.11" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.97" y="11.63" width="2.36" height="0.033" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="44.33" y="11.66" width="2.36" height="0.0047" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+agehead2
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2070.6
+</td>
+<td style="text-align:right;">
+1618.6
+</td>
+<td style="text-align:right;">
+100.0
+</td>
+<td style="text-align:right;">
+1521.0
+</td>
+<td style="text-align:right;">
+10816.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.36" y="3.22" width="4.15" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="5.51" y="4.24" width="4.15" height="7.42" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="9.66" y="7.77" width="4.15" height="3.89" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="13.81" y="8.74" width="4.15" height="2.92" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.95" y="10.16" width="4.15" height="1.51" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="22.10" y="10.67" width="4.15" height="0.99" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.25" y="11.16" width="4.15" height="0.50" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.40" y="11.41" width="4.15" height="0.25" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="34.54" y="11.57" width="4.15" height="0.095" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.69" y="11.64" width="4.15" height="0.021" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="42.84" y="11.66" width="4.15" height="0.0023" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sharenoedu
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="3.22" width="2.22" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.00" y="11.61" width="2.22" height="0.054" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.22" y="11.26" width="2.22" height="0.41" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="8.44" y="10.77" width="2.22" height="0.89" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.67" y="10.82" width="2.22" height="0.84" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="12.89" y="11.54" width="2.22" height="0.12" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="15.11" y="10.75" width="2.22" height="0.91" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.33" y="11.63" width="2.22" height="0.029" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="19.56" y="11.36" width="2.22" height="0.30" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.78" y="10.74" width="2.22" height="0.92" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.66" width="2.22" height="0.0012" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.22" y="11.63" width="2.22" height="0.032" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="28.44" y="11.56" width="2.22" height="0.11" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.67" y="11.42" width="2.22" height="0.24" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.89" y="11.58" width="2.22" height="0.078" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.11" y="11.66" width="2.22" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.33" y="11.63" width="2.22" height="0.029" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="39.56" y="11.66" width="2.22" height="0.0037" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.78" y="11.66" width="2.22" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="44.00" y="11.04" width="2.22" height="0.62" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+shareread
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="7.20" width="2.22" height="4.47" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.00" y="11.66" width="2.22" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.22" y="11.66" width="2.22" height="0.0039" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="8.44" y="11.58" width="2.22" height="0.085" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.67" y="11.42" width="2.22" height="0.24" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="12.89" y="11.65" width="2.22" height="0.012" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="15.11" y="10.67" width="2.22" height="0.99" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.33" y="11.66" width="2.22" height="0.0058" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="19.56" y="11.52" width="2.22" height="0.14" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.78" y="7.14" width="2.22" height="4.52" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.66" width="2.22" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.22" y="11.63" width="2.22" height="0.029" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="28.44" y="11.43" width="2.22" height="0.23" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.67" y="10.12" width="2.22" height="1.54" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.89" y="10.97" width="2.22" height="0.69" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.11" y="11.65" width="2.22" height="0.0077" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.33" y="11.28" width="2.22" height="0.38" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="39.56" y="11.61" width="2.22" height="0.054" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.78" y="11.66" width="2.22" height="0.0058" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="44.00" y="3.22" width="2.22" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+nrooms
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2.5
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+16.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="6.47" width="2.78" height="5.19" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.56" y="3.22" width="2.78" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="7.33" y="5.11" width="2.78" height="6.55" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.11" y="8.87" width="2.78" height="2.79" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="12.89" y="10.78" width="2.78" height="0.88" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="15.67" y="11.27" width="2.78" height="0.39" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="18.44" y="11.53" width="2.78" height="0.13" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.22" y="11.62" width="2.78" height="0.041" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.63" width="2.78" height="0.037" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.78" y="11.64" width="2.78" height="0.017" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="29.56" y="11.65" width="2.78" height="0.011" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.33" y="11.66" width="2.78" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.11" y="11.66" width="2.78" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.89" y="11.66" width="2.78" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="40.67" y="11.66" width="2.78" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="43.44" y="11.66" width="2.78" height="0.0022" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+dependratio
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.1
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+<td style="text-align:right;">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00">
+<defs>
+<style type="text/css">
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  </style>
+</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)">
+</g><defs><clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clipPath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="3.22" width="2.47" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.25" y="4.31" width="2.47" height="7.35" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.72" y="8.18" width="2.47" height="3.48" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="9.19" y="8.34" width="2.47" height="3.32" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="11.65" y="10.93" width="2.47" height="0.73" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="14.12" y="10.79" width="2.47" height="0.87" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="16.59" y="11.62" width="2.47" height="0.040" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="19.06" y="11.26" width="2.47" height="0.40" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.53" y="11.66" width="2.47" height="0.0044" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.50" width="2.47" height="0.17" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="26.47" y="11.66" width="2.47" height="0.0044" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="28.94" y="11.61" width="2.47" height="0.049" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="31.41" y="11.66" width="2.47" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="33.88" y="11.65" width="2.47" height="0.013" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="36.35" y="11.66" width="2.47" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.81" y="11.66" width="2.47" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.28" y="11.66" width="2.47" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="43.75" y="11.66" width="2.47" height="0.0044" style="stroke-width: 0.38; fill: #000000;"></rect></g>
+</svg>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Hmisc package, quick and painless hist.data.frame() function
+# but first, make sure to adjust the number of rows and columns to be displayed on your Plot Viewer
+par(mfrow = c(3, 3)) # 3 rows * 3 columns (9 variables)
+hist.data.frame(malawi_continuous)</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Now, let’s plot bar graphs and write tables of factor (categorical)
+variables:</p>
+<pre class="r"><code># == BAR GRAPHS == #
+malawi_factor &lt;- data_malawi %&gt;% select_if(~is.factor(.)) # subset of the data with all factor variables
+
+par(mfrow = c(3, 7)) # 7 rows, 3 columns (21 variables = length of df)
+
+for (i in 1:ncol(malawi_factor)) { # Loop over all the columns in the factor df subset
+    
+    # store data in column.i as x
+    x &lt;- malawi_factor[,i]
+    
+    # store name of column.i as x_name
+    x_name &lt;- colnames(malawi_factor[i])
+    
+    # Plot bar graph of x using Rbase plotting tools
+    barplot(table(x),
+            main = paste(x_name)
+    )
+    
+}</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code># == TABLES == #
+
+# We can also show tables of all factor variables (to get precise frequencies not displayed in bar plots)
+llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package</code></pre>
+<pre><code>## $north
+## 
+## not_north     north 
+##      9600      1680 
+## 
+## $central
+## 
+##    0    1 
+## 6960 4320 
+## 
+## $rural
+## 
+##    0    1 
+## 1440 9840 
+## 
+## $nevermarried
+## 
+##     0     1 
+## 10930   350 
+## 
+## $floor_cement
+## 
+##    0    1 
+## 9036 2244 
+## 
+## $electricity
+## 
+##     0     1 
+## 10620   660 
+## 
+## $flushtoilet
+## 
+##     0     1 
+## 10962   318 
+## 
+## $soap
+## 
+##    0    1 
+## 9740 1540 
+## 
+## $bed
+## 
+##    0    1 
+## 7653 3627 
+## 
+## $bike
+## 
+##    0    1 
+## 7194 4086 
+## 
+## $musicplayer
+## 
+##    0    1 
+## 9426 1854 
+## 
+## $coffeetable
+## 
+##    0    1 
+## 9956 1324 
+## 
+## $iron
+## 
+##    0    1 
+## 8962 2318 
+## 
+## $dimbagarden
+## 
+##    0    1 
+## 7658 3622 
+## 
+## $goats
+## 
+##    0    1 
+## 8856 2424 
+## 
+## $hfem
+## 
+##    0    1 
+## 8697 2583 
+## 
+## $grassroof
+## 
+##    0    1 
+## 2953 8327 
+## 
+## $mortarpestle
+## 
+##    0    1 
+## 5635 5645 
+## 
+## $table
+## 
+##    0    1 
+## 7249 4031 
+## 
+## $clock
+## 
+##    0    1 
+## 9039 2241 
+## 
+## $region
+## 
+## Centre  North  South 
+##   4320   1680   5280</code></pre>
+<p>What have we learned from the data visualisation?</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Nothing worrying about the data itself. McBride and Nichols did a
+good job of pre-processing the data for us. No pesky missing values, or
+unknown categories.</p></li>
+<li><p>From the bar plots, we can see that for the most part, people
+tend not to own assets. Worryingly, there is a lack of soap, flush
+toilets and electricity, all of which are crucial for human capital
+(health and education).</p></li>
+<li><p>From the histograms, we can see log per capita expenditure is
+normally distributed, but if we remove the log, it’s incredibly skewed.
+Poverty is endemic. Households tend not to have too many educated
+individuals, and their size is non-trivially large (with less rooms than
+people need).</p></li>
+</ol>
+<p><strong>Relationships between features</strong></p>
+<p>To finalise our exploration of the dataset, we should define:</p>
+<ul>
+<li><p>the target variable (a.k.a. outcome of interest)</p></li>
+<li><p>correlational insights</p></li>
+</ul>
+<p>Let’s visualise two distinct correlation matrices; for our numeric
+dataframe, which includes our target variable, we will plot a Pearson r
+correlation matrix. For our factor dataframe, to which we will add our
+continuous target, we will plot a Spearman rho correlation matrix. Both
+types of correlation coefficients are interpreted the same (0 = no
+correlation, 1 perfect positive correlation, -1 perfect negative
+correlation).</p>
+<pre class="r"><code># = = PEARSON CORRELATION MATRIX = = #
+
+M &lt;- cor(malawi_continuous) # create a correlation matrix of the continuous dataset, cor() uses Pearson&#39;s correlation coefficient as default. This means we can only take the correlation between continuous variables
+corrplot(M, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.8) # visualise it in a nice way</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+We can already tell that the size of the household and dependent ratio
+are highly negatively correlated to our target variable.</p>
+<pre class="r"><code># = = SPEARMAN CORRELATION MATRIX = = #
+
+malawi_factorC &lt;- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataframe to numeric, as the cor() command only takes in numeric types
+malawi_factorC$lnexp_pc_month &lt;- malawi_continuous$lnexp_pc_month # include target variable in the dataframe
+
+M2 &lt;- cor(malawi_factorC, method = &quot;spearman&quot;)
+corrplot(M2, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.3) # visualise it in a nice way</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Ownership of some assets stands out: soap, a cement floor,
+electricity, a bed… ownership of these (and a couple of other) assets is
+positively correlated to per capita expenditure. Living in a rural area,
+on the other hand, is negtively correlated to our target variable.</p>
+<p>We can also spot some correlation coefficients that equal zero. In
+some situations, the data generating mechanism can create predictors
+that only have a single unique value (i.e. a “zero-variance predictor”).
+For many ML models (excluding tree-based models), this may cause the
+model to crash or the fit to be unstable. Here, the only <span
+class="math inline">\(0\)</span> we’ve spotted is not in relation to our
+target variable.</p>
+<p>But we do observe some near-zero-variance predictors. Besides
+uninformative, these can also create unstable model fits. There’s a few
+strategies to deal with these; the quickest solution is to remove them.
+A second option, which is especially interesting in scenarios with a
+large number of predictors/variables, is to work with penalised models.
+We’ll discuss this option below. <br></p>
+<h3>
+<ol start="3" style="list-style-type: decimal">
+<li>Model fit: data partition and performance evaluation parameters
+</h3>
+<br></li>
+</ol>
+<p>We now have a general idea of the structure of the data we are
+working with, and what we’re trying to predict: per capita expenditures,
+which we believe are a proxy for poverty prevalence. Measured by the log
+of per capita monthly expenditure in our dataset, the variable is named
+lnexp_pc_month.</p>
+<p>The next step is create a simple linear model (OLS) to predict per
+capita expenditure using the variables in our dataset, and introduce the
+elements with which we will evaluate our model.</p>
+<p><strong>Data Partinioning</strong></p>
+<p>When we want to build predictive models for machine learning
+purposes, it is important to have (at least) two data sets. A training
+data set from which our model will learn, and a test data set containing
+the same features as our training data set; we use the second dataset to
+see how well our predictive model extrapolates to other samples (i.e. is
+it generalisable?). To split our main data set into two, we will work
+with an 80/20 split.</p>
+<p>The 80/20 split has its origins in the Pareto Principle, which states
+that ‘in most cases, 80% of effects from from 20% of causes’. Though
+there are other test/train splitting options, this partitioning method
+is a good place to start, and indeed standard in the machine learning
+field.</p>
+<pre class="r"><code># First, set a seed to guarantee replicability of the process
+set.seed(1234) # you can use any number you want, but to replicate the results in this tutorial you need to use this number
+
+# We could split the data manually, but the caret package includes an useful function
+
+train_idx &lt;- createDataPartition(data_malawi$lnexp_pc_month, p = .8, list = FALSE, times = 1)
+head(train_idx) # notice that observation 5 corresponds to resame indicator 7 and so on. We&#39;re shuffling and picking!</code></pre>
+<pre><code>##      Resample1
+## [1,]         1
+## [2,]         2
+## [3,]         4
+## [4,]         5
+## [5,]         7
+## [6,]         8</code></pre>
+<pre class="r"><code>Train_df &lt;- data_malawi[ train_idx,]
+Test_df  &lt;- data_malawi[-train_idx,]
+
+# Note that we have created training and testing dataframes as an 80/20 split of the original dataset.</code></pre>
+<p><strong>Prediction with Linear Models</strong></p>
+<p>We will start by fitting a predictive model using the training
+dataset; that is, our target variable <em>log of monthly per capita
+expenditures</em> or <em>lnexp_pc_month</em> will be a <span
+class="math inline">\(Y\)</span> dependent variable in a linear model
+<span class="math inline">\(Y_i = \alpha + x&#39;\beta_i +
+\epsilon_i\)</span>, and the remaining features in the data frame
+correspond to the row vectors <span
+class="math inline">\(x&#39;\beta\)</span>.</p>
+<pre class="r"><code>model1 &lt;- lm(lnexp_pc_month ~ .,Train_df) # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable lnexp_pc_month
+
+stargazer(model1, type = &quot;text&quot;) # printed in the console as text</code></pre>
+<pre><code>## 
+## ===============================================
+##                         Dependent variable:    
+##                     ---------------------------
+##                           lnexp_pc_month       
+## -----------------------------------------------
+## hhsize                       -0.292***         
+##                               (0.006)          
+##                                                
+## hhsize2                      0.012***          
+##                              (0.0005)          
+##                                                
+## agehead                        0.003           
+##                               (0.002)          
+##                                                
+## agehead2                    -0.00004**         
+##                              (0.00002)         
+##                                                
+## northnorth                   0.080***          
+##                               (0.014)          
+##                                                
+## central1                     0.252***          
+##                               (0.010)          
+##                                                
+## rural1                       -0.055***         
+##                               (0.017)          
+##                                                
+## nevermarried1                0.271***          
+##                               (0.028)          
+##                                                
+## sharenoedu                   -0.105***         
+##                               (0.020)          
+##                                                
+## shareread                    0.075***          
+##                               (0.015)          
+##                                                
+## nrooms                       0.039***          
+##                               (0.004)          
+##                                                
+## floor_cement1                0.102***          
+##                               (0.017)          
+##                                                
+## electricity1                 0.372***          
+##                               (0.027)          
+##                                                
+## flushtoilet1                 0.329***          
+##                               (0.033)          
+##                                                
+## soap1                        0.215***          
+##                               (0.014)          
+##                                                
+## bed1                         0.104***          
+##                               (0.013)          
+##                                                
+## bike1                        0.094***          
+##                               (0.011)          
+##                                                
+## musicplayer1                 0.111***          
+##                               (0.015)          
+##                                                
+## coffeetable1                 0.137***          
+##                               (0.019)          
+##                                                
+## iron1                        0.130***          
+##                               (0.014)          
+##                                                
+## dimbagarden1                 0.102***          
+##                               (0.010)          
+##                                                
+## goats1                       0.080***          
+##                               (0.012)          
+##                                                
+## dependratio                  -0.045***         
+##                               (0.006)          
+##                                                
+## hfem1                        -0.066***         
+##                               (0.012)          
+##                                                
+## grassroof1                   -0.096***         
+##                               (0.016)          
+##                                                
+## mortarpestle1                0.033***          
+##                               (0.010)          
+##                                                
+## table1                       0.051***          
+##                               (0.011)          
+##                                                
+## clock1                       0.058***          
+##                               (0.014)          
+##                                                
+## regionNorth                                    
+##                                                
+##                                                
+## regionSouth                                    
+##                                                
+##                                                
+## Constant                     7.978***          
+##                               (0.044)          
+##                                                
+## -----------------------------------------------
+## Observations                   9,024           
+## R2                             0.599           
+## Adjusted R2                    0.597           
+## Residual Std. Error      0.428 (df = 8995)     
+## F Statistic         479.041*** (df = 28; 8995) 
+## ===============================================
+## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<pre class="r"><code># We can also estimate iid and robust standard errors, using the model output package modelsummary()
+ms &lt;- modelsummary(model1,
+             vcov = list(&quot;iid&quot;,&quot;robust&quot;), # include iid and HC3 (robust) standard errors
+             statistic = c(&quot;p = {p.value}&quot;,&quot;s.e. = {std.error}&quot;),
+             stars = TRUE,
+             output = &quot;gt&quot;
+             ) # plotted as an image / object in &quot;gt&quot; format
+
+ms %&gt;% tab_header(
+    title = md(&quot;**Linear Models with iid and robust s.e.**&quot;),
+    subtitle = md(&quot;Target: (log) per capita monthly expenditure&quot;)
+)</code></pre>
+<div id="fwpwqhkfgg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fwpwqhkfgg table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#fwpwqhkfgg thead, #fwpwqhkfgg tbody, #fwpwqhkfgg tfoot, #fwpwqhkfgg tr, #fwpwqhkfgg td, #fwpwqhkfgg th {
+  border-style: none;
+}
+
+#fwpwqhkfgg p {
+  margin: 0;
+  padding: 0;
+}
+
+#fwpwqhkfgg .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fwpwqhkfgg .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fwpwqhkfgg .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fwpwqhkfgg .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fwpwqhkfgg .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fwpwqhkfgg .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fwpwqhkfgg .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fwpwqhkfgg .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fwpwqhkfgg .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#fwpwqhkfgg .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#fwpwqhkfgg .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fwpwqhkfgg .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fwpwqhkfgg .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fwpwqhkfgg .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fwpwqhkfgg .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fwpwqhkfgg .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#fwpwqhkfgg .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#fwpwqhkfgg .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#fwpwqhkfgg .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fwpwqhkfgg .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#fwpwqhkfgg .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fwpwqhkfgg .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fwpwqhkfgg .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fwpwqhkfgg .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fwpwqhkfgg .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fwpwqhkfgg .gt_left {
+  text-align: left;
+}
+
+#fwpwqhkfgg .gt_center {
+  text-align: center;
+}
+
+#fwpwqhkfgg .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fwpwqhkfgg .gt_font_normal {
+  font-weight: normal;
+}
+
+#fwpwqhkfgg .gt_font_bold {
+  font-weight: bold;
+}
+
+#fwpwqhkfgg .gt_font_italic {
+  font-style: italic;
+}
+
+#fwpwqhkfgg .gt_super {
+  font-size: 65%;
+}
+
+#fwpwqhkfgg .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#fwpwqhkfgg .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#fwpwqhkfgg .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#fwpwqhkfgg .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#fwpwqhkfgg .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#fwpwqhkfgg .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#fwpwqhkfgg .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="3" class="gt_heading gt_title gt_font_normal" style><strong>Linear Models with iid and robust s.e.</strong></td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Target: (log) per capita monthly expenditure</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=" "> </th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="(1)">(1)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="(2)">(2)</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="" class="gt_row gt_left">(Intercept)</td>
+<td headers="(1)" class="gt_row gt_center">7.978***</td>
+<td headers="(2)" class="gt_row gt_center">7.978***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.044</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.069</td></tr>
+    <tr><td headers="" class="gt_row gt_left">hhsize</td>
+<td headers="(1)" class="gt_row gt_center">-0.292***</td>
+<td headers="(2)" class="gt_row gt_center">-0.292***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.006</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.029</td></tr>
+    <tr><td headers="" class="gt_row gt_left">hhsize2</td>
+<td headers="(1)" class="gt_row gt_center">0.012***</td>
+<td headers="(2)" class="gt_row gt_center">0.012***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.000</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.003</td></tr>
+    <tr><td headers="" class="gt_row gt_left">agehead</td>
+<td headers="(1)" class="gt_row gt_center">0.003</td>
+<td headers="(2)" class="gt_row gt_center">0.003</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = 0.108</td>
+<td headers="(2)" class="gt_row gt_center">p = 0.137</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.002</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.002</td></tr>
+    <tr><td headers="" class="gt_row gt_left">agehead2</td>
+<td headers="(1)" class="gt_row gt_center">0.000*</td>
+<td headers="(2)" class="gt_row gt_center">0.000*</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = 0.015</td>
+<td headers="(2)" class="gt_row gt_center">p = 0.032</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.000</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.000</td></tr>
+    <tr><td headers="" class="gt_row gt_left">northnorth</td>
+<td headers="(1)" class="gt_row gt_center">0.080***</td>
+<td headers="(2)" class="gt_row gt_center">0.080***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.014</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.015</td></tr>
+    <tr><td headers="" class="gt_row gt_left">central1</td>
+<td headers="(1)" class="gt_row gt_center">0.252***</td>
+<td headers="(2)" class="gt_row gt_center">0.252***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.010</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.010</td></tr>
+    <tr><td headers="" class="gt_row gt_left">rural1</td>
+<td headers="(1)" class="gt_row gt_center">-0.055**</td>
+<td headers="(2)" class="gt_row gt_center">-0.055**</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = 0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = 0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.017</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.017</td></tr>
+    <tr><td headers="" class="gt_row gt_left">nevermarried1</td>
+<td headers="(1)" class="gt_row gt_center">0.271***</td>
+<td headers="(2)" class="gt_row gt_center">0.271***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.028</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.037</td></tr>
+    <tr><td headers="" class="gt_row gt_left">sharenoedu</td>
+<td headers="(1)" class="gt_row gt_center">-0.105***</td>
+<td headers="(2)" class="gt_row gt_center">-0.105***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.020</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.021</td></tr>
+    <tr><td headers="" class="gt_row gt_left">shareread</td>
+<td headers="(1)" class="gt_row gt_center">0.075***</td>
+<td headers="(2)" class="gt_row gt_center">0.075***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.015</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.015</td></tr>
+    <tr><td headers="" class="gt_row gt_left">nrooms</td>
+<td headers="(1)" class="gt_row gt_center">0.039***</td>
+<td headers="(2)" class="gt_row gt_center">0.039***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.004</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.004</td></tr>
+    <tr><td headers="" class="gt_row gt_left">floor_cement1</td>
+<td headers="(1)" class="gt_row gt_center">0.102***</td>
+<td headers="(2)" class="gt_row gt_center">0.102***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.017</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.018</td></tr>
+    <tr><td headers="" class="gt_row gt_left">electricity1</td>
+<td headers="(1)" class="gt_row gt_center">0.372***</td>
+<td headers="(2)" class="gt_row gt_center">0.372***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.027</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.029</td></tr>
+    <tr><td headers="" class="gt_row gt_left">flushtoilet1</td>
+<td headers="(1)" class="gt_row gt_center">0.329***</td>
+<td headers="(2)" class="gt_row gt_center">0.329***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.033</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.042</td></tr>
+    <tr><td headers="" class="gt_row gt_left">soap1</td>
+<td headers="(1)" class="gt_row gt_center">0.215***</td>
+<td headers="(2)" class="gt_row gt_center">0.215***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.014</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.014</td></tr>
+    <tr><td headers="" class="gt_row gt_left">bed1</td>
+<td headers="(1)" class="gt_row gt_center">0.104***</td>
+<td headers="(2)" class="gt_row gt_center">0.104***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.013</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.013</td></tr>
+    <tr><td headers="" class="gt_row gt_left">bike1</td>
+<td headers="(1)" class="gt_row gt_center">0.094***</td>
+<td headers="(2)" class="gt_row gt_center">0.094***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.011</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.011</td></tr>
+    <tr><td headers="" class="gt_row gt_left">musicplayer1</td>
+<td headers="(1)" class="gt_row gt_center">0.111***</td>
+<td headers="(2)" class="gt_row gt_center">0.111***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.015</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.015</td></tr>
+    <tr><td headers="" class="gt_row gt_left">coffeetable1</td>
+<td headers="(1)" class="gt_row gt_center">0.137***</td>
+<td headers="(2)" class="gt_row gt_center">0.137***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.019</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.019</td></tr>
+    <tr><td headers="" class="gt_row gt_left">iron1</td>
+<td headers="(1)" class="gt_row gt_center">0.130***</td>
+<td headers="(2)" class="gt_row gt_center">0.130***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.014</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.014</td></tr>
+    <tr><td headers="" class="gt_row gt_left">dimbagarden1</td>
+<td headers="(1)" class="gt_row gt_center">0.102***</td>
+<td headers="(2)" class="gt_row gt_center">0.102***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.010</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.010</td></tr>
+    <tr><td headers="" class="gt_row gt_left">goats1</td>
+<td headers="(1)" class="gt_row gt_center">0.080***</td>
+<td headers="(2)" class="gt_row gt_center">0.080***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.012</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.012</td></tr>
+    <tr><td headers="" class="gt_row gt_left">dependratio</td>
+<td headers="(1)" class="gt_row gt_center">-0.045***</td>
+<td headers="(2)" class="gt_row gt_center">-0.045***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.006</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.009</td></tr>
+    <tr><td headers="" class="gt_row gt_left">hfem1</td>
+<td headers="(1)" class="gt_row gt_center">-0.066***</td>
+<td headers="(2)" class="gt_row gt_center">-0.066***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.012</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.013</td></tr>
+    <tr><td headers="" class="gt_row gt_left">grassroof1</td>
+<td headers="(1)" class="gt_row gt_center">-0.096***</td>
+<td headers="(2)" class="gt_row gt_center">-0.096***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.016</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.016</td></tr>
+    <tr><td headers="" class="gt_row gt_left">mortarpestle1</td>
+<td headers="(1)" class="gt_row gt_center">0.033**</td>
+<td headers="(2)" class="gt_row gt_center">0.033**</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = 0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = 0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.010</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.010</td></tr>
+    <tr><td headers="" class="gt_row gt_left">table1</td>
+<td headers="(1)" class="gt_row gt_center">0.051***</td>
+<td headers="(2)" class="gt_row gt_center">0.051***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">s.e. = 0.011</td>
+<td headers="(2)" class="gt_row gt_center">s.e. = 0.012</td></tr>
+    <tr><td headers="" class="gt_row gt_left">clock1</td>
+<td headers="(1)" class="gt_row gt_center">0.058***</td>
+<td headers="(2)" class="gt_row gt_center">0.058***</td></tr>
+    <tr><td headers="" class="gt_row gt_left"></td>
+<td headers="(1)" class="gt_row gt_center">p = &lt;0.001</td>
+<td headers="(2)" class="gt_row gt_center">p = &lt;0.001</td></tr>
+    <tr><td headers="" class="gt_row gt_left" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;"></td>
+<td headers="(1)" class="gt_row gt_center" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">s.e. = 0.014</td>
+<td headers="(2)" class="gt_row gt_center" style="border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">s.e. = 0.014</td></tr>
+    <tr><td headers="" class="gt_row gt_left">Num.Obs.</td>
+<td headers="(1)" class="gt_row gt_center">9024</td>
+<td headers="(2)" class="gt_row gt_center">9024</td></tr>
+    <tr><td headers="" class="gt_row gt_left">R2</td>
+<td headers="(1)" class="gt_row gt_center">0.599</td>
+<td headers="(2)" class="gt_row gt_center">0.599</td></tr>
+    <tr><td headers="" class="gt_row gt_left">R2 Adj.</td>
+<td headers="(1)" class="gt_row gt_center">0.597</td>
+<td headers="(2)" class="gt_row gt_center">0.597</td></tr>
+    <tr><td headers="" class="gt_row gt_left">AIC</td>
+<td headers="(1)" class="gt_row gt_center">10317.3</td>
+<td headers="(2)" class="gt_row gt_center">10317.3</td></tr>
+    <tr><td headers="" class="gt_row gt_left">BIC</td>
+<td headers="(1)" class="gt_row gt_center">10530.5</td>
+<td headers="(2)" class="gt_row gt_center">10530.5</td></tr>
+    <tr><td headers="" class="gt_row gt_left">Log.Lik.</td>
+<td headers="(1)" class="gt_row gt_center">-5128.658</td>
+<td headers="(2)" class="gt_row gt_center">-5128.658</td></tr>
+    <tr><td headers="" class="gt_row gt_left">RMSE</td>
+<td headers="(1)" class="gt_row gt_center">0.43</td>
+<td headers="(2)" class="gt_row gt_center">0.43</td></tr>
+    <tr><td headers="" class="gt_row gt_left">Std.Errors</td>
+<td headers="(1)" class="gt_row gt_center">IID</td>
+<td headers="(2)" class="gt_row gt_center">HC3</td></tr>
+  </tbody>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="3">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td>
+    </tr>
+  </tfoot>
+  
+</table>
+</div>
+<pre class="r"><code># You can see that the variable region was not included in the output (this is because we already have dummies of north (not north = south), and central region). We may need to clean our dataset un some further steps. </code></pre>
+<p>Recall that one of the assumptions of a linear model is that errors
+are independent and identically distributed. We could run some tests to
+determine this, but with the contrast of the iid and robust errors (HC3)
+in the modelsummary output table we can already tell that this is not an
+issue/something to worry about in our estimations.</p>
+<p>Besides the regression output table, we can can also visualise the
+magnitude and significance of the coefficients with a plot. The further
+away the variable (dot) marker is from the <span
+class="math inline">\(0\)</span> line, the larger the magnitude.</p>
+<pre class="r"><code>modelplot(model1) + 
+          aes(color = ifelse(p.value &lt; 0.001, &quot;Significant&quot;, &quot;Not significant&quot;)) +
+              scale_color_manual(values = c(&quot;grey&quot;, &quot;black&quot;)
+                                 )</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>           # grey points indicate statistically insignificat (p&gt;0.001) coefficient estimates
+           # The scale of the plot is large due to the intercept estimate</code></pre>
+<p>Not unlike what we saw in out correlation matrix, household size,
+electricity, having a flush toilet… the magnitude of the impact of these
+variables on monthly per capita expenditure is significantly larger than
+that of other assets/predictors.</p>
+<p><strong>Performance Indicators</strong></p>
+<p>In predictive modelling, we are interested in the following
+performance metrics:</p>
+<ul>
+<li><p>Model <em>residuals</em>: recall residuals are the observed value
+minus the predicted value. We can estimate a model’s Root Mean Squared
+Error (RMSE) or the Mean Absolute Error (MAE). Residuals allow us to
+quantify the extent to which the predicted response value (for a given
+observation) is close to the true response value. Small RMSE or MAE
+values indicate that the prediction is close to the true observed
+value.</p></li>
+<li><p>The <em>p-values</em>: represented by stars *** (and a
+pre-defined critical threshold, e.g. 0.05), they point to the predictive
+power of each feature in the model; i.e. that the event does not occur
+by chance. In the same vein, the magnitude of the coefficient is also
+important, especially given that we are interested in explanatory power
+and not causality.</p></li>
+<li><p>The <em>R-squared</em>: arguably the go-to indicator for
+performance assessment. Low R^2 values are not uncommon, especially in
+the social sciences. However, when hoping to use a model for predictive
+purposes, a low R^2 is a bad sign, large number of statistically
+significant features notwithstanding. The drawback from relying solely
+on this measure is that it does not take into consideration the problem
+of model over-fitting; i.e. you can inflate the R-squared by adding as
+many variables as you want, even if those variables have little
+predicting power. This method will yield great results in the training
+data, but will under perform when extrapolating the model to the test
+(or indeed any other) data set.</p></li>
+</ul>
+<p><strong><em>Residuals</em></strong></p>
+<pre class="r"><code># = = Model Residuals = = #
+print(summary(model1$residuals))</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## -3.483927 -0.288657 -0.007872  0.000000  0.266950  1.887123</code></pre>
+<p>Recall that the residual is estimated as the true (observed) value
+minus the predicted value. Thus: the max(imum) error of 1.88 suggests
+that the model under-predicted expenditure by circa (log) $2 (or $6.5)
+for at least one observation. Fifty percent of the predictions (between
+the first and third quartiles) lie between (log) $0.28 and (log) $0.26
+over the true value. From the estimation of the prediction residuals we
+obtain the popular measure of performance evaluation known as the Root
+Mean Squared Error (RMSE, for short).</p>
+<pre class="r"><code># Calculate the RMSE for the training dataset, or the in-sample RMSE.
+
+# 1. Predict values on the training dataset
+p0 &lt;- predict(model1, Train_df)
+
+# 2. Obtain the errors (predicted values minus observed values of target variable)
+error0 &lt;- p0 - Train_df[[&quot;lnexp_pc_month&quot;]]
+
+# 3. In-sample RMSE
+RMSE_insample &lt;- sqrt(mean(error0 ^ 2))
+print(RMSE_insample)</code></pre>
+<pre><code>## [1] 0.4271572</code></pre>
+<pre class="r"><code># TIP: Notice that the in-sample RMSE we have just estimated was also printed in the linear model (regression) output tables!
+# The table printed with the stargazer package returns this value at the bottom, under the header Residual Std. Error (0.428)
+# The table printed with the modelsummary package returns this value at the bottom, under the header RMSE (0.43), rounded up. </code></pre>
+<p>The RMSE (0.4271) gives us an absolute number that indicates how much
+our predicted values deviate from the true (observed) number. This is
+all in reference to the target vector (a.k.a. our outcome variable).
+Think of the question, <em>how far, on average, are the residuals away
+from zero?</em> Generally speaking, the lower the value, the better the
+model fit. Besides being a good measure of goodness of fit, the RMSE is
+also useful for comparing the ability of our model to make predictions
+on different (e.g. test) data sets. The in-sample RMSE should be close
+or equal to the out-of-sample RMSE.</p>
+<p>In this case, our RMSE is ~0.4 units away from zero. Given the range
+of the target variable (roughly 4 to 11), the number seems to be
+relatively small and close enough to zero.</p>
+<p><strong><em>P-values</em></strong> Recall the large number of
+statistically significant features in our model. The coefficient plot,
+where we indicate that statistical significance is defined by a p-value
+threshold of 0.001, a strict rule (given the popularity of the more
+relaxed 0.05 critical value), shows that only 4 out of 29
+features/variables do not meet this criterion. We can conclude that the
+features we have selected are relevant predictors.</p>
+<p><strong><em>R-squared</em></strong></p>
+<pre class="r"><code>print(summary(model1))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lnexp_pc_month ~ ., data = Train_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4839 -0.2887 -0.0079  0.2669  1.8871 
+## 
+## Coefficients: (2 not defined because of singularities)
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.978e+00  4.409e-02 180.945  &lt; 2e-16 ***
+## hhsize        -2.919e-01  6.429e-03 -45.397  &lt; 2e-16 ***
+## hhsize2        1.206e-02  4.811e-04  25.067  &lt; 2e-16 ***
+## agehead        2.749e-03  1.712e-03   1.606  0.10835    
+## agehead2      -4.168e-05  1.717e-05  -2.428  0.01519 *  
+## northnorth     8.001e-02  1.439e-02   5.560 2.78e-08 ***
+## central1       2.521e-01  1.023e-02  24.639  &lt; 2e-16 ***
+## rural1        -5.483e-02  1.687e-02  -3.250  0.00116 ** 
+## nevermarried1  2.706e-01  2.839e-02   9.533  &lt; 2e-16 ***
+## sharenoedu    -1.045e-01  2.006e-02  -5.212 1.91e-07 ***
+## shareread      7.514e-02  1.502e-02   5.004 5.72e-07 ***
+## nrooms         3.898e-02  4.032e-03   9.670  &lt; 2e-16 ***
+## floor_cement1  1.016e-01  1.742e-02   5.835 5.58e-09 ***
+## electricity1   3.718e-01  2.696e-02  13.793  &lt; 2e-16 ***
+## flushtoilet1   3.295e-01  3.263e-02  10.099  &lt; 2e-16 ***
+## soap1          2.150e-01  1.413e-02  15.220  &lt; 2e-16 ***
+## bed1           1.040e-01  1.297e-02   8.019 1.20e-15 ***
+## bike1          9.395e-02  1.064e-02   8.831  &lt; 2e-16 ***
+## musicplayer1   1.111e-01  1.451e-02   7.658 2.08e-14 ***
+## coffeetable1   1.369e-01  1.866e-02   7.338 2.36e-13 ***
+## iron1          1.302e-01  1.378e-02   9.455  &lt; 2e-16 ***
+## dimbagarden1   1.018e-01  1.017e-02  10.017  &lt; 2e-16 ***
+## goats1         7.964e-02  1.168e-02   6.820 9.68e-12 ***
+## dependratio   -4.501e-02  5.848e-03  -7.697 1.55e-14 ***
+## hfem1         -6.570e-02  1.238e-02  -5.307 1.14e-07 ***
+## grassroof1    -9.590e-02  1.575e-02  -6.089 1.18e-09 ***
+## mortarpestle1  3.288e-02  1.027e-02   3.200  0.00138 ** 
+## table1         5.074e-02  1.149e-02   4.417 1.01e-05 ***
+## clock1         5.840e-02  1.423e-02   4.103 4.11e-05 ***
+## regionNorth           NA         NA      NA       NA    
+## regionSouth           NA         NA      NA       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4278 on 8995 degrees of freedom
+## Multiple R-squared:  0.5986, Adjusted R-squared:  0.5973 
+## F-statistic:   479 on 28 and 8995 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We have printed our model’s output once more, now using the r base
+command summary(). The other packages (stargazer and modelsummary) are
+great if you want to export your results in text, html, latex format,
+but not necessary if you just want to print your output. The estimated
+(Multiple) R-squared of 0.59 tells us that our model predicts around 60
+per cent of the variation in the independent variable (our target, log
+of per capita monthly expenditures). Also note that when we have a large
+number of predictors, it’s best to look at the Adjusted R-squared (of
+0.59), which corrects or adjusts for this by only increasing when a new
+feature improves the model more so than what would be expected by
+chance.</p>
+<p><strong>Out of sample predictions </strong></p>
+<p>Now that we have built and evaluated our model in the training
+dataset, we can proceed to make out-of-sample predictions. That is, see
+how our model performs in the test dataset.</p>
+<pre class="r"><code>p &lt;- predict(model1, Test_df)
+
+cat(&quot;observed summary statistics of target variable in full dataset&quot;)</code></pre>
+<pre><code>## observed summary statistics of target variable in full dataset</code></pre>
+<pre class="r"><code>print(summary(data_malawi$lnexp_pc_month))</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   4.777   6.893   7.305   7.359   7.758  11.064</code></pre>
+<pre class="r"><code>cat(&quot;predictions based on the training dataset&quot;)</code></pre>
+<pre><code>## predictions based on the training dataset</code></pre>
+<pre class="r"><code>print(summary(p0))</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   6.011   6.980   7.308   7.357   7.661  10.143</code></pre>
+<pre class="r"><code>cat(&quot;predictions from the testing dataset&quot;)</code></pre>
+<pre><code>## predictions from the testing dataset</code></pre>
+<pre class="r"><code>print(summary(p))</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   6.052   6.999   7.323   7.375   7.670   9.774</code></pre>
+<p>The summary statistics for the predictions with the train and test
+datasets are very close to one another. This is an indication that our
+model extrapolates well to other datasets. Compared to the observed
+summary statistics of the target variable, they’re relatively close,
+with the largest deviations observed at the minimum and maximum
+values.</p>
+<p><strong>The bias-variance tradeoff in practice</strong></p>
+<p>We previously mentioned that the RMSE metric could also be used to
+compare between train and test model predictions. Let us estimate the
+out-of-sample RMSE:</p>
+<pre class="r"><code>error &lt;- p - Test_df[[&quot;lnexp_pc_month&quot;]] # predicted values minus actual values
+RMSE_test &lt;- sqrt(mean(error^2))
+print(RMSE_test) # this is known as the out-of-sample RMSE</code></pre>
+<pre><code>## [1] 0.4284404</code></pre>
+<p>Notice that the <em>in-sample RMSE</em> [<span
+class="math inline">\(0.4271572\)</span>] is very close to the
+<em>out-of-sample RMSE</em> [<span
+class="math inline">\(0.4284404\)</span>]. This means that our model
+makes consistent predictions across different data sets. We also know by
+now that these predictions are relatively good. At least, we hit the
+mark around 60 per cent of the time. What we are observing here is a
+model that has found a balance between bias and variance. However, both
+measures can still improve. For one, McBride and Nichols (2018) report
+&gt; 80 per cent accuracy in their poverty predictions for Malawi. But
+please note that, at this point, we are not replicating their approach.
+They document using a classification model, which means that they
+previously used a poverty line score and divided the sample between
+individuals below and above the poverty line.</p>
+<p><em>What do we mean by bias in a model?</em></p>
+<p>The bias is the difference between the average prediction of our
+model and the true (observed) value. Minimising the bias is analogous to
+minimising the RMSE.</p>
+<p><em>What do we mean by variance in a model?</em></p>
+<p>It is the observed variability of our model prediction for a given
+data point (how much the model can adjust given the data set). A model
+with high variance would yield low error values in the training data but
+high errors in the test data.</p>
+<p>Hence, consistent in and out of sample RMSE scores = bias/variance
+balance.</p>
+<p><strong>Fine-tuning model parameters</strong></p>
+<p>Can we fine-tune model parameters? The quick answer is yes! Every
+algorithm has a set of parameters that can be adjusted/fine-tuned to
+improve our estimations. Even in the case of a simple linear model, we
+can try our hand at fine-tuning with, for example, cross-validation.</p>
+<p><em>What is cross-validation?</em></p>
+<p>Broadly speaking, it is a technique that allows us to assess the
+performance of our machine learning model. How so? Well, it looks at the
+‘stability’ of the model. It’s a measure of how well our model would
+work on new, unseen data (is this ringing a bell yet?); i.e. it has
+correctly observed and recorded the patterns in the data and has not
+captured too much noise (what we know as the error term, or what we are
+unable to explain with our model). K-fold cross-validation is a good
+place to start for such a thing. In the words of <a
+href="https://www.javatpoint.com/cross-validation-in-machine-learning">The
+Internet™</a>, what k-fold cross validation does is:</p>
+<pre><code>Split the input dataset into K groups
++ For each group:
+    + Take one group as the reserve or test data set.
+    + Use remaining groups as the training dataset.
+    + Fit the model on the training set and evaluate the performance of the model using the test set.</code></pre>
+<p>TL;DR We’re improving our splitting technique!</p>
+<p>An Illustration by <a
+href="https://eugenia-anello.medium.com/">Eugenia Anello</a></p>
+<center>
+<div class="figure">
+<img src="Images/kfold_crossvalidation.png" alt=" " width="65%" />
+<p class="caption">
+</p>
+</div>
+</center>
+<pre class="r"><code># Let&#39;s rumble! 
+
+set.seed(12345)
+
+# create an object that defines the training method as cross-validation and number of folds (caret pkg)
+cv_10fold &lt;- trainControl(
+    method = &quot;cv&quot;, #cross-validation
+    number = 10 # k-fold = 10-fold (split the data into 10 similar-sized samples)
+)
+
+set.seed(12345)
+
+# train a model 
+ols_kfold &lt;- train(
+    lnexp_pc_month ~ .,
+    data = Train_df,
+    method = &#39;lm&#39;, # runs a linear regression model (or ols)
+    trControl = cv_10fold # use 10 folds to cross-validate
+)
+ols_kfold2 &lt;- train(
+    lnexp_pc_month ~ .,
+    data = Test_df,
+    method = &#39;lm&#39;, # runs a linear regression model (or ols)
+    trControl = cv_10fold # use 10 folds to cross-validate
+)
+
+ols_kfold3 &lt;- train(
+    lnexp_pc_month ~ .,
+    data = data_malawi,
+    method = &#39;lm&#39;, # runs a linear regression model (or ols)
+    trControl = cv_10fold # use 10 folds to cross-validate
+)
+
+cat(&quot; Linear model with train dataset&quot;)</code></pre>
+<pre><code>##  Linear model with train dataset</code></pre>
+<pre class="r"><code>print(ols_kfold)</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 9024 samples
+##   29 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 8121, 8121, 8123, 8122, 8121, 8121, ... 
+## Resampling results:
+## 
+##   RMSE       Rsquared   MAE      
+##   0.4295064  0.5947776  0.3365398
+## 
+## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
+<pre class="r"><code>cat(&quot; Linear model with test dataset&quot;)</code></pre>
+<pre><code>##  Linear model with test dataset</code></pre>
+<pre class="r"><code>print(ols_kfold2)</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 2256 samples
+##   29 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 2030, 2030, 2030, 2030, 2031, 2031, ... 
+## Resampling results:
+## 
+##   RMSE       Rsquared   MAE      
+##   0.4312944  0.5991526  0.3379473
+## 
+## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
+<pre class="r"><code>cat(&quot; Linear model with full dataset&quot;)</code></pre>
+<pre><code>##  Linear model with full dataset</code></pre>
+<pre class="r"><code>print(ols_kfold3)</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 11280 samples
+##    29 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 10152, 10152, 10152, 10152, 10152, 10152, ... 
+## Resampling results:
+## 
+##   RMSE       Rsquared   MAE      
+##   0.4291473  0.5965825  0.3363802
+## 
+## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
+<p>Having cross-validated our model with 10 folds, we can see that the
+results are virtually the same. We have a RMSE of around .43, an R^2 of
+.59, (and a MAE of .33). We ran the same model for the train, test and
+full datasets and find results are consistent. Recall the R^2 tells us
+the model’s predictive ability and the RMSE and MAE the model’s
+accuracy.</p>
+<p><strong>NOTE:</strong> k-fold cross-validation replaces our original
+80/20 split (we don’t need to do that anymore!) Therefore, we use the
+full dataset in the train() function. Using the train,test and full
+datasets in the example above was just for pedagogical purposes but it
+is no longer necessary and we can use the reported estimates of R^2
+(close to 1!), RMSE (close to 0!) and MAE (let’s go low!) for model
+assessment without comparing them to another set of predictions.
+<br></p>
+<h3>
+<ol start="4" style="list-style-type: decimal">
+<li>Feature selection with Lasso linear regression
+</h3>
+<br></li>
+</ol>
+<p>An OLS regression is not the only model that can be written in the
+form of <span class="math inline">\(Y_i = \alpha + \beta_1X_{1i},
+\beta_2X_{2i},..., \beta_pX_{pi}+ u_i\)</span>. In this section we will
+discuss ‘penalised’ models, which can also be expressed as a linear
+relationship between parameters. Penalised regression models are also
+known as regression shrinkage methods, and they take their name after
+the colloquial term for coefficient regularisation, ‘shrinkage’ of
+estimated coefficients. The goal of penalised models, as opposed to a
+traditional linear model, is not to minimise bias (least squares
+approach), but to reduce variance by adding a constraint to the equation
+and effectively pushing coefficient parameters towards 0. This results
+in the the worse model predictors having a coefficient of zero or close
+to zero.</p>
+<p>Consider a scenario where you have dozens hundreds of predictors.
+Which covariates are truly important for our known outcome? Including
+all of the predictors leads to <em>over-fitting</em>. We’ll find that
+the R^2 value is high, and conclude that our in-sample fit is good.
+However, this may lead to bad out-of-sample predictions. <em>Model
+selection</em> is a particularly challenging endeavour when we encounter
+high-dimensional data; i.e. when the number of variables is close to or
+larger than the number of observations. Some examples where you may
+encounter high-dimensional data include:</p>
+<ol style="list-style-type: decimal">
+<li><p>Cross-country analyses: we have a small and finite number of
+countries, but we may collect/observe as many variables as we
+want.</p></li>
+<li><p>Cluster-population analyses: we wish to understand the outcome of
+some unique population <span class="math inline">\(n\)</span>, e.g. all
+students from classroom A. We collect plenty of information on these
+students, but the sample and the population are analogous <span
+class="math inline">\(n = N\)</span>, and thus the sample number of
+observations is small and finite.</p></li>
+</ol>
+<p>The LASSO - Least Absolute Shrinkage and Selection Operator imposes a
+shrinking penalty to those predictors that do not actually belong in the
+model, and reduces the size of the estimated <span
+class="math inline">\(\beta\)</span> coefficients towards and including
+zero (when the tuning parameter/ shrinkage penalty <span
+class="math inline">\(\lambda\)</span> is sufficiently large). Note that
+<span class="math inline">\(lambda\)</span> is the penalty term called
+<em>L1-norm</em>, and corresponds to the sum of the absolute
+coefficients.</p>
+<p>What does this mean for our case? Well, McBride and Nichols (2018)
+used two sources to compile their final dataset (which we are using).
+One of those sources is the Living Standards Measurement Study (<a
+href="https://www.worldbank.org/en/programs/lsms">LSMS</a>) from the
+World Bank Group. These surveys collect more than 500 variables/
+features per country case. You can subset the dataset with critical
+reasoning: using your knowledge of the phenomenon, which features might
+best describe it? But even then, we might still end up with a large
+number of features. Perhaps a LASSO approach could work here.</p>
+<p>Our own data is not ideal for the approach, because it has a small
+number of features (<span class="math inline">\(29\)</span>), compared
+to the large number of observations (<span
+class="math inline">\(11,280\)</span>). But let’s run a lasso regression
+and see if my statement holds. How would I know if it holds? If the
+Lasso regression returns the same values for the performance assessment
+parameters as the OLS regression; this means that the penalisation
+parameter was either zero (leading back to an OLS) or too small to make
+a difference.</p>
+<pre class="r"><code>### small detour ... 
+summary(model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lnexp_pc_month ~ ., data = Train_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4839 -0.2887 -0.0079  0.2669  1.8871 
+## 
+## Coefficients: (2 not defined because of singularities)
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.978e+00  4.409e-02 180.945  &lt; 2e-16 ***
+## hhsize        -2.919e-01  6.429e-03 -45.397  &lt; 2e-16 ***
+## hhsize2        1.206e-02  4.811e-04  25.067  &lt; 2e-16 ***
+## agehead        2.749e-03  1.712e-03   1.606  0.10835    
+## agehead2      -4.168e-05  1.717e-05  -2.428  0.01519 *  
+## northnorth     8.001e-02  1.439e-02   5.560 2.78e-08 ***
+## central1       2.521e-01  1.023e-02  24.639  &lt; 2e-16 ***
+## rural1        -5.483e-02  1.687e-02  -3.250  0.00116 ** 
+## nevermarried1  2.706e-01  2.839e-02   9.533  &lt; 2e-16 ***
+## sharenoedu    -1.045e-01  2.006e-02  -5.212 1.91e-07 ***
+## shareread      7.514e-02  1.502e-02   5.004 5.72e-07 ***
+## nrooms         3.898e-02  4.032e-03   9.670  &lt; 2e-16 ***
+## floor_cement1  1.016e-01  1.742e-02   5.835 5.58e-09 ***
+## electricity1   3.718e-01  2.696e-02  13.793  &lt; 2e-16 ***
+## flushtoilet1   3.295e-01  3.263e-02  10.099  &lt; 2e-16 ***
+## soap1          2.150e-01  1.413e-02  15.220  &lt; 2e-16 ***
+## bed1           1.040e-01  1.297e-02   8.019 1.20e-15 ***
+## bike1          9.395e-02  1.064e-02   8.831  &lt; 2e-16 ***
+## musicplayer1   1.111e-01  1.451e-02   7.658 2.08e-14 ***
+## coffeetable1   1.369e-01  1.866e-02   7.338 2.36e-13 ***
+## iron1          1.302e-01  1.378e-02   9.455  &lt; 2e-16 ***
+## dimbagarden1   1.018e-01  1.017e-02  10.017  &lt; 2e-16 ***
+## goats1         7.964e-02  1.168e-02   6.820 9.68e-12 ***
+## dependratio   -4.501e-02  5.848e-03  -7.697 1.55e-14 ***
+## hfem1         -6.570e-02  1.238e-02  -5.307 1.14e-07 ***
+## grassroof1    -9.590e-02  1.575e-02  -6.089 1.18e-09 ***
+## mortarpestle1  3.288e-02  1.027e-02   3.200  0.00138 ** 
+## table1         5.074e-02  1.149e-02   4.417 1.01e-05 ***
+## clock1         5.840e-02  1.423e-02   4.103 4.11e-05 ***
+## regionNorth           NA         NA      NA       NA    
+## regionSouth           NA         NA      NA       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4278 on 8995 degrees of freedom
+## Multiple R-squared:  0.5986, Adjusted R-squared:  0.5973 
+## F-statistic:   479 on 28 and 8995 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code># notice that region dummies are repeated and therefore return NA in the output. We should clean this before proceeding.
+# these guys are troublesome (recall our conversation about zero-variance predictors?)
+data_malawi2 &lt;- data_malawi[,-which(colnames(data_malawi)==&quot;region&quot;)]
+summary(lm(lnexp_pc_month~., data = data_malawi2)) # no more excluded categorical variables (recall this happened in our original linear model due to repeated measures?)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lnexp_pc_month ~ ., data = data_malawi2)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.6626 -0.2906 -0.0096  0.2665  1.8788 
+## 
+## Coefficients:
+##                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.965e+00  3.947e-02 201.781  &lt; 2e-16 ***
+## hhsize        -2.979e-01  5.854e-03 -50.893  &lt; 2e-16 ***
+## hhsize2        1.246e-02  4.401e-04  28.307  &lt; 2e-16 ***
+## agehead        3.545e-03  1.529e-03   2.319 0.020433 *  
+## agehead2      -5.079e-05  1.532e-05  -3.315 0.000918 ***
+## northnorth     7.452e-02  1.292e-02   5.766 8.32e-09 ***
+## central1       2.552e-01  9.119e-03  27.979  &lt; 2e-16 ***
+## rural1        -5.488e-02  1.507e-02  -3.642 0.000272 ***
+## nevermarried1  2.416e-01  2.507e-02   9.638  &lt; 2e-16 ***
+## sharenoedu    -1.053e-01  1.802e-02  -5.845 5.21e-09 ***
+## shareread      7.838e-02  1.344e-02   5.832 5.63e-09 ***
+## nrooms         4.182e-02  3.609e-03  11.587  &lt; 2e-16 ***
+## floor_cement1  9.460e-02  1.546e-02   6.119 9.73e-10 ***
+## electricity1   3.719e-01  2.387e-02  15.579  &lt; 2e-16 ***
+## flushtoilet1   3.471e-01  2.886e-02  12.027  &lt; 2e-16 ***
+## soap1          2.163e-01  1.261e-02  17.154  &lt; 2e-16 ***
+## bed1           1.051e-01  1.156e-02   9.099  &lt; 2e-16 ***
+## bike1          9.405e-02  9.516e-03   9.883  &lt; 2e-16 ***
+## musicplayer1   1.090e-01  1.287e-02   8.466  &lt; 2e-16 ***
+## coffeetable1   1.311e-01  1.641e-02   7.991 1.47e-15 ***
+## iron1          1.325e-01  1.231e-02  10.761  &lt; 2e-16 ***
+## dimbagarden1   9.140e-02  9.095e-03  10.049  &lt; 2e-16 ***
+## goats1         8.671e-02  1.049e-02   8.269  &lt; 2e-16 ***
+## dependratio   -4.086e-02  5.225e-03  -7.820 5.74e-15 ***
+## hfem1         -6.761e-02  1.102e-02  -6.135 8.80e-10 ***
+## grassroof1    -9.138e-02  1.394e-02  -6.556 5.77e-11 ***
+## mortarpestle1  3.207e-02  9.193e-03   3.489 0.000487 ***
+## table1         5.132e-02  1.029e-02   4.987 6.23e-07 ***
+## clock1         6.254e-02  1.273e-02   4.912 9.16e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4278 on 11251 degrees of freedom
+## Multiple R-squared:  0.5997, Adjusted R-squared:  0.5987 
+## F-statistic: 601.9 on 28 and 11251 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>set.seed(12345)
+cv_10fold &lt;- trainControl(
+    method = &quot;cv&quot;, 
+    number = 10 
+)
+set.seed(12345)
+model_lasso &lt;- caret::train(
+    lnexp_pc_month ~ .,
+    data = data_malawi,
+    method = &#39;lasso&#39;,
+    preProcess = c(&quot;center&quot;, &quot;scale&quot;), #This will first center and then scale all relevant variables in the model
+    trControl = cv_10fold # use 10 folds to cross-validate // we already know this fine-tuning may not be needed!
+    )
+
+print(model_lasso) # best R^2 and RMSE is similar to the one using a linear regression...( and so is the MAE!)</code></pre>
+<pre><code>## The lasso 
+## 
+## 11280 samples
+##    29 predictor
+## 
+## Pre-processing: centered (30), scaled (30) 
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 10152, 10152, 10152, 10152, 10152, 10152, ... 
+## Resampling results across tuning parameters:
+## 
+##   fraction  RMSE       Rsquared   MAE      
+##   0.1       0.5953796  0.4234291  0.4653872
+##   0.5       0.4485973  0.5660193  0.3533998
+##   0.9       0.4295497  0.5957600  0.3368464
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final value used for the model was fraction = 0.9.</code></pre>
+<p><strong>Parameter-tuning in our Lasso regression</strong></p>
+<p>Let’s start with centering and scaling variables; why do we do
+that?</p>
+<p><em>Centering and Scaling in Lasso</em>: Recall that the L1-norm puts
+constraints on the size of the coefficients of the Lasso regression. The
+size, of course, differs based on the different scales the variables are
+measured. Having <span class="math inline">\(1\)</span> and up to <span
+class="math inline">\(55\)</span> electric gadgets at home is not the
+same as earning between <span class="math inline">\(1000\)</span> and
+<span class="math inline">\(100,000\)</span> monthly (of whichever
+currency you want to imagine here). There are two immediate consequences
+of centering and scaling (or normalising). 1) There is no longer an
+intercept. 2) It is easier to rank the relative magnitude of the
+coefficients post-shrinkage.</p>
+<p><em>Cross-validation in Lasso:</em> Beyond training and testing
+dataframes, what a k-fold (commonly 10-fold) cross validation does is
+resample the data to find an optimal (λ) lambda/penalisation for the
+lasso model and assess its predictive error. Recall: The optimal λ
+(lambda)/penalisation minimizes the out-of-sample (or test) mean
+prediction error.</p>
+<p>This tuning is already included in the chunk of code above.</p>
+<pre class="r"><code># Let&#39;s visualise our lasso model:
+plot(model_lasso)</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<pre class="r"><code>cat(&quot;The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)&quot;)</code></pre>
+<pre><code>## The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)</code></pre>
+<p>It seems that the fraction used (0.9) is close to the non-penalised
+model (or OLS/linear). Our original claim that this particular set-up
+does not call for a Lasso approach was correct. We may want to try other
+machine learning algorithms to see if we can improve our initial
+predictions!</p>
+<p>A final note: there is some discussion over whether k-fold or really
+any cross-validation technique is optimal for choosing the lambda
+parameter in Lasso models (see for example, this Coursera <a
+href="https://www.coursera.org/lecture/ml-regression/choosing-the-penalty-strength-and-other-practical-issues-with-lasso-SPr8p">video</a>).
+It is true that cross-validation is something that we want to do for ALL
+our machine learning models. Just make sure to make an informed choice
+of which cv technique you’ll implement in your model.</p>
+<p><strong>Multiple categorical variables is problematic with
+Lasso!</strong></p>
+<p>Lasso models do not perform well with multiple categorical variables.
+As is our case. Primarily because, in order to work with categorical
+data in lasso models we encode them as dummies (for example, north =
+<span class="math inline">\(1\)</span> and <span
+class="math inline">\(0\)</span> otherwise, center = <span
+class="math inline">\(1\)</span> and <span
+class="math inline">\(0\)</span> otherwise). Lasso will thus only
+consider the dummy, and not the concept of the ‘region’). An alternative
+to that is a Group Lasso. If you’d like to read more on that, you can
+have a look at this <a
+href="https://towardsdatascience.com/beyond-linear-regression-467a7fc3bafb#:~:text=Lasso%20feature%20selection%20works%20well,with%20few%20non%2Dzero%20coefficients.">Towards
+Data Science Post</a>.</p>
+</div>
+</div>
+
+<!DOCTYPE html>
+<hr>
+<p style="text-align: center;">Copyright &copy; 2022 <i class="fa-light fa-person-to-portal"></i> Michelle González Amador & Stephan Dietrich <i class="fa-light fa-person-from-portal"></i>. All rights reserved.</p>
+<p style="text-align: center;"><a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy" class="fa fa-github"></a></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

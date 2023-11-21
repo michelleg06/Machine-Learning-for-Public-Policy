@@ -38,14 +38,15 @@ To end the course, we will meet online for a **Collaborative Policy Challenge**,
 
 **Course textbook (e-book available for free):**
 
-James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning: With Applications in R.](https://hastie.su.domains/ISLR2/ISLRv2_website.pdf)
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to Statistical Learning](https://www.statlearning.com/)
 
-## 1. Gentle Introduction to R and Rstudio
+## 1. Gentle Introduction to R and Rstudio, and Python.
 
     ·  Introduction to the course
     ·  Introduction to the R statistical programming language with the Rstudio IDE
+    ·  Introduction to the Python with Visual Studio Code
 
-**Release Date: 30 November 2030**
+**Release Date: 30 November 2023**
 
 **Instructors:** Stephan, Alex and Michelle (who will give you a warm welcome!)
 
