@@ -1,5 +1,5 @@
 ---
-title: "Prediction Policy Problems: Linear Models and Lasso Regression"
+#title: "Prediction Policy Problems: Linear Models and Lasso Regression"
 #author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
@@ -9,7 +9,7 @@ output: html_document
     text-align: justify}
 </style>
 
-## **Supervised Machine Learning: Linear Models Lasso Regression** {.tabset .tabset-fade .tabset-pills}
+## **Prediction Policy Problems:: Linear Models Lasso Regression** {.tabset .tabset-fade .tabset-pills}
 
 **Introducing the Prediction Policy Framework**
 
@@ -54,6 +54,8 @@ In this block we'll work with real-world data from the country of Malawi to pred
 ### **R practical**
 
 You can download the dataset by clicking on the button below.
+<br>
+
 ```{r, echo=FALSE}
 library(downloadthis)
 download_link(
@@ -70,6 +72,7 @@ download_link(
 The script below is a step by step on how to go about coding a predictive model using a *linear regression*. Despite its simplicity and transparency, i.e. the ease with which we can interpret its results, a linear model is not without challenges in machine learning.
 
 <h3> 1. Preliminaries: working directory, libraries, data upload </h3>
+<br>
 
 ```{r, message=FALSE}
 rm(list = ls()) # this line cleans your Global Environment.
@@ -98,6 +101,7 @@ data_malawi <- read_csv("malawi.csv") # the file is directly read from the worki
 ```
 
 <h3> 2. Get to know your data: visualisation and pre-processing </h3>
+<br>
 
 ```{r, message=FALSE}
 skim(data_malawi) # describes the dataset in a nice format 
@@ -107,9 +111,11 @@ skim(data_malawi) # describes the dataset in a nice format
 
 - Not all of these variables are relevant for our prediction model.
 
-- To find the labels and description of the variables, you can refer to the [paper](https://academic.oup.com/wber/article-abstract/32/3/531/2447896)
+- To find the labels and description of the variables, you can refer to the [paper](https://academic.oup.com/wber/article-abstract/32/3/531/2447896). 
+<br>
 
 [hhsize, hhsize2, age_head, age_head2, regions, rural, never married, share_of_adults_without_education, share_of_adults_who_can_read, number of rooms, cement floor, electricity, flush toilet, soap, bed, bike, music player, coffee table, iron, garden, goats]
+<br>
 
 - Luckily for us, we have no missing values (n_missing in summary output)!
 
@@ -178,7 +184,7 @@ for (i in 1:ncol(data_malawi)) { # iterate over the length of columns in the dat
 }
 
 ```
-
+<br>
 Notice that we have a few variables with 2 unique values and one variable with 3 unique values. We should transform these into factor() class. We can do this one by one, or in one shot. I'll give an example of both:
 
 ```{r, message=FALSE}
@@ -296,7 +302,7 @@ malawi_factorC <- as.data.frame(lapply(malawi_factor,as.numeric)) # coerce dataf
 malawi_factorC$lnexp_pc_month <- malawi_continuous$lnexp_pc_month # include target variable in the dataframe
 
 M2 <- cor(malawi_factorC, method = "spearman")
-corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.8) # visualise it in a nice way
+corrplot(M2, method="circle", addCoef.col ="black", number.cex = 0.3) # visualise it in a nice way
 
 ```
 
@@ -305,8 +311,10 @@ Ownership of some assets stands out: soap, a cement floor, electricity, a bed...
 We can also spot some correlation coefficients that equal zero. In some situations, the data generating mechanism can create predictors that only have a single unique value (i.e. a “zero-variance predictor”). For many ML models (excluding tree-based models), this may cause the model to crash or the fit to be unstable. Here, the only $0$ we've spotted is not in relation to our target variable. 
 
 But we do observe some near-zero-variance predictors. Besides uninformative, these can also create unstable model fits. There's a few strategies to deal with these; the quickest solution is to remove them. A second option, which is especially interesting in scenarios with a large number of predictors/variables, is to work with penalised models. We'll discuss this option below.
+<br>
 
 <h3> 3. Model fit: data partition and performance evaluation parameters </h3>
+<br>
 
 We now have a general idea of the structure of the data we are working with, and what we're trying to predict: per capita expenditures, which we believe are a proxy for poverty prevalence. Measured by the log of per capita monthly expenditure in our dataset, the variable is named lnexp_pc_month.
 
@@ -433,15 +441,15 @@ Now that we have built and evaluated our model in the training dataset, we can p
 ```{r, message=FALSE}
 p <- predict(model1, Test_df)
 
-cat("observed summary statistics of target variable in full dataset\n")
+cat("observed summary statistics of target variable in full dataset")
 
 print(summary(data_malawi$lnexp_pc_month))
 
-cat("predictions based on the training dataset\n")
+cat("predictions based on the training dataset")
 
 print(summary(p0))
 
-cat("predictions from the testing dataset\n")
+cat("predictions from the testing dataset")
 
 print(summary(p))
 ```
@@ -532,15 +540,15 @@ ols_kfold3 <- train(
     trControl = cv_10fold # use 10 folds to cross-validate
 )
 
-cat(" Linear model with train dataset\n")
+cat(" Linear model with train dataset")
 print(ols_kfold)
-cat("\n")
 
-cat(" Linear model with test dataset\n")
+
+cat(" Linear model with test dataset")
 print(ols_kfold2)
-cat("\n")
 
-cat(" Linear model with full dataset\n")
+
+cat(" Linear model with full dataset")
 print(ols_kfold3)
 
 ```
@@ -548,8 +556,10 @@ print(ols_kfold3)
 Having cross-validated our model with 10 folds, we can see that the results are virtually the same. We have a RMSE of around .43, an R^2 of .59, (and a MAE of .33). We ran the same model for the train, test and full datasets and find results are consistent. Recall the R^2 tells us the model's predictive ability and the RMSE and MAE the model's accuracy.
     
 **NOTE:** k-fold cross-validation replaces our original 80/20 split (we don't need to do that anymore!) Therefore, we use the full dataset in the train() function. Using the train,test and full datasets in the example above was just for pedagogical purposes but it is no longer necessary and we can use the reported estimates of R^2 (close to 1!), RMSE (close to 0!) and MAE (let's go low!) for model assessment without comparing them to another set of predictions.
+<br>
 
 <h3> 4. Feature selection with Lasso linear regression </h3>
+<br>
 
 An OLS regression is not the only model that can be written in the form of $Y_i = \alpha + \beta_1X_{1i}, \beta_2X_{2i},..., \beta_pX_{pi}+ u_i$. In this section we will discuss 'penalised' models, which can also be expressed as a linear relationship between parameters. Penalised regression models are also known as regression shrinkage methods, and they take their name after the colloquial term for coefficient regularisation, 'shrinkage' of estimated coefficients. The goal of penalised models, as opposed to a traditional linear model, is not to minimise bias (least squares approach), but to reduce variance by adding a constraint to the equation and effectively pushing coefficient parameters towards 0. This results in the the worse model predictors having a coefficient of zero or close to zero. 
 
