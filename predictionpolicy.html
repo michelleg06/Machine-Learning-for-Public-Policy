@@ -265,7 +265,11 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="predictionpolicy.html">Prediction Policy Problems</a>
+  <a href="predictionpolicy.html">
+    <span class="fa fa-line-chart"></span>
+     
+    Prediction Policy Problems
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -287,7 +291,7 @@ $(document).ready(function () {
 <div id="prediction-policy-problems-linear-models-lasso-regression"
 class="section level2 tabset tabset-fade tabset-pills">
 <h2 class="tabset tabset-fade tabset-pills"><strong>Prediction Policy
-Problems:: Linear Models Lasso Regression</strong></h2>
+Problems: Linear Models &amp; Lasso Regression</strong></h2>
 <p><strong>Introducing the Prediction Policy Framework</strong></p>
 <p>In the video-lecture below you’ll be given a brief introduction to
 the prediction policy framework, and a primer on machine learning.
@@ -4856,12 +4860,12 @@ approach), but to reduce variance by adding a constraint to the equation
 and effectively pushing coefficient parameters towards 0. This results
 in the the worse model predictors having a coefficient of zero or close
 to zero.</p>
-<p>Consider a scenario where you have dozens hundreds of predictors.
-Which covariates are truly important for our known outcome? Including
-all of the predictors leads to <em>over-fitting</em>. We’ll find that
-the R^2 value is high, and conclude that our in-sample fit is good.
-However, this may lead to bad out-of-sample predictions. <em>Model
-selection</em> is a particularly challenging endeavour when we encounter
+<p>Consider a scenario where you have hundreds of predictors. Which
+covariates are truly important for our known outcome? Including all of
+the predictors leads to <em>over-fitting</em>. We’ll find that the R^2
+value is high, and conclude that our in-sample fit is good. However,
+this may lead to bad out-of-sample predictions. <em>Model selection</em>
+is a particularly challenging endeavour when we encounter
 high-dimensional data; i.e. when the number of variables is close to or
 larger than the number of observations. Some examples where you may
 encounter high-dimensional data include:</p>
@@ -5071,8 +5075,8 @@ href="https://www.coursera.org/lecture/ml-regression/choosing-the-penalty-streng
 It is true that cross-validation is something that we want to do for ALL
 our machine learning models. Just make sure to make an informed choice
 of which cv technique you’ll implement in your model.</p>
-<p><strong>Multiple categorical variables is problematic with
-Lasso!</strong></p>
+<p><strong>A setup with multiple categorical variables is problematic
+with Lasso!</strong></p>
 <p>Lasso models do not perform well with multiple categorical variables.
 As is our case. Primarily because, in order to work with categorical
 data in lasso models we encode them as dummies (for example, north =
@@ -5085,6 +5089,1195 @@ to that is a Group Lasso. If you’d like to read more on that, you can
 have a look at this <a
 href="https://towardsdatascience.com/beyond-linear-regression-467a7fc3bafb#:~:text=Lasso%20feature%20selection%20works%20well,with%20few%20non%2Dzero%20coefficients.">Towards
 Data Science Post</a>.</p>
+</div>
+<div id="python-practical" class="section level3">
+<h3><strong>Python practical</strong></h3>
+<p>You can download the dataset by clicking on the button below.
+<br></p>
+<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/malawi.csv">
+<button class="btn btn-info"><i class="fa fa-save"></i> Download malawi df (.csv)</button>
+</a>
+<h3>
+<ol style="list-style-type: decimal">
+<li>Preliminaries: packages and data upload
+</h3>
+<br></li>
+</ol>
+<pre class="python"><code>
+
+import numpy as np # can be used to perform a wide variety of mathematical operations on arrays.
+import pandas as pd # mainly used for data analysis and associated manipulation of tabular data in DataFrames
+import matplotlib as mpl # comprehensive library for creating static, animated, and interactive visualizations in Python
+import sklearn as sk #  implement machine learning models and statistical modelling.
+import seaborn as sns # for dataframe/vector visualisation
+import matplotlib.pyplot as plt # only pyplots from the matplotlib library of visuals
+from sklearn.metrics import mean_absolute_error, mean_squared_error # evaluation metrics for ML models. Setting mean_squared_error squared to False will return the RMSE.
+import statsmodels.api as sm # to visualise linear models in a nice way...
+
+
+malawi = pd.read_csv(&#39;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/malawi.csv&#39;) # import csv file and store as malawi</code></pre>
+<h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Get to know your data: pre-processing and visualisation
+</h3>
+<br></li>
+</ol>
+<p>Pandas is a very complete package to manipulate
+DataFrames/datasets.</p>
+<pre class="python"><code># first observations of dataframe
+malawi.head()</code></pre>
+<pre><code>##    lnexp_pc_month  hhsize  hhsize2  ...  strataid  lnzline      case_id
+## 0        6.900896       7       49  ...         1    7.555  10101002025
+## 1        7.064378       3        9  ...         1    7.555  10101002051
+## 2        6.823851       6       36  ...         1    7.555  10101002072
+## 3        6.894722       6       36  ...         1    7.555  10101002079
+## 4        6.465989       6       36  ...         1    7.555  10101002095
+## 
+## [5 rows x 38 columns]</code></pre>
+<pre class="python"><code># descriptive statistics of variables
+malawi.describe()</code></pre>
+<pre><code>##        lnexp_pc_month        hhsize  ...       lnzline       case_id
+## count    11280.000000  11280.000000  ...  1.128000e+04  1.128000e+04
+## mean         7.358888      4.546809  ...  7.555000e+00  2.372322e+10
+## std          0.675346      2.335525  ...  1.776436e-15  7.241514e+09
+## min          4.776855      1.000000  ...  7.555000e+00  1.010100e+10
+## 25%          6.892941      3.000000  ...  7.555000e+00  2.040204e+10
+## 50%          7.305191      4.000000  ...  7.555000e+00  2.090352e+10
+## 75%          7.757587      6.000000  ...  7.555000e+00  3.053301e+10
+## max         11.063562     27.000000  ...  7.555000e+00  3.120209e+10
+## 
+## [8 rows x 36 columns]</code></pre>
+<pre class="python"><code># now let&#39;s summarise the dataframe in a general format
+malawi.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 11280 entries, 0 to 11279
+## Data columns (total 38 columns):
+##  #   Column          Non-Null Count  Dtype  
+## ---  ------          --------------  -----  
+##  0   lnexp_pc_month  11280 non-null  float64
+##  1   hhsize          11280 non-null  int64  
+##  2   hhsize2         11280 non-null  int64  
+##  3   agehead         11280 non-null  int64  
+##  4   agehead2        11280 non-null  int64  
+##  5   north           11280 non-null  int64  
+##  6   central         11280 non-null  int64  
+##  7   rural           11280 non-null  int64  
+##  8   nevermarried    11280 non-null  int64  
+##  9   sharenoedu      11280 non-null  float64
+##  10  shareread       11280 non-null  float64
+##  11  nrooms          11280 non-null  int64  
+##  12  floor_cement    11280 non-null  int64  
+##  13  electricity     11280 non-null  int64  
+##  14  flushtoilet     11280 non-null  int64  
+##  15  soap            11280 non-null  int64  
+##  16  bed             11280 non-null  int64  
+##  17  bike            11280 non-null  int64  
+##  18  musicplayer     11280 non-null  int64  
+##  19  coffeetable     11280 non-null  int64  
+##  20  iron            11280 non-null  int64  
+##  21  dimbagarden     11280 non-null  int64  
+##  22  goats           11280 non-null  int64  
+##  23  dependratio     11280 non-null  float64
+##  24  hfem            11280 non-null  int64  
+##  25  grassroof       11280 non-null  int64  
+##  26  mortarpestle    11280 non-null  int64  
+##  27  table           11280 non-null  int64  
+##  28  clock           11280 non-null  int64  
+##  29  ea              11280 non-null  int64  
+##  30  EA              11280 non-null  int64  
+##  31  hhwght          11280 non-null  float64
+##  32  region          11280 non-null  object 
+##  33  eatype          11280 non-null  object 
+##  34  psu             11280 non-null  int64  
+##  35  strataid        11280 non-null  int64  
+##  36  lnzline         11280 non-null  float64
+##  37  case_id         11280 non-null  int64  
+## dtypes: float64(6), int64(30), object(2)
+## memory usage: 3.3+ MB</code></pre>
+<ul>
+<li><p>The dataset contains 38 variables and 11,280
+observations.</p></li>
+<li><p>Not all of these variables are relevant for our prediction
+model.</p></li>
+<li><p>To find the labels and description of the variables, you can
+refer to the <a
+href="https://academic.oup.com/wber/article-abstract/32/3/531/2447896">paper</a>.
+<br></p></li>
+</ul>
+<p>[hhsize, hhsize2, age_head, age_head2, regions, rural, never married,
+share_of_adults_without_education, share_of_adults_who_can_read, number
+of rooms, cement floor, electricity, flush toilet, soap, bed, bike,
+music player, coffee table, iron, garden, goats] <br></p>
+<ul>
+<li>Luckily for us, we have no missing values (Non-Null Count in info()
+output)!</li>
+</ul>
+<ol style="list-style-type: upper-alpha">
+<li><p>Machine learning models cannot be trained when missing values are
+present.</p></li>
+<li><p>Dealing with missingness is a non-trivial task: First and
+foremost, we should assess whether there is a pattern to missingness and
+if so, what that means to what we can learn from our (sub)population. If
+there is no discernible pattern, we can proceed to delete the missing
+values or impute them. A more detailed explanation and course of action
+can be found <a
+href="https://stefvanbuuren.name/fimd/sec-MCAR.html">here</a>.</p></li>
+</ol>
+<p><strong>Feature selection: subsetting the dataset </strong></p>
+<p>As part of our data pre-processing we will subset the dataframe, such
+that only relevant variables are left. * Relevant: variables/features
+about a household/individual that could help us determine whether they
+are in poverty. That way, we save some memory space; but also, we can
+call the full set of variables in a dataframe in one go!</p>
+<p>variables to delete (not included in the identified set above): [ea,
+EA, hhwght, psu, strataid, lnzline, case_id, eatype]</p>
+<p><strong>N/B</strong>: Feature selection is a <em>critical
+process</em> (and we normally don’t have a paper to guide us through
+it): from a practical point of view, a model with less predictors may be
+easier to interpret. Also, some models may be negatively affected by
+non-informative predictors. This process is similar to traditional
+econometric modelling, but we should not conflate predictive and causal
+modelling. Importantly, please note that we are not interested in
+knowing why something happens, but rather in what is likely to happen
+given some known data. Hence:</p>
+<pre class="python"><code># deleting variables from pandas dataframe 
+
+cols2delete = [&#39;ea&#39;, &#39;EA&#39;, &#39;hhwght&#39;, &#39;psu&#39;, &#39;strataid&#39;, &#39;lnzline&#39;, &#39;case_id&#39;, &#39;eatype&#39;, &#39;region&#39;]
+malawi = malawi.drop(cols2delete,axis=1) # axis=0 means delete rows and axis=1 means delete columns
+
+# check if we have deleted the columns: 
+print(malawi.shape)</code></pre>
+<pre><code>## (11280, 29)</code></pre>
+<p>Same number of rows, but only 29 variables left. We have succesfully
+deleted those pesky unwanted vectors!</p>
+<p><strong>Data visualisation</strong></p>
+<p>A quick and effective way to take a first glance at our data is to
+plot histograms of relevant features. We can use the seaborn and
+matplotlib libraries to visualise our dataframe.</p>
+<ul>
+<li>The distribution of each variable matters for the type of plot</li>
+<li>start by looking at the number of unique values</li>
+<li>if unique values &lt;= 3 you are certain this is a categorical
+variable, and from our exploration using malawi.info() we had only
+integer/floats…</li>
+</ul>
+<pre class="python"><code># print numbr of unique values by vector
+malawi.nunique()</code></pre>
+<pre><code>## lnexp_pc_month    11266
+## hhsize               19
+## hhsize2              19
+## agehead              88
+## agehead2             88
+## north                 2
+## central               2
+## rural                 2
+## nevermarried          2
+## sharenoedu           47
+## shareread            28
+## nrooms               16
+## floor_cement          2
+## electricity           2
+## flushtoilet           2
+## soap                  2
+## bed                   2
+## bike                  2
+## musicplayer           2
+## coffeetable           2
+## iron                  2
+## dimbagarden           2
+## goats                 2
+## dependratio          62
+## hfem                  2
+## grassroof             2
+## mortarpestle          2
+## table                 2
+## clock                 2
+## dtype: int64</code></pre>
+<pre class="python"><code>print(&quot; There&#39;s a large number of variables with 2 unique values. We can plot numeric/continuous variables as histograms and binary variables as bar plots.&quot;)</code></pre>
+<pre><code>##  There&#39;s a large number of variables with 2 unique values. We can plot numeric/continuous variables as histograms and binary variables as bar plots.</code></pre>
+<pre class="python"><code># for-loop that iterates over variables in dataframe, if they have 2 unique values, transform vector into categorical
+for column in malawi:
+    if malawi[column].nunique() == 2:
+        malawi[column] = pd.Categorical(malawi[column])
+
+# check if it worked
+malawi.info() # hooray! we&#39;ve got integers, floats (numerics), and categorical variables now. </code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 11280 entries, 0 to 11279
+## Data columns (total 29 columns):
+##  #   Column          Non-Null Count  Dtype   
+## ---  ------          --------------  -----   
+##  0   lnexp_pc_month  11280 non-null  float64 
+##  1   hhsize          11280 non-null  int64   
+##  2   hhsize2         11280 non-null  int64   
+##  3   agehead         11280 non-null  int64   
+##  4   agehead2        11280 non-null  int64   
+##  5   north           11280 non-null  category
+##  6   central         11280 non-null  category
+##  7   rural           11280 non-null  category
+##  8   nevermarried    11280 non-null  category
+##  9   sharenoedu      11280 non-null  float64 
+##  10  shareread       11280 non-null  float64 
+##  11  nrooms          11280 non-null  int64   
+##  12  floor_cement    11280 non-null  category
+##  13  electricity     11280 non-null  category
+##  14  flushtoilet     11280 non-null  category
+##  15  soap            11280 non-null  category
+##  16  bed             11280 non-null  category
+##  17  bike            11280 non-null  category
+##  18  musicplayer     11280 non-null  category
+##  19  coffeetable     11280 non-null  category
+##  20  iron            11280 non-null  category
+##  21  dimbagarden     11280 non-null  category
+##  22  goats           11280 non-null  category
+##  23  dependratio     11280 non-null  float64 
+##  24  hfem            11280 non-null  category
+##  25  grassroof       11280 non-null  category
+##  26  mortarpestle    11280 non-null  category
+##  27  table           11280 non-null  category
+##  28  clock           11280 non-null  category
+## dtypes: category(20), float64(4), int64(5)
+## memory usage: 1016.0 KB</code></pre>
+<pre class="python"><code># plot histograms or bar graphs for each of the columns in the dataframe, print them all in the same grid
+# subset of numeric/continuous
+numeric_df = malawi.select_dtypes(include=[&#39;float64&#39;, &#39;int64&#39;])
+numeric_df.shape # dataframe subset contains only 9 variables</code></pre>
+<pre><code>## (11280, 9)</code></pre>
+<pre class="python"><code># plot histograms of all variables in numeric dataframe (df)
+for column in numeric_df.columns:
+    plt.figure(figsize=(3, 1))  # Adjust figsize as needed
+    sns.histplot(numeric_df[column], bins=20, kde=True)
+    plt.title(f&#39;Histogram of {column}&#39;)
+    plt.xlabel(column)
+    plt.ylabel(&#39;Count&#39;)
+    plt.show()</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-1.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-2.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-3.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-4.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-5.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-6.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-7.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-8.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-27-9.png" width="288" /></p>
+<p>We can apply a similar logic to plotting/visualising categorical
+data: bar graphs, but also tables work well.</p>
+<pre class="python"><code># subset of categorical data
+cat_df = malawi.select_dtypes(include=[&#39;category&#39;])
+cat_df.shape # dataframe subset contains 20 variables </code></pre>
+<pre><code>## (11280, 20)</code></pre>
+<pre class="python"><code># let&#39;s start with printing tables of the 20 variables with category/count
+
+for column in cat_df.columns:
+    table = pd.crosstab(index=cat_df[column], columns=&#39;count&#39;)
+    print(f&#39;Table for {column}:\n{table}\n&#39;)</code></pre>
+<pre><code>## Table for north:
+## col_0  count
+## north       
+## 0       9600
+## 1       1680
+## 
+## Table for central:
+## col_0    count
+## central       
+## 0         6960
+## 1         4320
+## 
+## Table for rural:
+## col_0  count
+## rural       
+## 0       1440
+## 1       9840
+## 
+## Table for nevermarried:
+## col_0         count
+## nevermarried       
+## 0             10930
+## 1               350
+## 
+## Table for floor_cement:
+## col_0         count
+## floor_cement       
+## 0              9036
+## 1              2244
+## 
+## Table for electricity:
+## col_0        count
+## electricity       
+## 0            10620
+## 1              660
+## 
+## Table for flushtoilet:
+## col_0        count
+## flushtoilet       
+## 0            10962
+## 1              318
+## 
+## Table for soap:
+## col_0  count
+## soap        
+## 0       9740
+## 1       1540
+## 
+## Table for bed:
+## col_0  count
+## bed         
+## 0       7653
+## 1       3627
+## 
+## Table for bike:
+## col_0  count
+## bike        
+## 0       7194
+## 1       4086
+## 
+## Table for musicplayer:
+## col_0        count
+## musicplayer       
+## 0             9426
+## 1             1854
+## 
+## Table for coffeetable:
+## col_0        count
+## coffeetable       
+## 0             9956
+## 1             1324
+## 
+## Table for iron:
+## col_0  count
+## iron        
+## 0       8962
+## 1       2318
+## 
+## Table for dimbagarden:
+## col_0        count
+## dimbagarden       
+## 0             7658
+## 1             3622
+## 
+## Table for goats:
+## col_0  count
+## goats       
+## 0       8856
+## 1       2424
+## 
+## Table for hfem:
+## col_0  count
+## hfem        
+## 0       8697
+## 1       2583
+## 
+## Table for grassroof:
+## col_0      count
+## grassroof       
+## 0           2953
+## 1           8327
+## 
+## Table for mortarpestle:
+## col_0         count
+## mortarpestle       
+## 0              5635
+## 1              5645
+## 
+## Table for table:
+## col_0  count
+## table       
+## 0       7249
+## 1       4031
+## 
+## Table for clock:
+## col_0  count
+## clock       
+## 0       9039
+## 1       2241</code></pre>
+<pre class="python"><code>    
+# maybe bar graphs for a quick visual check of start ownership scarcity?
+
+for column in cat_df.columns:
+    plt.figure(figsize=(6, 4)) 
+    sns.countplot(x=column, data=cat_df)
+    plt.title(f&#39;Bar Plot of {column}&#39;)
+    plt.xlabel(column)
+    plt.ylabel(&#39;Count&#39;)
+    plt.show()</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-19.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-20.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-21.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-22.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-23.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-24.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-25.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-26.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-27.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-28.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-29.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-30.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-31.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-32.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-33.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-34.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-35.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-36.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-37.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-38.png" width="576" /></p>
+<p>What have we learned from the data visualisation?</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Nothing worrying about the data itself. McBride and Nichols did a
+good job of pre-processing the data for us. No pesky missing values, or
+unknown categories.</p></li>
+<li><p>From the bar plots, we can see that for the most part, people
+tend not to own assets. Worryingly, there is a lack of soap, flush
+toilets and electricity, all of which are crucial for human capital
+(health and education).</p></li>
+<li><p>From the histograms, we can see log per capita expenditure is
+normally distributed, but if we remove the log, it’s incredibly skewed.
+Poverty is endemic. Furthermore, households tend not to have too many
+educated individuals, and household size is non-trivially large (with
+less rooms than people need).</p></li>
+</ol>
+<p><strong>Relationships between features</strong></p>
+<p>To finalise our exploration of the dataset, we should define:</p>
+<ul>
+<li><p>the target variable (a.k.a. outcome of interest)</p></li>
+<li><p>correlational insights</p></li>
+</ul>
+<p>Let’s visualise two distinct correlation matrices; for our numeric
+dataframe, which includes our target variable, we will plot a Pearson r
+correlation matrix. For our factor dataframe, to which we will add our
+continuous target, we will plot a Spearman rho correlation matrix. Both
+types of correlation coefficients are interpreted the same (0 = no
+correlation, 1 perfect positive correlation, -1 perfect negative
+correlation).</p>
+<pre class="python"><code># Pearson correlation matrix (seaborn and matplotlib libraries again :)) 
+correlation_matrix = numeric_df.corr() # Pearson correlation for continuously disributed variables (default method is pearson)
+
+# plot it to get a nice visual
+plt.figure(figsize=(8, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap=&#39;coolwarm&#39;, fmt=&#39;.2f&#39;, linewidths=0.5)
+plt.title(&#39;Pearson Correlation Matrix&#39;)
+plt.show()</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-59.png" width="768" /></p>
+<pre class="python"><code># Spearman correlation matrix
+# unfortunately, only numeric values can be used in corr()
+# detour: transform categorical into numeric type...
+for column in cat_df.columns:
+    if pd.api.types.is_categorical_dtype(cat_df[column]):
+        cat_df[column] = cat_df[column].cat.codes
+cat_df.info() # all integers now! hooray!</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 11280 entries, 0 to 11279
+## Data columns (total 20 columns):
+##  #   Column        Non-Null Count  Dtype
+## ---  ------        --------------  -----
+##  0   north         11280 non-null  int8 
+##  1   central       11280 non-null  int8 
+##  2   rural         11280 non-null  int8 
+##  3   nevermarried  11280 non-null  int8 
+##  4   floor_cement  11280 non-null  int8 
+##  5   electricity   11280 non-null  int8 
+##  6   flushtoilet   11280 non-null  int8 
+##  7   soap          11280 non-null  int8 
+##  8   bed           11280 non-null  int8 
+##  9   bike          11280 non-null  int8 
+##  10  musicplayer   11280 non-null  int8 
+##  11  coffeetable   11280 non-null  int8 
+##  12  iron          11280 non-null  int8 
+##  13  dimbagarden   11280 non-null  int8 
+##  14  goats         11280 non-null  int8 
+##  15  hfem          11280 non-null  int8 
+##  16  grassroof     11280 non-null  int8 
+##  17  mortarpestle  11280 non-null  int8 
+##  18  table         11280 non-null  int8 
+##  19  clock         11280 non-null  int8 
+## dtypes: int8(20)
+## memory usage: 220.4 KB</code></pre>
+<pre class="python"><code># detour 2: concatenate target variable to our categorical dataframe
+targetvar = malawi[&#39;lnexp_pc_month&#39;]
+cat_df_new = pd.concat([cat_df, targetvar], axis=1) # recall axis=1 tells python to concatenate the column
+
+
+spearman_matrix = cat_df_new.corr(method=&#39;spearman&#39;) # specify method spearman
+
+# visualise spearman correlation matrix
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(spearman_matrix, annot=True, cmap=&#39;coolwarm&#39;, fmt=&#39;.2f&#39;, linewidths=0.5, annot_kws={&#39;size&#39;: 6})
+plt.title(&#39;Spearman Correlation Matrix&#39;)
+plt.show()</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-60.png" width="768" /></p>
+<p>Ideally, we would print a correlation matrix with ALL the variables.
+For display purposes, we’ve separated them here. If we were interested
+in relationships between two variables that are not our target variable,
+we may want to think about a full correlation matrix.</p>
+<p>From the Pearson Correlation Matrix, we can see that the size of the
+household and dependent ratio are highly negatively correlated to our
+target variable.</p>
+<p>From the Spearman Correlation Matrix, we see that ownership of some
+assets stands out: soap, a cement floor, electricity, a bed… ownership
+of these (and a couple of other) assets is positively correlated to per
+capita expenditure. Living in a rural area, on the other hand, is
+negtively correlated to our target variable.</p>
+<p>We can also spot some correlation coefficients that equal zero. In
+some situations, the data generating mechanism can create predictors
+that only have a single unique value (i.e. a “zero-variance predictor”).
+For many ML models (excluding tree-based models), this may cause the
+model to crash or the fit to be unstable. Here, the only <span
+class="math inline">\(0\)</span> we’ve spotted is not in relation to our
+target variable.</p>
+<p>But we do observe some near-zero-variance predictors. Besides
+uninformative, these can also create unstable model fits. There’s a few
+strategies to deal with these; the quickest solution is to remove them.
+A second option, which is especially interesting in scenarios with a
+large number of predictors/variables, is to work with penalised models.
+We’ll discuss this option below. <br></p>
+<h3>
+<ol start="3" style="list-style-type: decimal">
+<li>Model fit: data partition and performance evaluation parameters
+</h3>
+<br></li>
+</ol>
+<p>We now have a general idea of the structure of the data we are
+working with, and what we’re trying to predict: per capita expenditures,
+which we believe are a proxy for poverty prevalence. Measured by the log
+of per capita monthly expenditure in our dataset, the variable is named
+lnexp_pc_month.</p>
+<p>The next step is to create a simple linear model (OLS) to predict
+monthly per capita expenditure using the variables in our dataset, and
+introduce the elements with which we will evaluate our model.</p>
+<p><strong>Data Partinioning</strong></p>
+<p>When we want to build predictive models for machine learning
+purposes, it is important to have (at least) two data sets. A training
+data set from which our model will learn, and a test data set containing
+the same features as our training data set; we use the second dataset to
+see how well our predictive model extrapolates to other samples (i.e. is
+it generalisable?). To split our main data set into two, we will work
+with an 80/20 split.</p>
+<p>The 80/20 split has its origins in the Pareto Principle, which states
+that ‘in most cases, 80% of effects from from 20% of causes’. Though
+there are other test/train splitting options, this partitioning method
+is a good place to start, and indeed standard in the machine learning
+field.</p>
+<pre class="python"><code># split train and test data using the sci-kit learn library (our go-to machine learning package for now!)
+
+from sklearn.model_selection import train_test_split
+
+# We need to define a matrix X that contains all the features (variables) that we are interested in, and a vector Y that is the target variable
+# These two elements should be defined both fur the train and test subsets of our data
+X = malawi.iloc[:, 1:28] # x is a matrix containing all vectors/variables except the first one, which conveniently is our target variable
+# recall that python starts counting at 0, therefore vector in position 0 =  vector 1, vector in position 1 = vector 2, etc.
+y = malawi.iloc[:, 0] # y is a vector containing our target variable 
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=12345) # random_state is for reproducibility purposes, analogous to setting a seed in R. 
+
+X_train.head(3)</code></pre>
+<pre><code>##       hhsize  hhsize2  agehead  agehead2  ... hfem grassroof mortarpestle table
+## 9867       5       25       41      1681  ...    1         0            1     1
+## 3782       5       25       41      1681  ...    0         1            1     0
+## 5647       5       25       55      3025  ...    0         0            1     1
+## 
+## [3 rows x 27 columns]</code></pre>
+<pre class="python"><code>X_test.head(3)</code></pre>
+<pre><code>##       hhsize  hhsize2  agehead  agehead2  ... hfem grassroof mortarpestle table
+## 3750       2        4       48      2304  ...    1         1            0     0
+## 9030       3        9       42      1764  ...    0         1            1     1
+## 3239       2        4       26       676  ...    0         1            0     0
+## 
+## [3 rows x 27 columns]</code></pre>
+<pre class="python"><code>print(y_train)</code></pre>
+<pre><code>## 9867    8.504023
+## 3782    6.688002
+## 5647    7.287024
+## 7440    5.643893
+## 7283    6.706208
+##           ...   
+## 4478    8.266976
+## 4094    8.688864
+## 3492    7.312614
+## 2177    7.538856
+## 4578    6.676927
+## Name: lnexp_pc_month, Length: 9024, dtype: float64</code></pre>
+<pre class="python"><code>print(y_test)</code></pre>
+<pre><code>## 3750     7.936020
+## 9030     7.464896
+## 3239     7.288868
+## 1463     7.816436
+## 11236    6.859672
+##            ...   
+## 8570     7.232218
+## 11080    7.318853
+## 7124     9.199136
+## 8818     7.928102
+## 3167     7.507953
+## Name: lnexp_pc_month, Length: 2256, dtype: float64</code></pre>
+<pre class="python"><code>
+# everything looks okay, let&#39;s proceed with modelling... </code></pre>
+<p><strong>Prediction with Linear Models</strong></p>
+<p>We will start by fitting a predictive model using the training
+dataset; that is, our target variable <em>log of monthly per capita
+expenditures</em> or <em>lnexp_pc_month</em> will be a <span
+class="math inline">\(Y\)</span> dependent variable in a linear model
+<span class="math inline">\(Y_i = \alpha + x&#39;\beta_i +
+\epsilon_i\)</span>, and the remaining features in the data frame
+correspond to the row vectors <span
+class="math inline">\(x&#39;\beta\)</span>.</p>
+<pre class="python"><code> # Importing more features from the scikit-learn package 
+from sklearn.linear_model import LinearRegression
+
+model1 = LinearRegression(fit_intercept=True).fit(X_train, y_train)
+ # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable lnexp_pc_month
+
+# visualise the output from the linear model
+
+print(f&#39;Coefficients: {model1.coef_}&#39;)</code></pre>
+<pre><code>## Coefficients: [-2.88803518e-01  1.16454588e-02  4.00549713e-03 -5.26522790e-05
+##   7.46404592e-02  2.59743764e-01 -5.70197786e-02  2.68613159e-01
+##  -1.10722935e-01  8.48179021e-02  3.97403945e-02  1.22016217e-01
+##   3.86242046e-01  3.64921504e-01  2.08221283e-01  1.15598316e-01
+##   9.77483503e-02  1.12175940e-01  1.35028702e-01  1.38280053e-01
+##   9.19268361e-02  8.76979599e-02 -4.31108804e-02 -7.06557671e-02
+##  -8.59920259e-02  2.97336875e-02  5.09616025e-02]</code></pre>
+<pre class="python"><code>print(f&#39;Intercept: {model1.intercept_}&#39;)</code></pre>
+<pre><code>## Intercept: 7.9286268681021985</code></pre>
+<pre class="python"><code># visualise in a nice way (using the statsmodel library)
+
+
+X_train_with_constant = sm.add_constant(X_train) # add a constant to the X feature matrix
+ols_model = sm.OLS(y_train, X_train_with_constant) # use the statsmodel OLS function to regress X features on Y vector
+
+# Fit the OLS model
+lm_results = ols_model.fit()
+
+# Display the summary
+print(lm_results.summary())</code></pre>
+<pre><code>##                             OLS Regression Results                            
+## ==============================================================================
+## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
+## Model:                            OLS   Adj. R-squared:                  0.598
+## Method:                 Least Squares   F-statistic:                     498.3
+## Date:                Wed, 22 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        20:56:11   Log-Likelihood:                -5189.2
+## No. Observations:                9024   AIC:                         1.043e+04
+## Df Residuals:                    8996   BIC:                         1.063e+04
+## Df Model:                          27                                         
+## Covariance Type:            nonrobust                                         
+## ================================================================================
+##                    coef    std err          t      P&gt;|t|      [0.025      0.975]
+## --------------------------------------------------------------------------------
+## const            7.9286      0.044    179.409      0.000       7.842       8.015
+## hhsize          -0.2888      0.006    -44.577      0.000      -0.302      -0.276
+## hhsize2          0.0116      0.000     24.092      0.000       0.011       0.013
+## agehead          0.0040      0.002      2.327      0.020       0.001       0.007
+## agehead2     -5.265e-05   1.72e-05     -3.058      0.002   -8.64e-05   -1.89e-05
+## north            0.0746      0.014      5.156      0.000       0.046       0.103
+## central          0.2597      0.010     25.294      0.000       0.240       0.280
+## rural           -0.0570      0.017     -3.384      0.001      -0.090      -0.024
+## nevermarried     0.2686      0.028      9.519      0.000       0.213       0.324
+## sharenoedu      -0.1107      0.020     -5.450      0.000      -0.151      -0.071
+## shareread        0.0848      0.015      5.622      0.000       0.055       0.114
+## nrooms           0.0397      0.004      9.707      0.000       0.032       0.048
+## floor_cement     0.1220      0.017      7.012      0.000       0.088       0.156
+## electricity      0.3862      0.027     14.506      0.000       0.334       0.438
+## flushtoilet      0.3649      0.032     11.365      0.000       0.302       0.428
+## soap             0.2082      0.014     14.720      0.000       0.180       0.236
+## bed              0.1156      0.013      8.933      0.000       0.090       0.141
+## bike             0.0977      0.011      9.108      0.000       0.077       0.119
+## musicplayer      0.1122      0.014      7.787      0.000       0.084       0.140
+## coffeetable      0.1350      0.018      7.483      0.000       0.100       0.170
+## iron             0.1383      0.014     10.093      0.000       0.111       0.165
+## dimbagarden      0.0919      0.010      9.003      0.000       0.072       0.112
+## goats            0.0877      0.012      7.428      0.000       0.065       0.111
+## dependratio     -0.0431      0.006     -7.396      0.000      -0.055      -0.032
+## hfem            -0.0707      0.012     -5.687      0.000      -0.095      -0.046
+## grassroof       -0.0860      0.016     -5.498      0.000      -0.117      -0.055
+## mortarpestle     0.0297      0.010      2.867      0.004       0.009       0.050
+## table            0.0510      0.012      4.411      0.000       0.028       0.074
+## ==============================================================================
+## Omnibus:                      204.679   Durbin-Watson:                   1.992
+## Prob(Omnibus):                  0.000   Jarque-Bera (JB):              314.826
+## Skew:                           0.233   Prob(JB):                     4.33e-69
+## Kurtosis:                       3.787   Cond. No.                     2.68e+04
+## ==============================================================================
+## 
+## Notes:
+## [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+## [2] The condition number is large, 2.68e+04. This might indicate that there are
+## strong multicollinearity or other numerical problems.</code></pre>
+<p>Recall that one of the assumptions of a linear model is that errors
+are independent and identically distributed. We could run some tests to
+determine this, but with another quick way to check is to contrast the
+iid and robust errors (HC3) in the summary output:</p>
+<pre class="python"><code>lm_robust = sm.OLS(y_train, X_train_with_constant).fit(cov_type=&#39;HC3&#39;) # HC3 are alsow known as robust std errors
+print(lm_robust.summary())</code></pre>
+<pre><code>##                             OLS Regression Results                            
+## ==============================================================================
+## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
+## Model:                            OLS   Adj. R-squared:                  0.598
+## Method:                 Least Squares   F-statistic:                     431.9
+## Date:                Wed, 22 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        20:56:11   Log-Likelihood:                -5189.2
+## No. Observations:                9024   AIC:                         1.043e+04
+## Df Residuals:                    8996   BIC:                         1.063e+04
+## Df Model:                          27                                         
+## Covariance Type:                  HC3                                         
+## ================================================================================
+##                    coef    std err          z      P&gt;|z|      [0.025      0.975]
+## --------------------------------------------------------------------------------
+## const            7.9286      0.066    120.963      0.000       7.800       8.057
+## hhsize          -0.2888      0.027    -10.502      0.000      -0.343      -0.235
+## hhsize2          0.0116      0.002      4.732      0.000       0.007       0.016
+## agehead          0.0040      0.002      2.181      0.029       0.000       0.008
+## agehead2     -5.265e-05   1.93e-05     -2.733      0.006   -9.04e-05   -1.49e-05
+## north            0.0746      0.016      4.727      0.000       0.044       0.106
+## central          0.2597      0.010     25.600      0.000       0.240       0.280
+## rural           -0.0570      0.017     -3.267      0.001      -0.091      -0.023
+## nevermarried     0.2686      0.036      7.507      0.000       0.198       0.339
+## sharenoedu      -0.1107      0.021     -5.338      0.000      -0.151      -0.070
+## shareread        0.0848      0.015      5.587      0.000       0.055       0.115
+## nrooms           0.0397      0.005      8.706      0.000       0.031       0.049
+## floor_cement     0.1220      0.018      6.733      0.000       0.086       0.158
+## electricity      0.3862      0.030     13.071      0.000       0.328       0.444
+## flushtoilet      0.3649      0.041      8.939      0.000       0.285       0.445
+## soap             0.2082      0.014     14.659      0.000       0.180       0.236
+## bed              0.1156      0.013      8.816      0.000       0.090       0.141
+## bike             0.0977      0.011      9.053      0.000       0.077       0.119
+## musicplayer      0.1122      0.015      7.607      0.000       0.083       0.141
+## coffeetable      0.1350      0.019      7.079      0.000       0.098       0.172
+## iron             0.1383      0.014     10.158      0.000       0.112       0.165
+## dimbagarden      0.0919      0.010      8.983      0.000       0.072       0.112
+## goats            0.0877      0.012      7.553      0.000       0.065       0.110
+## dependratio     -0.0431      0.008     -5.189      0.000      -0.059      -0.027
+## hfem            -0.0707      0.013     -5.408      0.000      -0.096      -0.045
+## grassroof       -0.0860      0.015     -5.648      0.000      -0.116      -0.056
+## mortarpestle     0.0297      0.010      2.856      0.004       0.009       0.050
+## table            0.0510      0.012      4.313      0.000       0.028       0.074
+## ==============================================================================
+## Omnibus:                      204.679   Durbin-Watson:                   1.992
+## Prob(Omnibus):                  0.000   Jarque-Bera (JB):              314.826
+## Skew:                           0.233   Prob(JB):                     4.33e-69
+## Kurtosis:                       3.787   Cond. No.                     2.68e+04
+## ==============================================================================
+## 
+## Notes:
+## [1] Standard Errors are heteroscedasticity robust (HC3)
+## [2] The condition number is large, 2.68e+04. This might indicate that there are
+## strong multicollinearity or other numerical problems.</code></pre>
+<p>Our results are virtually the same. We’ll continue with the
+assumption that our simple linear model is homoskedastic.</p>
+<p><strong>Performance Indicators</strong></p>
+<p>In predictive modelling, we are interested in the following
+performance metrics:</p>
+<ul>
+<li><p>Model <em>residuals</em>: recall residuals are the observed value
+minus the predicted value. We can estimate a model’s Root Mean Squared
+Error (RMSE) or the Mean Absolute Error (MAE). Residuals allow us to
+quantify the extent to which the predicted response value (for a given
+observation) is close to the true response value. Small RMSE or MAE
+values indicate that the prediction is close to the true observed
+value.</p></li>
+<li><p>The <em>p-values</em>: represented by stars *** (and a
+pre-defined critical threshold, e.g. 0.05), they point to the predictive
+power of each feature in the model; i.e. that the event does not occur
+by chance. In the same vein, the magnitude of the coefficient is also
+important, especially given that we are interested in explanatory power
+and not causality.</p></li>
+<li><p>The <em>R-squared</em>: arguably the go-to indicator for
+performance assessment. Low R^2 values are not uncommon, especially in
+the social sciences. However, when hoping to use a model for predictive
+purposes, a low R^2 is a bad sign, large number of statistically
+significant features notwithstanding. The drawback from relying solely
+on this measure is that it does not take into consideration the problem
+of model over-fitting; i.e. you can inflate the R-squared by adding as
+many variables as you want, even if those variables have little
+predicting power. This method will yield great results in the training
+data, but will under perform when extrapolating the model to the test
+(or indeed any other) data set.</p></li>
+</ul>
+<p><strong><em>Residuals</em></strong></p>
+<pre class="python"><code># = = Model Residuals = = #
+# residuals of the train dataset 
+
+# First, predict values of y based on the fitted linear model
+y_pred = model1.predict(X_train)
+
+# Second, calculate residuals. Recall: observed - predicted
+residuals_model1 = y_train - y_pred
+
+# Compute summary statistics of residuals
+residual_mean = np.mean(residuals_model1)
+residual_std = np.std(residuals_model1)
+residual_min = np.min(residuals_model1)
+residual_25th_percentile = np.percentile(residuals_model1, 25)
+residual_median = np.median(residuals_model1)
+residual_75th_percentile = np.percentile(residuals_model1, 75)
+residual_max = np.max(residuals_model1)
+
+# Print summary statistics
+print(f&quot;Mean of residuals: {residual_mean}&quot;)</code></pre>
+<pre><code>## Mean of residuals: 3.2204341636290003e-16</code></pre>
+<pre class="python"><code>print(f&quot;Standard deviation of residuals: {residual_std}&quot;)</code></pre>
+<pre><code>## Standard deviation of residuals: 0.43003194030066827</code></pre>
+<pre class="python"><code>print(f&quot;Minimum residual: {residual_min}&quot;)</code></pre>
+<pre><code>## Minimum residual: -3.277590076409755</code></pre>
+<pre class="python"><code>print(f&quot;25th percentile of residuals: {residual_25th_percentile}&quot;)</code></pre>
+<pre><code>## 25th percentile of residuals: -0.2895732594552083</code></pre>
+<pre class="python"><code>print(f&quot;Median of residuals: {residual_median}&quot;)</code></pre>
+<pre><code>## Median of residuals: -0.013638733126892788</code></pre>
+<pre class="python"><code>print(f&quot;75th percentile of residuals: {residual_75th_percentile}&quot;)</code></pre>
+<pre><code>## 75th percentile of residuals: 0.2657401219175035</code></pre>
+<pre class="python"><code>print(f&quot;Maximum residual: {residual_max}&quot;)</code></pre>
+<pre><code>## Maximum residual: 1.8711412012693618</code></pre>
+<p>Recall that the residual is estimated as the true (observed) value
+minus the predicted value. Thus: the max(imum) error of 1.87 suggests
+that the model under-predicted expenditure by circa (log) $2 (or $6.5)
+for at least one observation. Fifty percent of the predictions (between
+the first and third quartiles) lie between (log) $0.28 and (log) $0.26
+over/under the true value. From the estimation of the prediction
+residuals we obtain the popular measure of performance evaluation known
+as the Root Mean Squared Error (RMSE, for short).</p>
+<pre class="python"><code># Calculate the RMSE for the training dataset, or the in-sample RMSE.
+
+rmse_insample = mean_squared_error(y_train, y_pred, squared=False)
+print(rmse_insample)</code></pre>
+<pre><code>## 0.43003194030066827</code></pre>
+<p>The RMSE (0.4300) gives us an absolute number that indicates how much
+our predicted values deviate from the true (observed) number. This is
+all in reference to the target vector (a.k.a. our outcome variable).
+Think of the question, <em>how far, on average, are the residuals away
+from zero?</em> Generally speaking, the lower the value, the better the
+model fit. Besides being a good measure of goodness of fit, the RMSE is
+also useful for comparing the ability of our model to make predictions
+on different (e.g. test) data sets. The in-sample RMSE should be close
+or equal to the out-of-sample RMSE.</p>
+<p>In this case, our RMSE is ~0.4 units away from zero. Given the range
+of the target variable (roughly 4 to 11), the number seems to be
+relatively small and close enough to zero. Good news!</p>
+<p><strong><em>P-values</em></strong> Recall the large number of
+statistically significant features in our model summary (output table),
+identified by the header P&gt;|z| and the scoring number being below a
+critical <span class="math inline">\(\alpha\)</span> threshold
+(traditionally, 0.05, more strictly, 0.001). We can conclude that the
+features we have selected are relevant predictors.</p>
+<p><strong><em>R-squared</em></strong></p>
+<pre class="python"><code>from sklearn.metrics import r2_score # an evaluation metric (r-squared) that we didn&#39;t load at the beginning
+
+r2_train = r2_score(y_train, model1.predict(X_train))
+
+# Print the R-squared on the training set
+print(f&quot;R-squared on the training dataset: {r2_train}&quot;)</code></pre>
+<pre><code>## R-squared on the training dataset: 0.5992973775467874</code></pre>
+<p>The estimated R-squared of 0.59 tells us that our model predicts
+around 60 per cent of the variation in the independent variable (our
+target, log of per capita monthly expenditures).</p>
+<p><strong>Out of sample predictions </strong></p>
+<p>Now that we have built and evaluated our model in the training
+dataset, we can proceed to make out-of-sample predictions. That is, see
+how our model performs in the test dataset.</p>
+<pre class="python"><code># Fit the model to the training data
+model2 = LinearRegression(fit_intercept=True).fit(X_test, y_test)
+
+# predict y(target) values based on the test data model
+y_test_pred = model2.predict(X_test)
+
+# Calculate Root Mean Squared Error on the test set
+rmse_test = mean_squared_error(y_test, y_test_pred, squared=False)
+
+# Estimate the R squared of the test model
+r2_test = r2_score(y_test, model2.predict(X_test))
+
+# Print the Mean Squared Error and R-squared on the test set
+print(f&quot;Root Mean Squared Error on the test set: {rmse_test}&quot;)</code></pre>
+<pre><code>## Root Mean Squared Error on the test set: 0.4143593687999341</code></pre>
+<pre class="python"><code>print(f&quot;R-squared on the test dataset: {r2_train}&quot;)</code></pre>
+<pre><code>## R-squared on the test dataset: 0.5992973775467874</code></pre>
+<p><strong>The bias-variance tradeoff in practice</strong></p>
+<p>We previously mentioned that the RMSE metric could also be used to
+compare between train and test model predictions:</p>
+<p>Notice that the <em>in-sample RMSE</em> [<span
+class="math inline">\(0.43003\)</span>] is very close to the
+<em>out-of-sample RMSE</em> [<span
+class="math inline">\(0.41435\)</span>]. This means that our model makes
+consistent predictions across different data sets. We also know by now
+that these predictions are relatively good. At least, we hit the mark
+around 60 per cent of the time. What we are observing here is a model
+that has found a balance between bias and variance. However, both
+measures can still improve. For one, McBride and Nichols (2018) report
+&gt; 80 per cent accuracy in their poverty predictions for Malawi. But
+please note that, at this point, we are not replicating their approach.
+They document using a classification model, which means that they
+previously used a poverty line score and divided the sample between
+individuals below and above the poverty line.</p>
+<p><em>What do we mean by bias in a model?</em></p>
+<p>The bias is the difference between the average prediction of our
+model and the true (observed) value. Minimising the bias is analogous to
+minimising the RMSE.</p>
+<p><em>What do we mean by variance in a model?</em></p>
+<p>It is the observed variability of our model prediction for a given
+data point (how much the model can adjust given the data set). A model
+with high variance would yield low error values in the training data but
+high errors in the test data.</p>
+<p>Hence, consistent in and out of sample RMSE scores = bias/variance
+balance.</p>
+<p><strong>Fine-tuning model parameters</strong></p>
+<p>Can we fine-tune model parameters? The quick answer is yes! Every
+machine learning algorithm has a set of parameters that can be
+adjusted/fine-tuned to improve our estimations. Even in the case of a
+simple linear model, we can try our hand at fine-tuning with, for
+example, cross-validation.</p>
+<p><em>What is cross-validation?</em></p>
+<p>Broadly speaking, it is a technique that allows us to assess the
+performance of our machine learning model. How so? Well, it looks at the
+‘stability’ of the model. It’s a measure of how well our model would
+work on new, unseen data (is this ringing a bell yet?); i.e. it has
+correctly observed and recorded the patterns in the data and has not
+captured too much noise (what we know as the error term, or what we are
+unable to explain with our model). K-fold cross-validation is a good
+place to start for such a thing. In the words of <a
+href="https://www.javatpoint.com/cross-validation-in-machine-learning">The
+Internet™</a>, what k-fold cross validation does is:</p>
+<pre><code>Split the input dataset into K groups
++ For each group:
+    + Take one group as the reserve or test data set.
+    + Use remaining groups as the training dataset.
+    + Fit the model on the training set and evaluate the performance of the model using the test set.</code></pre>
+<p>TL;DR We’re improving our splitting technique!</p>
+<p>An Illustration by <a
+href="https://eugenia-anello.medium.com/">Eugenia Anello</a></p>
+<center>
+<div class="figure">
+<img src="Images/kfold_crossvalidation.png" alt=" " width="65%" />
+<p class="caption">
+</p>
+</div>
+</center>
+<p><strong>Let’s rumble!</strong></p>
+<pre class="python"><code>
+from sklearn.model_selection import cross_val_score, KFold
+
+# Linear regression model with k-fold cross-validation
+# This time around, we&#39;ll work with a) the full dataset (no need to split beforehand) and b) model objects instead of estimating the 
+# model on-the-fly!
+
+# object that contains an empty linear regression model
+model_kcrossval = LinearRegression() 
+
+# object that contains the number of folds (or partitions) that we want to have
+k_folds = 10 # 5 or 10 are standard numbers. Choosing the optimal number of folds is beyond the score of this tutorial. 
+
+# object that contains a k-fold cross-validation 
+model_kf = KFold(n_splits=k_folds, shuffle=True, random_state=12345) #recall we had used 12345 as our random state before as well... 
+
+# estimate a k-fold cross-validated model!
+kfold_mse_scores = -cross_val_score(model_kcrossval, X, y.ravel(), cv=model_kf, scoring=&#39;neg_mean_squared_error&#39;)
+</code></pre>
+<p>What is happening in the line of code that estimates the k-fold
+cross-validated model? Let’s see if we can make sense of it: + The
+-cross_val_score (yes, with a minus sign) is a function that is used to
+estimate cross-validation models. + Inside the function, we specify the
+type of model (model_kcrossval = LinearRegression) + Inside the
+function, we specify which dataframe (matrix of features X, full dataset
+minus the target vriable) + Inside the function, we specify which target
+variable y (full dataset), the y.ravel() is to ensure that the function
+reads it as a one-dimensional array + Inside the function, we specify
+what type of cross-validation (cv) technique. Our model_kf object
+defines the cv technique as a k-fold cross-validation with 10 folds. +
+Inside the function, we select a ‘scoring’ = negative mean squared
+error. Why negate the mse? it’s to explicitly tell scikit-learn (the
+library we are using) to minimise the mean squared errors, it’s default
+is to maximise them. <br></p>
+<p>The output that we get is the estimated mean squared error per fold,
+but we can also get the average of all folds and the root mean squared
+error that we’ve been using thus far.</p>
+<pre class="python"><code># get the average mse from all 10 folds
+average_kfold_mse = np.mean(kfold_mse_scores) # finally, numpy library in action
+
+print(&quot;Mean Squared Error for each fold:&quot;, kfold_mse_scores)</code></pre>
+<pre><code>## Mean Squared Error for each fold: [0.1721741  0.17878181 0.19410003 0.17626526 0.19455392 0.18466671
+##  0.16980631 0.20032969 0.17379885 0.20905726]</code></pre>
+<pre class="python"><code>print(f&quot;Average Mean Squared Error: {average_kfold_mse}&quot;)</code></pre>
+<pre><code>## Average Mean Squared Error: 0.18535339333850878</code></pre>
+<pre class="python"><code># get the RMSE, so that we can compare the performance of our cross-validated model
+kfold_rmse_scores = np.sqrt(kfold_mse_scores)
+average_kfold_rmse = np.sqrt(average_kfold_mse)
+
+print(&quot;Root Mean Squared Error for each fold:&quot;, kfold_rmse_scores)</code></pre>
+<pre><code>## Root Mean Squared Error for each fold: [0.41493867 0.42282598 0.44056784 0.41983957 0.44108267 0.42972865
+##  0.41207561 0.44758204 0.4168919  0.4572278 ]</code></pre>
+<pre class="python"><code>print(f&quot;Average Root Mean Squared Error: {average_kfold_rmse}&quot;)</code></pre>
+<pre><code>## Average Root Mean Squared Error: 0.43052687876427503</code></pre>
+<p>Having cross-validated our model with 10 folds, we can see that the
+residual results are virtually the same. We have a RMSE of around .43,
+but what about the R^2? We need to estimate it separately.</p>
+<pre class="python"><code># loading (again!) another metric from scikit-learn
+from sklearn.metrics import make_scorer
+
+# creating an object for r^2 estimates
+r2_scorer = make_scorer(r2_score)
+
+# export r squared as scoring output instead of mean squared errors
+
+kfold_r2_scores = cross_val_score(model_kcrossval, X, y.ravel(), cv=model_kf, scoring=r2_scorer) # note: this time, no negative sign at the beggining!
+
+
+# get the average R^2 for all folds
+average_r2_scores = np.average(kfold_r2_scores)
+
+# print results
+
+print(&quot;R-squared for each fold:&quot;, kfold_r2_scores)</code></pre>
+<pre><code>## R-squared for each fold: [0.60735695 0.58411959 0.57381508 0.62260601 0.60060855 0.61087529
+##  0.62923256 0.57307956 0.60035639 0.52943145]</code></pre>
+<pre class="python"><code>print(f&quot;Average R-squared:{average_r2_scores}&quot;)</code></pre>
+<pre><code>## Average R-squared:0.5931481424710761</code></pre>
+<p><strong>NOTE:</strong> k-fold cross-validation replaces our original
+80/20 split. It is meant to improve our predictions when we have a
+limited number of observations to ‘learn’ from. It let’s us get around
+the fact that we ‘lost’ about 20% of the finite sample to the testing
+dataset by using a reshuffling/resampling technique and making sure we
+have used all the data to ’learn at some point. <br></p>
+<p>Having said the above, based on the R^2 (<span
+class="math inline">\(0.59\)</span>) and the RMSE (<span
+class="math inline">\(0.43\)</span>) estimates, our model predictions
+have not improved after cross-validation. We’re still on the improvement
+path!</p>
+<p><br></p>
+<h3>
+<ol start="4" style="list-style-type: decimal">
+<li>Feature selection with Lasso linear regression
+</h3>
+<br></li>
+</ol>
+<p>An OLS regression is not the only model that can be written in the
+form of <span class="math inline">\(Y_i = \alpha + \beta_1X_{1i},
+\beta_2X_{2i},..., \beta_pX_{pi}+ u_i\)</span>. In this section we will
+discuss ‘penalised’ models, which can also be expressed as a linear
+relationship between parameters. Penalised regression models are also
+known as regression shrinkage methods, and they take their name after
+the colloquial term for coefficient regularisation, ‘shrinkage’ of
+estimated coefficients. The goal of penalised models, as opposed to a
+traditional linear model, is not to minimise bias (least squares
+approach), but to reduce variance by adding a constraint to the equation
+and effectively pushing coefficient parameters towards 0. This results
+in the the worse model predictors having a coefficient of zero or close
+to zero.</p>
+<p>Consider a scenario where you have hundreds of predictors. Which
+covariates are truly important for our known outcome? Including all of
+the predictors leads to <em>over-fitting</em>. We’ll find that the R^2
+value is high, and conclude that our in-sample fit is good. However,
+this may lead to bad out-of-sample predictions. <em>Model selection</em>
+is a particularly challenging endeavour when we encounter
+high-dimensional data; i.e. when the number of variables is close to or
+larger than the number of observations. Some examples where you may
+encounter high-dimensional data include:</p>
+<ol style="list-style-type: decimal">
+<li><p>Cross-country analyses: we have a small and finite number of
+countries, but we may collect/observe as many variables as we
+want.</p></li>
+<li><p>Cluster-population analyses: we wish to understand the outcome of
+some unique population <span class="math inline">\(n\)</span>, e.g. all
+students from classroom A. We collect plenty of information on these
+students, but the sample and the population are analogous <span
+class="math inline">\(n = N\)</span>, and thus the sample number of
+observations is small and finite.</p></li>
+</ol>
+<p>The LASSO - Least Absolute Shrinkage and Selection Operator imposes a
+shrinking penalty to those predictors that do not actually belong in the
+model, and reduces the size of the estimated <span
+class="math inline">\(\beta\)</span> coefficients towards and including
+zero (when the tuning parameter/ shrinkage penalty <span
+class="math inline">\(\lambda\)</span> is sufficiently large). Note that
+<span class="math inline">\(lambda\)</span> is the penalty term called
+<em>L1-norm</em>, and corresponds to the sum of the absolute
+coefficients.</p>
+<p>What does this mean for our case? Well, McBride and Nichols (2018)
+used two sources to compile their final dataset (which we are using).
+One of those sources is the Living Standards Measurement Study (<a
+href="https://www.worldbank.org/en/programs/lsms">LSMS</a>) from the
+World Bank Group. These surveys collect more than 500 variables/
+features per country case. You can subset the dataset with critical
+reasoning: using your knowledge of the phenomenon, which features might
+best describe it? But even then, we might still end up with a large
+number of features. Perhaps a LASSO approach could work here.</p>
+<p>Our own data is not ideal for the approach, because it has a small
+number of features (<span class="math inline">\(29\)</span>), compared
+to the large number of observations (<span
+class="math inline">\(11,280\)</span>). But let’s run a lasso regression
+and see if my statement holds. How would I know if it holds? If the
+Lasso regression returns the same values for the performance assessment
+parameters as the OLS regression; this means that the penalisation
+parameter was either zero (leading back to an OLS) or too small to make
+a difference.</p>
+<pre class="python"><code># (linear) Lasso with scikit-learn
+from sklearn.linear_model import Lasso
+from sklearn.preprocessing import StandardScaler
+
+# before we proceed, we must center and scale (normalise) our features
+normalise_obj = StandardScaler()
+
+# normalise both train and test data (we don&#39;t need to cross-validate, remember? back to our 20/80 split df!)
+X_train_scaled = normalise_obj.fit_transform(X_train) # fit on train dataset and then normalise train dataset
+X_test_scaled = normalise_obj.transform(X_test) # no  need to re-fit, just normalise test dataset
+
+# create lasso model
+
+lasso_model = Lasso(alpha=0.1)
+
+print(&quot;alpha is the regularisation parameter. The closer the alpha value is to zero, the more the model is close to a simple linear regression. Let&#39;s start with the smallest value of alpha, and increase if needed.&quot;)</code></pre>
+<pre><code>## alpha is the regularisation parameter. The closer the alpha value is to zero, the more the model is close to a simple linear regression. Let&#39;s start with the smallest value of alpha, and increase if needed.</code></pre>
+<pre class="python"><code># fit the lasso model on the training data
+lasso_model.fit(X_train_scaled, y_train)</code></pre>
+<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Lasso(alpha=0.1)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">Lasso</label><div class="sk-toggleable__content"><pre>Lasso(alpha=0.1)</pre></div></div></div></div></div>
+<pre class="python"><code># make predictions on the test dataset
+y_lasso_pred = lasso_model.predict(X_test_scaled)
+
+
+# Estimate Root Mean Squared Error on the test set
+mse_lasso = mean_squared_error(y_test, y_lasso_pred)
+rmse_lasso = np.sqrt(mse_lasso)
+
+# Print the Mean Squared Error
+print(f&quot;Root Mean Squared Error on the scaled test set: {rmse_lasso}&quot;)</code></pre>
+<pre><code>## Root Mean Squared Error on the scaled test set: 0.5049684278065933</code></pre>
+<pre class="python"><code># RMSE on train data
+y_lasso_pred_train = lasso_model.predict(X_train_scaled)
+mse_lasso_train = mean_squared_error(y_train, y_lasso_pred_train)
+rmse_lasso_train = np.sqrt(mse_lasso_train)
+
+print(f&quot;Root Mean Squared Error on the scaled train set: {rmse_lasso_train}&quot;)</code></pre>
+<pre><code>## Root Mean Squared Error on the scaled train set: 0.5172317065909608</code></pre>
+<pre class="python"><code># R squared
+
+r2_train = r2_score(y_train, y_lasso_pred_train)
+r2_test = r2_score(y_test, y_lasso_pred)
+
+print(f&quot;R squared on train: {r2_train} and test: {r2_test}&quot;)</code></pre>
+<pre><code>## R squared on train: 0.4203163697877488 and test: 0.41272095987451374</code></pre>
+<p>With an in-sample RMSE of <span class="math inline">\(0.51\)</span>
+and an out-of-sample RMSE of <span class="math inline">\(0.5\)</span> a
+Lasso with a small penalisation parameter performs worse than a simple
+linear regression. Similarly, our R^2 estimates which were at <span
+class="math inline">\(0.59\)</span> before, have now decreased to <span
+class="math inline">\(0.42\)</span>. Do we increase or decrease the
+regularization parameter <span class="math inline">\(\alpha\)</span> ?
+Let’s try decreasing it first:</p>
+<pre class="python"><code># decrease the size of alpha (getting closer to a simple linear regression)
+lasso_model2 = Lasso(alpha=0.01)
+
+# fit the model on the train
+lasso_model2.fit(X_train_scaled, y_train)</code></pre>
+<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Lasso(alpha=0.01)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" checked><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">Lasso</label><div class="sk-toggleable__content"><pre>Lasso(alpha=0.01)</pre></div></div></div></div></div>
+<pre class="python"><code># make predictions on the test dataset
+y_lasso2_pred = lasso_model2.predict(X_test_scaled)
+
+
+# Estimate Root Mean Squared Error on the test set
+mse_lasso2 = mean_squared_error(y_test, y_lasso2_pred)
+rmse_lasso2 = np.sqrt(mse_lasso2)
+
+# Print the Mean Squared Error
+print(f&quot;Root Mean Squared Error of Lasso with 0.01 alpha: {rmse_lasso2} vs 0.1 alpha: {rmse_lasso}&quot;)</code></pre>
+<pre><code>## Root Mean Squared Error of Lasso with 0.01 alpha: 0.4288848193436583 vs 0.1 alpha: 0.5049684278065933</code></pre>
+<pre class="python"><code># optional: plot variable relevance!
+
+# store coefficients in a dataframe first
+coefficients = lasso_model2.coef_
+df_coef = pd.DataFrame({&quot;Att&quot;: X.columns, &quot;Coefs&quot;: coefficients})
+
+plt.figure(figsize=(10, 6))
+plt.barh(df_coef[&#39;Att&#39;], df_coef[&#39;Coefs&#39;], color=&#39;red&#39;)
+plt.title(&#39;Variable Importance - Lasso Regression with 0.01 alpha&#39;)
+plt.xlabel(&#39;Coefficient Magnitude&#39;)
+plt.ylabel(&#39;Feature&#39;)
+plt.show()</code></pre>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-42-1.png" width="960" /></p>
+<p>The performance of our model with a smaller alpha (closer to <span
+class="math inline">\(0\)</span>, or NO penalisation = simple linear
+regression) based on the RMSE indicates that the best performing machine
+learning model is still a simple linear regression, like we had
+initially suggested (given what we know about the structure of our
+data). Our dataset is not a candidate for feature selection with LASSO
+modelling. Also, you should know that you don’t have to manually search
+for the best value of alpha. You can import a search algorithm, also
+from the scikit-learn library, called GridSearchCV. The search algorithm
+will search for the optimal value of alpha for you, from a pre-defined
+range (you do have to manually set the range yourself).</p>
+<p><strong>Conclusion</strong></p>
+<p>At this point, our best predictions are made with a linear regression
+algorithm, which bested a lasso model. As we progress, we will explore
+other common machine learning algorithms to see whether our prediction
+capabilities improve!.</p>
 </div>
 </div>
 

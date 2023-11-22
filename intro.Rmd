@@ -472,7 +472,6 @@ library(reticulate)
 #use_python("/Users/michellegonzalez/.pyenv/versions/3.9.18/bin/python3.9", required = T)
 use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
 
-
 ```
 If you would like to follow the course with Python, we will offer some guidance. Bear in mind that the R and Python scripts are not meant to be exact replicas of one another, this is because the languages offer different data wrangling packages. However, you'll be able to get to the core of the course content.
 
