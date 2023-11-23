@@ -98,13 +98,15 @@ library(gt) # a package to edit modelsummary (and other) tables
 library(stargazer) # a package to visualise model output
 
 data_malawi <- read_csv("malawi.csv") # the file is directly read from the working directory/folder previously set
+
 ```
 
 <h3> 2. Get to know your data: visualisation and pre-processing </h3>
 <br>
 
 ```{r, skimr_digits = 3}
-options(digits = 3) # only print 3 decimal points (you can ignore this line if you want the whole output)
+
+options(pillar.sigfig = 3) # print only 3 digits after the decimal point (feel free to skip this line)
 skim(data_malawi) # describes the dataset in a nice format 
 ```
 <br>
@@ -1282,4 +1284,21 @@ The performance of our model with a smaller alpha (closer to $0$, or NO penalisa
 
 **Conclusion**
 
-At this point, our best predictions are made with a linear regression algorithm, which bested a lasso model. As we progress, we will explore other common machine learning algorithms to see whether our prediction capabilities improve!. 
+At this point, our best predictions are made with a linear regression algorithm, which bested a lasso model. As we progress, we will explore other common machine learning algorithms to see whether our prediction capabilities improve!.
+
+### **Practice at home**
+
+You can replicate the excercises in Python or R using the Malawi dataset. However, if you'd like a challenge, you can also try running Linear and Lasso Linear Model using a similar dataset for the country of Bolivia. The dataset was put together by McBride and Nichols for the same paper for which they used the Malawi dataset. 
+<br>
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/bolivia.csv",
+  button_label = "Download bolivia df (.csv)",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
