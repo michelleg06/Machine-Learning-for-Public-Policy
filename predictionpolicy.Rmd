@@ -1288,6 +1288,8 @@ At this point, our best predictions are made with a linear regression algorithm,
 
 ### **Practice at home**
 
+You can go to our [blog](https://www.ml4pp-blog.com/) and ask questions about the practical exercise on the Prediction Policy Problems post. One of the instructors, or even one of your peers is likely to reply to your thread! You can also leave messages there and propose a meeting on the [Gather.Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy), were you can interact with other people following the course in other parts of the world. 
+
 You can replicate the excercises in Python or R using the Malawi dataset. However, if you'd like a challenge, you can also try running Linear and Lasso Linear Model using a similar dataset for the country of Bolivia. The dataset was put together by McBride and Nichols for the same paper for which they used the Malawi dataset. 
 <br>
 
@@ -1302,3 +1304,5 @@ download_link(
   self_contained = FALSE
 )
 ```
+
+If you do try your hand at it, let us know by answering one simple question in [this link](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_8vjYJqfwiQWalMi).
