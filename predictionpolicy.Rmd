@@ -103,9 +103,11 @@ data_malawi <- read_csv("malawi.csv") # the file is directly read from the worki
 <h3> 2. Get to know your data: visualisation and pre-processing </h3>
 <br>
 
-```{r, message=FALSE}
+```{r, skimr_digits = 3}
+options(digits = 3) # only print 3 decimal points (you can ignore this line if you want the whole output)
 skim(data_malawi) # describes the dataset in a nice format 
 ```
+<br>
 
 - The dataset contains 38 variables and 11,280 observations.
 
@@ -119,13 +121,16 @@ skim(data_malawi) # describes the dataset in a nice format
 
 - Luckily for us, we have no missing values (n_missing in summary output)!
 
-A) Machine learning models cannot be trained when missing values are present.
+    A) Machine learning models cannot be trained when missing values are present.
 
-B) Dealing with missingness is a non-trivial task: 
+    B) Dealing with missingness is a non-trivial task: 
+    
+```
 First and foremost, we should assess whether there is a pattern to missingness and if so, 
 what that means to what we can learn from our (sub)population. If there is no discernible pattern, 
 we can proceed to delete the missing values or impute them. A more detailed explanation and course of action
 can be found [here](https://stefvanbuuren.name/fimd/sec-MCAR.html).
+```
 
 **Feature selection: subsetting the dataset **
 
@@ -133,8 +138,10 @@ As part of our data pre-processing we will subset the dataframe, such that only 
 * Relevant: variables/features about a household that could help us determine whether they are in poverty.
 That way, we save some memory space; but also, we can call the full set of variables in a dataframe in one go!
 
+```
 variables to delete (not included in the identified set above):
 [ea, EA, hhwght, psu, strataid, lnzline, case_id, eatype] 
+```
 
 **N/B**: Feature selection is a *critical process* (and we normally don't have a paper to guide us through it): from a practical point of view, a model with less predictors may be easier to interpret. Also, some models may be negatively affected by non-informative predictors. This process is similar to traditional econometric modelling, but we should not conflate predictive and explanatory modelling. Importantly, please note that we are not interested in knowing why something happens, but rather in what is likely to happen given some known data. Hence:
 
@@ -145,7 +152,8 @@ cols <- c("ea", "EA", "psu","hhwght", "strataid", "lnzline", "case_id","eatype")
 
 
 # subset of the data_malawi object:datframe
-data_malawi <- data_malawi[,-which(colnames(data_malawi) %in% cols)] # 30 variables remain
+data_malawi <- data_malawi[,-which(colnames(data_malawi) %in% cols)] # the minus sign indicates deletion of cols
+
 
 ```
 
@@ -183,27 +191,32 @@ for (i in 1:ncol(data_malawi)) { # iterate over the length of columns in the dat
     
 }
 
+# If you want to optimise your code, using for loops is not ideal. In R, there exists a family of functions called Apply whose purpose is to apply some function to all the elements in an object. For the time being, iterating over 38 columns is fast enough and we don't need to think about optimising our code. We'll also see an example later on on how to use one of the functions from the apply family. You can also refer to this blog (https://www.r-bloggers.com/2021/05/apply-family-in-r-apply-lapply-sapply-mapply-and-tapply/) if you want to learn more about it. 
+
 ```
 <br>
-Notice that we have a few variables with 2 unique values and one variable with 3 unique values. We should transform these into factor() class. We can do this one by one, or in one shot. I'll give an example of both:
+
+Notice that we have a few variables with 2 unique values and one variable with 3 unique values. We should transform these into factor() class. Recall from the introduction tab that in object-oriented programming correctly identifying the variable type (vector class) is crucial for data manipulation and arithmetic operations. We can do this one by one, or in one shot. I'll give an example of both:
 
 ```{r, message=FALSE}
+# == One by one == # 
 
-data_malawi$north <- factor(data_malawi$north)
-str(data_malawi$north) # 2 is labelled as "1" and 1 is labelled as "0". This is not an issue. For future reference, you can label the categories.
-head(data_malawi$north) # first 6 observations are 1 = north
-tail(data_malawi$north) # last 6 observations are 0 = not north
-levels(data_malawi$north) <- c("not_north","north") # the order of the label matters (label for "0" comes firts.)
-head(data_malawi$north) # first 6 observations are north
-tail(data_malawi$north) # last 6 observations are not north
+# transform a variable in df to factor, and pass it on to the df to keep the change
+# first, sneak peak at the first 5 observations (rows) of the vector
+head(data_malawi$north) # returns 1 = North 
+data_malawi$north <- factor(data_malawi$north, levels = c(0, 1), labels = c("NotNorth", "North"))
 
-# long story short, R stores factors as 1...n; but the label remains the numeric value assigned (1 for true, 0 false)
+str(data_malawi$north) # returns 2?
+head(data_malawi$north) # returns north (which was = 1 before), hooray!
+# R stores factors as 1...n; but the label remains the initial numeric value assigned (1 for true, 0 false)
+# We have also explicityly told 0 is NotNorth and 1 is North (by the order that follows the line of code)
+
 
 # transform all binary/categorical data into factor class
-
 min_count <- 3 # vector: 3 categories is our max number of categories found
 
-# apply a lenght(unique(x)) function to all the columns (rows = 1, columns = 2) of the data_malawi dataframe, then
+# == Apply family: function apply and lapply==#
+# apply a length(unique(x)) function to all the columns (rows = 1, columns = 2) of the data_malawi dataframe, then
 # store boolean (true/false) if the number of unique values is lower or equal to the min_count vector
 n_distinct2 <- apply(data_malawi, 2, function(x) length(unique(x))) <= min_count
 
@@ -211,9 +224,6 @@ n_distinct2 <- apply(data_malawi, 2, function(x) length(unique(x))) <= min_count
 
 # select the identified categorical variables and transform them into factors
 data_malawi[n_distinct2] <- lapply(data_malawi[n_distinct2], factor) 
-
-# skim your dataframe 
-skim(data_malawi) #success!
 
 ```
 
@@ -267,6 +277,7 @@ for (i in 1:ncol(malawi_factor)) { # Loop over all the columns in the factor df 
 llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package
 
 ```
+<br>
 
 What have we learned from the data visualisation?
 
@@ -489,10 +500,10 @@ Broadly speaking, it is a technique that allows us to assess the performance of 
    
 ```
 Split the input dataset into K groups
-+ For each group:
-    + Take one group as the reserve or test data set.
-    + Use remaining groups as the training dataset.
-    + Fit the model on the training set and evaluate the performance of the model using the test set.
+    For each group:
+        - Take one group as the reserve or test data set.
+        - Use remaining groups as the training dataset.
+        - Fit the model on the training set and evaluate the performance of the model using the test set.
 ``` 
     
 TL;DR We're improving our splitting technique!
@@ -555,7 +566,7 @@ print(ols_kfold3)
 
 Having cross-validated our model with 10 folds, we can see that the results are virtually the same. We have a RMSE of around .43, an R^2 of .59, (and a MAE of .33). We ran the same model for the train, test and full datasets and find results are consistent. Recall the R^2 tells us the model's predictive ability and the RMSE and MAE the model's accuracy.
     
-**NOTE:** k-fold cross-validation replaces our original 80/20 split (we don't need to do that anymore!) Therefore, we use the full dataset in the train() function. Using the train,test and full datasets in the example above was just for pedagogical purposes but it is no longer necessary and we can use the reported estimates of R^2 (close to 1!), RMSE (close to 0!) and MAE (let's go low!) for model assessment without comparing them to another set of predictions.
+**NOTE:** k-fold cross-validation replaces our original 80/20 split (we don't need to do that anymore!) Therefore, we use the full dataset in the train() function. Using the train, test and full datasets in the example above was just for pedagogical purposes but it is no longer necessary and we can use the reported estimates of R^2 (close to 1!), RMSE (close to 0!) and MAE (let's go low!) for model assessment without comparing them to another set of predictions. These reported parameters are estimated as the average of the R^2, RMSE, and MAE for all the folds. 
 <br>
 
 <h3> 4. Feature selection with Lasso linear regression </h3>
@@ -569,8 +580,7 @@ Consider a scenario where you have hundreds of predictors. Which covariates are 
 
 2. Cluster-population analyses: we wish to understand the outcome of some unique population $n$, e.g. all students from classroom A. We collect plenty of information on these students, but the sample and the population are analogous $n = N$, and thus the sample number of observations is small and finite. 
 
-The LASSO - Least Absolute Shrinkage and Selection Operator imposes a shrinking penalty to those predictors that do not actually belong in the model, and reduces the size of the estimated $\beta$ coefficients towards and including zero (when the tuning parameter/ shrinkage penalty $\lambda$ is sufficiently large). Note that $lambda$ is the penalty term called *L1-norm*, 
-and corresponds to the sum of the absolute coefficients.
+The LASSO - Least Absolute Shrinkage and Selection Operator imposes a shrinking penalty to those predictors that do not actually belong in the model, and reduces the size of the estimated $\beta$ coefficients towards and including zero (when the tuning parameter/ shrinkage penalty $\lambda$ is sufficiently large). Note that $lambda$ is the penalty term called *L1-norm*, and corresponds to the sum of the absolute coefficients.
 
 What does this mean for our case? Well, McBride and Nichols (2018) used two sources to compile their final dataset (which we are using). One of those sources is the Living Standards Measurement Study ([LSMS](https://www.worldbank.org/en/programs/lsms)) from the World Bank Group. These surveys collect more than 500 variables/ features per country case. You can subset the dataset with critical reasoning: using your knowledge of the phenomenon, which features might best describe it? But even then, we might still end up with a large number of features. Perhaps a LASSO approach could work here. 
 

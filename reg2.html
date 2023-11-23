@@ -514,8 +514,8 @@ hist.data.frame(malawi_continuous)</code></pre>
 The only thing we did not do last time, was try to understand the
 distributions which bunched at the zero value. We will do that now.</p>
 <pre class="r"><code>summary(malawi$hh_d10) #Amt [NAME] spent in the past 4 weeks for all illnesses and injuries?</code></pre>
-<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-##      0.0      0.0      0.0    124.4      0.0 220000.0</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##       0       0       0     124       0  220000</code></pre>
 <pre class="r"><code>unique(malawi$hh_d10) # variable distribution is legitimate.</code></pre>
 <pre><code>##   [1]      0   2800    250   1300   1100   1000    300      8    600  10000
 ##  [11]   1500   2500   2000   3000    100    200    500   6000   3500   7500
@@ -716,10 +716,10 @@ print(model_lasso)</code></pre>
 ## Summary of sample sizes: 28619, 28619, 28619, 28619, 28619, 28619, ... 
 ## Resampling results across tuning parameters:
 ## 
-##   fraction  RMSE      Rsquared    MAE     
-##   0.1       9.864623  0.07498428  4.017711
-##   0.5       9.595137  0.09158449  3.978529
-##   0.9       9.588421  0.09240227  4.010338
+##   fraction  RMSE  Rsquared  MAE 
+##   0.1       9.86  0.0750    4.02
+##   0.5       9.60  0.0916    3.98
+##   0.9       9.59  0.0924    4.01
 ## 
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final value used for the model was fraction = 0.9.</code></pre>
@@ -763,10 +763,10 @@ lasso_predictions &lt;-  predict(model_lasso, newdata = test_features)
 
 # RMSE
 sqrt(mean((test_target - lasso_predictions)^2))</code></pre>
-<pre><code>## [1] 9.888506</code></pre>
+<pre><code>## [1] 9.89</code></pre>
 <pre class="r"><code># R^2
 cor(test_target, lasso_predictions) ^ 2</code></pre>
-<pre><code>## [1] 0.1051635</code></pre>
+<pre><code>## [1] 0.105</code></pre>
 <p>Our manual results are much like what we observed from printing the
 model.</p>
 <p><strong>Cross validation: k-fold with caret()</strong></p>
@@ -828,10 +828,10 @@ print(lasso_kfold)</code></pre>
 ## Summary of sample sizes: 25758, 25757, 25757, 25759, 25756, 25756, ... 
 ## Resampling results across tuning parameters:
 ## 
-##   fraction  RMSE      Rsquared    MAE     
-##   0.1       9.859488  0.07799664  4.019956
-##   0.5       9.590976  0.09166445  3.974331
-##   0.9       9.584186  0.09290247  4.002476
+##   fraction  RMSE  Rsquared  MAE 
+##   0.1       9.86  0.0780    4.02
+##   0.5       9.59  0.0917    3.97
+##   0.9       9.58  0.0929    4.00
 ## 
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final value used for the model was fraction = 0.9.</code></pre>
@@ -847,10 +847,10 @@ lasso_10kpredictions &lt;- predict(lasso_kfold, newdata = test_features)
 
 # RMSE
 sqrt(mean((test_target - lasso_10kpredictions)^2))</code></pre>
-<pre><code>## [1] 9.888506</code></pre>
+<pre><code>## [1] 9.89</code></pre>
 <pre class="r"><code># R2
 cor(test_target, lasso_10kpredictions) ^ 2</code></pre>
-<pre><code>## [1] 0.1051635</code></pre>
+<pre><code>## [1] 0.105</code></pre>
 <p>A final note: there is some discussion over whether k-fold or really
 any cross validation technique is optimal for choosing the lambda
 parameter in Lasso models (see for example, this Coursera <a

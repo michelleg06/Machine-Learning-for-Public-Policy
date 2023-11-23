@@ -403,7 +403,8 @@ data_malawi &lt;- read_csv(&quot;malawi.csv&quot;) # the file is directly read f
 </h3>
 <br></li>
 </ol>
-<pre class="r"><code>skim(data_malawi) # describes the dataset in a nice format </code></pre>
+<pre class="r"><code>options(digits = 3) # only print 3 decimal points (you can ignore this line if you want the whole output)
+skim(data_malawi) # describes the dataset in a nice format </code></pre>
 <table style="width: auto;" class="table table-condensed">
 <caption>
 Data summary
@@ -616,25 +617,25 @@ lnexp_pc_month
 1
 </td>
 <td style="text-align:right;">
-7.360000e+00
+7.36e+00
 </td>
 <td style="text-align:right;">
-6.800000e-01
+6.75e-01
 </td>
 <td style="text-align:right;">
-4.7800e+00
+4.78e+00
 </td>
 <td style="text-align:right;">
-6.890000e+00
+6.89e+00
 </td>
 <td style="text-align:right;">
-7.310000e+00
+7.30e+00
 </td>
 <td style="text-align:right;">
-7.760000e+00
+7.76e+00
 </td>
 <td style="text-align:right;">
-1.106000e+01
+1.11e+01
 </td>
 <td style="text-align:left;">
 ▁▇▇▁▁
@@ -651,25 +652,25 @@ hhsize
 1
 </td>
 <td style="text-align:right;">
-4.550000e+00
+4.55e+00
 </td>
 <td style="text-align:right;">
-2.340000e+00
+2.34e+00
 </td>
 <td style="text-align:right;">
-1.0000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-3.000000e+00
+3.00e+00
 </td>
 <td style="text-align:right;">
-4.000000e+00
+4.00e+00
 </td>
 <td style="text-align:right;">
-6.000000e+00
+6.00e+00
 </td>
 <td style="text-align:right;">
-2.700000e+01
+2.70e+01
 </td>
 <td style="text-align:left;">
 ▇▂▁▁▁
@@ -686,25 +687,25 @@ hhsize2
 1
 </td>
 <td style="text-align:right;">
-2.613000e+01
+2.61e+01
 </td>
 <td style="text-align:right;">
-2.799000e+01
+2.80e+01
 </td>
 <td style="text-align:right;">
-1.0000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-9.000000e+00
+9.00e+00
 </td>
 <td style="text-align:right;">
-1.600000e+01
+1.60e+01
 </td>
 <td style="text-align:right;">
-3.600000e+01
+3.60e+01
 </td>
 <td style="text-align:right;">
-7.290000e+02
+7.29e+02
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -721,25 +722,25 @@ agehead
 1
 </td>
 <td style="text-align:right;">
-4.246000e+01
+4.25e+01
 </td>
 <td style="text-align:right;">
-1.636000e+01
+1.64e+01
 </td>
 <td style="text-align:right;">
-1.0000e+01
+1.00e+01
 </td>
 <td style="text-align:right;">
-2.900000e+01
+2.90e+01
 </td>
 <td style="text-align:right;">
-3.900000e+01
+3.90e+01
 </td>
 <td style="text-align:right;">
-5.400000e+01
+5.40e+01
 </td>
 <td style="text-align:right;">
-1.040000e+02
+1.04e+02
 </td>
 <td style="text-align:left;">
 ▅▇▅▂▁
@@ -756,25 +757,25 @@ agehead2
 1
 </td>
 <td style="text-align:right;">
-2.070610e+03
+2.07e+03
 </td>
 <td style="text-align:right;">
-1.618600e+03
+1.62e+03
 </td>
 <td style="text-align:right;">
-1.0000e+02
+1.00e+02
 </td>
 <td style="text-align:right;">
-8.410000e+02
+8.41e+02
 </td>
 <td style="text-align:right;">
-1.521000e+03
+1.52e+03
 </td>
 <td style="text-align:right;">
-2.916000e+03
+2.92e+03
 </td>
 <td style="text-align:right;">
-1.081600e+04
+1.08e+04
 </td>
 <td style="text-align:left;">
 ▇▃▁▁▁
@@ -791,25 +792,25 @@ north
 1
 </td>
 <td style="text-align:right;">
-1.500000e-01
+1.49e-01
 </td>
 <td style="text-align:right;">
-3.600000e-01
+3.56e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -826,25 +827,25 @@ central
 1
 </td>
 <td style="text-align:right;">
-3.800000e-01
+3.83e-01
 </td>
 <td style="text-align:right;">
-4.900000e-01
+4.86e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▅
@@ -861,25 +862,25 @@ rural
 1
 </td>
 <td style="text-align:right;">
-8.700000e-01
+8.72e-01
 </td>
 <td style="text-align:right;">
-3.300000e-01
+3.34e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▁▁▁▁▇
@@ -896,25 +897,25 @@ nevermarried
 1
 </td>
 <td style="text-align:right;">
-3.000000e-02
+3.10e-02
 </td>
 <td style="text-align:right;">
-1.700000e-01
+1.73e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -931,25 +932,25 @@ sharenoedu
 1
 </td>
 <td style="text-align:right;">
-1.700000e-01
+1.65e-01
 </td>
 <td style="text-align:right;">
-2.600000e-01
+2.60e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-2.500000e-01
+2.50e-01
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▂▁▁▁
@@ -966,25 +967,25 @@ shareread
 1
 </td>
 <td style="text-align:right;">
-6.100000e-01
+6.06e-01
 </td>
 <td style="text-align:right;">
-3.800000e-01
+3.81e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-3.300000e-01
+3.33e-01
 </td>
 <td style="text-align:right;">
-6.700000e-01
+6.67e-01
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▅▁▅▂▇
@@ -1001,25 +1002,25 @@ nrooms
 1
 </td>
 <td style="text-align:right;">
-2.500000e+00
+2.50e+00
 </td>
 <td style="text-align:right;">
-1.300000e+00
+1.30e+00
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-2.000000e+00
+2.00e+00
 </td>
 <td style="text-align:right;">
-2.000000e+00
+2.00e+00
 </td>
 <td style="text-align:right;">
-3.000000e+00
+3.00e+00
 </td>
 <td style="text-align:right;">
-1.600000e+01
+1.60e+01
 </td>
 <td style="text-align:left;">
 ▇▂▁▁▁
@@ -1036,25 +1037,25 @@ floor_cement
 1
 </td>
 <td style="text-align:right;">
-2.000000e-01
+1.99e-01
 </td>
 <td style="text-align:right;">
-4.000000e-01
+3.99e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1071,25 +1072,25 @@ electricity
 1
 </td>
 <td style="text-align:right;">
-6.000000e-02
+5.90e-02
 </td>
 <td style="text-align:right;">
-2.300000e-01
+2.35e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -1106,25 +1107,25 @@ flushtoilet
 1
 </td>
 <td style="text-align:right;">
-3.000000e-02
+2.80e-02
 </td>
 <td style="text-align:right;">
-1.700000e-01
+1.66e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -1141,25 +1142,25 @@ soap
 1
 </td>
 <td style="text-align:right;">
-1.400000e-01
+1.37e-01
 </td>
 <td style="text-align:right;">
-3.400000e-01
+3.43e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -1176,25 +1177,25 @@ bed
 1
 </td>
 <td style="text-align:right;">
-3.200000e-01
+3.22e-01
 </td>
 <td style="text-align:right;">
-4.700000e-01
+4.67e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▃
@@ -1211,25 +1212,25 @@ bike
 1
 </td>
 <td style="text-align:right;">
-3.600000e-01
+3.62e-01
 </td>
 <td style="text-align:right;">
-4.800000e-01
+4.81e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▅
@@ -1246,25 +1247,25 @@ musicplayer
 1
 </td>
 <td style="text-align:right;">
-1.600000e-01
+1.64e-01
 </td>
 <td style="text-align:right;">
-3.700000e-01
+3.71e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1281,25 +1282,25 @@ coffeetable
 1
 </td>
 <td style="text-align:right;">
-1.200000e-01
+1.17e-01
 </td>
 <td style="text-align:right;">
-3.200000e-01
+3.22e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -1316,25 +1317,25 @@ iron
 1
 </td>
 <td style="text-align:right;">
-2.100000e-01
+2.05e-01
 </td>
 <td style="text-align:right;">
-4.000000e-01
+4.04e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1351,25 +1352,25 @@ dimbagarden
 1
 </td>
 <td style="text-align:right;">
-3.200000e-01
+3.21e-01
 </td>
 <td style="text-align:right;">
-4.700000e-01
+4.67e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▃
@@ -1386,25 +1387,25 @@ goats
 1
 </td>
 <td style="text-align:right;">
-2.100000e-01
+2.15e-01
 </td>
 <td style="text-align:right;">
-4.100000e-01
+4.11e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1421,25 +1422,25 @@ dependratio
 1
 </td>
 <td style="text-align:right;">
-1.120000e+00
+1.12e+00
 </td>
 <td style="text-align:right;">
-9.500000e-01
+9.49e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-5.000000e-01
+5.00e-01
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.500000e+00
+1.50e+00
 </td>
 <td style="text-align:right;">
-9.000000e+00
+9.00e+00
 </td>
 <td style="text-align:left;">
 ▇▂▁▁▁
@@ -1456,25 +1457,25 @@ hfem
 1
 </td>
 <td style="text-align:right;">
-2.300000e-01
+2.29e-01
 </td>
 <td style="text-align:right;">
-4.200000e-01
+4.20e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1491,25 +1492,25 @@ grassroof
 1
 </td>
 <td style="text-align:right;">
-7.400000e-01
+7.38e-01
 </td>
 <td style="text-align:right;">
-4.400000e-01
+4.40e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▃▁▁▁▇
@@ -1526,25 +1527,25 @@ mortarpestle
 1
 </td>
 <td style="text-align:right;">
-5.000000e-01
+5.00e-01
 </td>
 <td style="text-align:right;">
-5.000000e-01
+5.00e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▇
@@ -1561,25 +1562,25 @@ table
 1
 </td>
 <td style="text-align:right;">
-3.600000e-01
+3.57e-01
 </td>
 <td style="text-align:right;">
-4.800000e-01
+4.79e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▅
@@ -1596,25 +1597,25 @@ clock
 1
 </td>
 <td style="text-align:right;">
-2.000000e-01
+1.99e-01
 </td>
 <td style="text-align:right;">
-4.000000e-01
+3.99e-01
 </td>
 <td style="text-align:right;">
-0.0000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-1.000000e+00
+1.00e+00
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▂
@@ -1631,25 +1632,25 @@ ea
 1
 </td>
 <td style="text-align:right;">
-7.606000e+01
+7.61e+01
 </td>
 <td style="text-align:right;">
-1.885500e+02
+1.89e+02
 </td>
 <td style="text-align:right;">
-1.0000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-8.000000e+00
+8.00e+00
 </td>
 <td style="text-align:right;">
-1.900000e+01
+1.90e+01
 </td>
 <td style="text-align:right;">
-4.525000e+01
+4.52e+01
 </td>
 <td style="text-align:right;">
-9.010000e+02
+9.01e+02
 </td>
 <td style="text-align:left;">
 ▇▁▁▁▁
@@ -1666,25 +1667,25 @@ EA
 1
 </td>
 <td style="text-align:right;">
-2.372322e+07
+2.37e+07
 </td>
 <td style="text-align:right;">
-7.241514e+06
+7.24e+06
 </td>
 <td style="text-align:right;">
-1.0101e+07
+1.01e+07
 </td>
 <td style="text-align:right;">
-2.040204e+07
+2.04e+07
 </td>
 <td style="text-align:right;">
-2.090352e+07
+2.09e+07
 </td>
 <td style="text-align:right;">
-3.053301e+07
+3.05e+07
 </td>
 <td style="text-align:right;">
-3.120209e+07
+3.12e+07
 </td>
 <td style="text-align:left;">
 ▂▁▆▁▇
@@ -1701,25 +1702,25 @@ hhwght
 1
 </td>
 <td style="text-align:right;">
-2.387900e+02
+2.39e+02
 </td>
 <td style="text-align:right;">
-7.001000e+01
+7.00e+01
 </td>
 <td style="text-align:right;">
-7.9000e+01
+7.90e+01
 </td>
 <td style="text-align:right;">
-2.076000e+02
+2.08e+02
 </td>
 <td style="text-align:right;">
-2.471000e+02
+2.47e+02
 </td>
 <td style="text-align:right;">
-2.913000e+02
+2.91e+02
 </td>
 <td style="text-align:right;">
-3.587000e+02
+3.59e+02
 </td>
 <td style="text-align:left;">
 ▂▁▇▇▂
@@ -1736,25 +1737,25 @@ psu
 1
 </td>
 <td style="text-align:right;">
-2.372322e+07
+2.37e+07
 </td>
 <td style="text-align:right;">
-7.241514e+06
+7.24e+06
 </td>
 <td style="text-align:right;">
-1.0101e+07
+1.01e+07
 </td>
 <td style="text-align:right;">
-2.040204e+07
+2.04e+07
 </td>
 <td style="text-align:right;">
-2.090352e+07
+2.09e+07
 </td>
 <td style="text-align:right;">
-3.053301e+07
+3.05e+07
 </td>
 <td style="text-align:right;">
-3.120209e+07
+3.12e+07
 </td>
 <td style="text-align:left;">
 ▂▁▆▁▇
@@ -1771,25 +1772,25 @@ strataid
 1
 </td>
 <td style="text-align:right;">
-1.560000e+01
+1.56e+01
 </td>
 <td style="text-align:right;">
-8.090000e+00
+8.09e+00
 </td>
 <td style="text-align:right;">
-1.0000e+00
+1.00e+00
 </td>
 <td style="text-align:right;">
-9.000000e+00
+9.00e+00
 </td>
 <td style="text-align:right;">
-1.500000e+01
+1.50e+01
 </td>
 <td style="text-align:right;">
-2.200000e+01
+2.20e+01
 </td>
 <td style="text-align:right;">
-3.000000e+01
+3.00e+01
 </td>
 <td style="text-align:left;">
 ▅▇▇▆▅
@@ -1806,25 +1807,25 @@ lnzline
 1
 </td>
 <td style="text-align:right;">
-7.550000e+00
+7.55e+00
 </td>
 <td style="text-align:right;">
-0.000000e+00
+0.00e+00
 </td>
 <td style="text-align:right;">
-7.5500e+00
+7.55e+00
 </td>
 <td style="text-align:right;">
-7.550000e+00
+7.55e+00
 </td>
 <td style="text-align:right;">
-7.550000e+00
+7.55e+00
 </td>
 <td style="text-align:right;">
-7.550000e+00
+7.55e+00
 </td>
 <td style="text-align:right;">
-7.550000e+00
+7.55e+00
 </td>
 <td style="text-align:left;">
 ▁▁▇▁▁
@@ -1841,25 +1842,25 @@ case_id
 1
 </td>
 <td style="text-align:right;">
-2.372322e+10
+2.37e+10
 </td>
 <td style="text-align:right;">
-7.241514e+09
+7.24e+09
 </td>
 <td style="text-align:right;">
-1.0101e+10
+1.01e+10
 </td>
 <td style="text-align:right;">
-2.040204e+10
+2.04e+10
 </td>
 <td style="text-align:right;">
-2.090352e+10
+2.09e+10
 </td>
 <td style="text-align:right;">
-3.053301e+10
+3.05e+10
 </td>
 <td style="text-align:right;">
-3.120209e+10
+3.12e+10
 </td>
 <td style="text-align:left;">
 ▂▁▆▁▇
@@ -1867,6 +1868,7 @@ case_id
 </tr>
 </tbody>
 </table>
+<p><br></p>
 <ul>
 <li><p>The dataset contains 38 variables and 11,280
 observations.</p></li>
@@ -1882,28 +1884,26 @@ share_of_adults_without_education, share_of_adults_who_can_read, number
 of rooms, cement floor, electricity, flush toilet, soap, bed, bike,
 music player, coffee table, iron, garden, goats] <br></p>
 <ul>
-<li>Luckily for us, we have no missing values (n_missing in summary
-output)!</li>
-</ul>
+<li><p>Luckily for us, we have no missing values (n_missing in summary
+output)!</p>
 <ol style="list-style-type: upper-alpha">
 <li><p>Machine learning models cannot be trained when missing values are
 present.</p></li>
-<li><p>Dealing with missingness is a non-trivial task: First and
-foremost, we should assess whether there is a pattern to missingness and
-if so, what that means to what we can learn from our (sub)population. If
-there is no discernible pattern, we can proceed to delete the missing
-values or impute them. A more detailed explanation and course of action
-can be found <a
-href="https://stefvanbuuren.name/fimd/sec-MCAR.html">here</a>.</p></li>
-</ol>
+<li><p>Dealing with missingness is a non-trivial task:</p></li>
+</ol></li>
+</ul>
+<pre><code>First and foremost, we should assess whether there is a pattern to missingness and if so, 
+what that means to what we can learn from our (sub)population. If there is no discernible pattern, 
+we can proceed to delete the missing values or impute them. A more detailed explanation and course of action
+can be found [here](https://stefvanbuuren.name/fimd/sec-MCAR.html).</code></pre>
 <p><strong>Feature selection: subsetting the dataset </strong></p>
 <p>As part of our data pre-processing we will subset the dataframe, such
 that only relevant variables are left. * Relevant: variables/features
 about a household that could help us determine whether they are in
 poverty. That way, we save some memory space; but also, we can call the
 full set of variables in a dataframe in one go!</p>
-<p>variables to delete (not included in the identified set above): [ea,
-EA, hhwght, psu, strataid, lnzline, case_id, eatype]</p>
+<pre><code>variables to delete (not included in the identified set above):
+[ea, EA, hhwght, psu, strataid, lnzline, case_id, eatype] </code></pre>
 <p><strong>N/B</strong>: Feature selection is a <em>critical
 process</em> (and we normally don’t have a paper to guide us through
 it): from a practical point of view, a model with less predictors may be
@@ -1919,7 +1919,7 @@ cols &lt;- c(&quot;ea&quot;, &quot;EA&quot;, &quot;psu&quot;,&quot;hhwght&quot;,
 
 
 # subset of the data_malawi object:datframe
-data_malawi &lt;- data_malawi[,-which(colnames(data_malawi) %in% cols)] # 30 variables remain</code></pre>
+data_malawi &lt;- data_malawi[,-which(colnames(data_malawi) %in% cols)] # the minus sign indicates deletion of cols</code></pre>
 <p>A few notes for you:</p>
 <ul>
 <li><p>a dataframe follows the form data[rows,colums]</p></li>
@@ -2010,923 +2010,43 @@ for (i in 1:ncol(data_malawi)) { # iterate over the length of columns in the dat
 ## [1] 2
 ## [1] &quot;region&quot;
 ## [1] 3</code></pre>
-<p><br> Notice that we have a few variables with 2 unique values and one
+<pre class="r"><code># If you want to optimise your code, using for loops is not ideal. In R, there exists a family of functions called Apply whose purpose is to apply some function to all the elements in an object. For the time being, iterating over 38 columns is fast enough and we don&#39;t need to think about optimising our code. We&#39;ll also see an example later on on how to use one of the functions from the apply family. You can also refer to this blog (https://www.r-bloggers.com/2021/05/apply-family-in-r-apply-lapply-sapply-mapply-and-tapply/) if you want to learn more about it. </code></pre>
+<p><br></p>
+<p>Notice that we have a few variables with 2 unique values and one
 variable with 3 unique values. We should transform these into factor()
-class. We can do this one by one, or in one shot. I’ll give an example
-of both:</p>
-<pre class="r"><code>data_malawi$north &lt;- factor(data_malawi$north)
-str(data_malawi$north) # 2 is labelled as &quot;1&quot; and 1 is labelled as &quot;0&quot;. This is not an issue. For future reference, you can label the categories.</code></pre>
-<pre><code>##  Factor w/ 2 levels &quot;0&quot;,&quot;1&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<pre class="r"><code>head(data_malawi$north) # first 6 observations are 1 = north</code></pre>
-<pre><code>## [1] 1 1 1 1 1 1
-## Levels: 0 1</code></pre>
-<pre class="r"><code>tail(data_malawi$north) # last 6 observations are 0 = not north</code></pre>
-<pre><code>## [1] 0 0 0 0 0 0
-## Levels: 0 1</code></pre>
-<pre class="r"><code>levels(data_malawi$north) &lt;- c(&quot;not_north&quot;,&quot;north&quot;) # the order of the label matters (label for &quot;0&quot; comes firts.)
-head(data_malawi$north) # first 6 observations are north</code></pre>
-<pre><code>## [1] north north north north north north
-## Levels: not_north north</code></pre>
-<pre class="r"><code>tail(data_malawi$north) # last 6 observations are not north</code></pre>
-<pre><code>## [1] not_north not_north not_north not_north not_north not_north
-## Levels: not_north north</code></pre>
-<pre class="r"><code># long story short, R stores factors as 1...n; but the label remains the numeric value assigned (1 for true, 0 false)
+class. Recall from the introduction tab that in object-oriented
+programming correctly identifying the variable type (vector class) is
+crucial for data manipulation and arithmetic operations. We can do this
+one by one, or in one shot. I’ll give an example of both:</p>
+<pre class="r"><code># == One by one == # 
+
+# transform a variable in df to factor, and pass it on to the df to keep the change
+# first, sneak peak at the first 5 observations (rows) of the vector
+head(data_malawi$north) # returns 1 = North </code></pre>
+<pre><code>## [1] 1 1 1 1 1 1</code></pre>
+<pre class="r"><code>data_malawi$north &lt;- factor(data_malawi$north, levels = c(0, 1), labels = c(&quot;NotNorth&quot;, &quot;North&quot;))
+
+str(data_malawi$north) # returns 2?</code></pre>
+<pre><code>##  Factor w/ 2 levels &quot;NotNorth&quot;,&quot;North&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<pre class="r"><code>head(data_malawi$north) # returns north (which was = 1 before), hooray!</code></pre>
+<pre><code>## [1] North North North North North North
+## Levels: NotNorth North</code></pre>
+<pre class="r"><code># R stores factors as 1...n; but the label remains the initial numeric value assigned (1 for true, 0 false)
+# We have also explicityly told 0 is NotNorth and 1 is North (by the order that follows the line of code)
+
 
 # transform all binary/categorical data into factor class
-
 min_count &lt;- 3 # vector: 3 categories is our max number of categories found
 
-# apply a lenght(unique(x)) function to all the columns (rows = 1, columns = 2) of the data_malawi dataframe, then
+# == Apply family: function apply and lapply==#
+# apply a length(unique(x)) function to all the columns (rows = 1, columns = 2) of the data_malawi dataframe, then
 # store boolean (true/false) if the number of unique values is lower or equal to the min_count vector
 n_distinct2 &lt;- apply(data_malawi, 2, function(x) length(unique(x))) &lt;= min_count
 
 # print(n_distinct2) # prints boolean indicator object (so you know what object you have created)
 
 # select the identified categorical variables and transform them into factors
-data_malawi[n_distinct2] &lt;- lapply(data_malawi[n_distinct2], factor) 
-
-# skim your dataframe 
-skim(data_malawi) #success!</code></pre>
-<table style="width: auto;" class="table table-condensed">
-<caption>
-Data summary
-</caption>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Name
-</td>
-<td style="text-align:left;">
-data_malawi
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Number of rows
-</td>
-<td style="text-align:left;">
-11280
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Number of columns
-</td>
-<td style="text-align:left;">
-30
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-_______________________
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Column type frequency:
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-factor
-</td>
-<td style="text-align:left;">
-21
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-numeric
-</td>
-<td style="text-align:left;">
-9
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-________________________
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Group variables
-</td>
-<td style="text-align:left;">
-None
-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: factor</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:left;">
-ordered
-</th>
-<th style="text-align:right;">
-n_unique
-</th>
-<th style="text-align:left;">
-top_counts
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-north
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-not: 9600, nor: 1680
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-central
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 6960, 1: 4320
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-rural
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-1: 9840, 0: 1440
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-nevermarried
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 10930, 1: 350
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-floor_cement
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 9036, 1: 2244
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-electricity
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 10620, 1: 660
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-flushtoilet
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 10962, 1: 318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-soap
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 9740, 1: 1540
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-bed
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 7653, 1: 3627
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-bike
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 7194, 1: 4086
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-musicplayer
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 9426, 1: 1854
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-coffeetable
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 9956, 1: 1324
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-iron
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 8962, 1: 2318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-dimbagarden
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 7658, 1: 3622
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-goats
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 8856, 1: 2424
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-hfem
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 8697, 1: 2583
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-grassroof
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-1: 8327, 0: 2953
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-mortarpestle
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-1: 5645, 0: 5635
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-table
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 7249, 1: 4031
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-clock
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:left;">
-0: 9039, 1: 2241
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-region
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:left;">
-FALSE
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:left;">
-Sou: 5280, Cen: 4320, Nor: 1680
-</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: numeric</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-skim_variable
-</th>
-<th style="text-align:right;">
-n_missing
-</th>
-<th style="text-align:right;">
-complete_rate
-</th>
-<th style="text-align:right;">
-mean
-</th>
-<th style="text-align:right;">
-sd
-</th>
-<th style="text-align:right;">
-p0
-</th>
-<th style="text-align:right;">
-p25
-</th>
-<th style="text-align:right;">
-p50
-</th>
-<th style="text-align:right;">
-p75
-</th>
-<th style="text-align:right;">
-p100
-</th>
-<th style="text-align:left;">
-hist
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-lnexp_pc_month
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-7.36
-</td>
-<td style="text-align:right;">
-0.68
-</td>
-<td style="text-align:right;">
-4.78
-</td>
-<td style="text-align:right;">
-6.89
-</td>
-<td style="text-align:right;">
-7.31
-</td>
-<td style="text-align:right;">
-7.76
-</td>
-<td style="text-align:right;">
-11.06
-</td>
-<td style="text-align:left;">
-▁▇▇▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-hhsize
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4.55
-</td>
-<td style="text-align:right;">
-2.34
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:right;">
-3.00
-</td>
-<td style="text-align:right;">
-4.00
-</td>
-<td style="text-align:right;">
-6.00
-</td>
-<td style="text-align:right;">
-27.00
-</td>
-<td style="text-align:left;">
-▇▂▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-hhsize2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-26.13
-</td>
-<td style="text-align:right;">
-27.99
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:right;">
-9.00
-</td>
-<td style="text-align:right;">
-16.00
-</td>
-<td style="text-align:right;">
-36.00
-</td>
-<td style="text-align:right;">
-729.00
-</td>
-<td style="text-align:left;">
-▇▁▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-agehead
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-42.46
-</td>
-<td style="text-align:right;">
-16.36
-</td>
-<td style="text-align:right;">
-10.00
-</td>
-<td style="text-align:right;">
-29.00
-</td>
-<td style="text-align:right;">
-39.00
-</td>
-<td style="text-align:right;">
-54.00
-</td>
-<td style="text-align:right;">
-104.00
-</td>
-<td style="text-align:left;">
-▅▇▅▂▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-agehead2
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2070.61
-</td>
-<td style="text-align:right;">
-1618.60
-</td>
-<td style="text-align:right;">
-100.00
-</td>
-<td style="text-align:right;">
-841.00
-</td>
-<td style="text-align:right;">
-1521.00
-</td>
-<td style="text-align:right;">
-2916.00
-</td>
-<td style="text-align:right;">
-10816.00
-</td>
-<td style="text-align:left;">
-▇▃▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-sharenoedu
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.17
-</td>
-<td style="text-align:right;">
-0.26
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:left;">
-▇▂▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-shareread
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.61
-</td>
-<td style="text-align:right;">
-0.38
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.33
-</td>
-<td style="text-align:right;">
-0.67
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:left;">
-▅▁▅▂▇
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-nrooms
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-2.50
-</td>
-<td style="text-align:right;">
-1.30
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:right;">
-2.00
-</td>
-<td style="text-align:right;">
-3.00
-</td>
-<td style="text-align:right;">
-16.00
-</td>
-<td style="text-align:left;">
-▇▂▁▁▁
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-dependratio
-</td>
-<td style="text-align:right;">
-0
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1.12
-</td>
-<td style="text-align:right;">
-0.95
-</td>
-<td style="text-align:right;">
-0.00
-</td>
-<td style="text-align:right;">
-0.50
-</td>
-<td style="text-align:right;">
-1.00
-</td>
-<td style="text-align:right;">
-1.50
-</td>
-<td style="text-align:right;">
-9.00
-</td>
-<td style="text-align:left;">
-▇▂▁▁▁
-</td>
-</tr>
-</tbody>
-</table>
+data_malawi[n_distinct2] &lt;- lapply(data_malawi[n_distinct2], factor) </code></pre>
 <p><strong>Visualise your data: histograms, bar plots,
 tables</strong></p>
 <p>Let’s start with histograms of numeric (continuous) variables.</p>
@@ -3408,8 +2528,8 @@ for (i in 1:ncol(malawi_factor)) { # Loop over all the columns in the factor df 
 llply(.data=malawi_factor, .fun=table) # create tables of all the variables in dataframe using the plyr package</code></pre>
 <pre><code>## $north
 ## 
-## not_north     north 
-##      9600      1680 
+## NotNorth    North 
+##     9600     1680 
 ## 
 ## $central
 ## 
@@ -3510,6 +2630,7 @@ llply(.data=malawi_factor, .fun=table) # create tables of all the variables in d
 ## 
 ## Centre  North  South 
 ##   4320   1680   5280</code></pre>
+<p><br></p>
 <p>What have we learned from the data visualisation?</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Nothing worrying about the data itself. McBride and Nichols did a
@@ -3645,7 +2766,7 @@ stargazer(model1, type = &quot;text&quot;) # printed in the console as text</cod
 ## agehead2                    -0.00004**         
 ##                              (0.00002)         
 ##                                                
-## northnorth                   0.080***          
+## northNorth                   0.080***          
 ##                               (0.014)          
 ##                                                
 ## central1                     0.252***          
@@ -3723,7 +2844,7 @@ stargazer(model1, type = &quot;text&quot;) # printed in the console as text</cod
 ## regionSouth                                    
 ##                                                
 ##                                                
-## Constant                     7.978***          
+## Constant                     7.980***          
 ##                               (0.044)          
 ##                                                
 ## -----------------------------------------------
@@ -3731,7 +2852,7 @@ stargazer(model1, type = &quot;text&quot;) # printed in the console as text</cod
 ## R2                             0.599           
 ## Adjusted R2                    0.597           
 ## Residual Std. Error      0.428 (df = 8995)     
-## F Statistic         479.041*** (df = 28; 8995) 
+## F Statistic         479.000*** (df = 28; 8995) 
 ## ===============================================
 ## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <pre class="r"><code># We can also estimate iid and robust standard errors, using the model output package modelsummary()
@@ -4246,7 +3367,7 @@ ms %&gt;% tab_header(
     <tr><td headers="" class="gt_row gt_left"></td>
 <td headers="(1)" class="gt_row gt_center">s.e. = 0.000</td>
 <td headers="(2)" class="gt_row gt_center">s.e. = 0.000</td></tr>
-    <tr><td headers="" class="gt_row gt_left">northnorth</td>
+    <tr><td headers="" class="gt_row gt_left">northNorth</td>
 <td headers="(1)" class="gt_row gt_center">0.080***</td>
 <td headers="(2)" class="gt_row gt_center">0.080***</td></tr>
     <tr><td headers="" class="gt_row gt_left"></td>
@@ -4548,8 +3669,8 @@ data, but will under perform when extrapolating the model to the test
 <p><strong><em>Residuals</em></strong></p>
 <pre class="r"><code># = = Model Residuals = = #
 print(summary(model1$residuals))</code></pre>
-<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-## -3.483927 -0.288657 -0.007872  0.000000  0.266950  1.887123</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   -3.48   -0.29   -0.01    0.00    0.27    1.89</code></pre>
 <p>Recall that the residual is estimated as the true (observed) value
 minus the predicted value. Thus: the max(imum) error of 1.88 suggests
 that the model under-predicted expenditure by circa (log) $2 (or $6.5)
@@ -4569,7 +3690,7 @@ error0 &lt;- p0 - Train_df[[&quot;lnexp_pc_month&quot;]]
 # 3. In-sample RMSE
 RMSE_insample &lt;- sqrt(mean(error0 ^ 2))
 print(RMSE_insample)</code></pre>
-<pre><code>## [1] 0.4271572</code></pre>
+<pre><code>## [1] 0.427</code></pre>
 <pre class="r"><code># TIP: Notice that the in-sample RMSE we have just estimated was also printed in the linear model (regression) output tables!
 # The table printed with the stargazer package returns this value at the bottom, under the header Residual Std. Error (0.428)
 # The table printed with the modelsummary package returns this value at the bottom, under the header RMSE (0.43), rounded up. </code></pre>
@@ -4599,48 +3720,48 @@ features we have selected are relevant predictors.</p>
 ## lm(formula = lnexp_pc_month ~ ., data = Train_df)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.4839 -0.2887 -0.0079  0.2669  1.8871 
+##    Min     1Q Median     3Q    Max 
+## -3.484 -0.289 -0.008  0.267  1.887 
 ## 
 ## Coefficients: (2 not defined because of singularities)
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    7.978e+00  4.409e-02 180.945  &lt; 2e-16 ***
-## hhsize        -2.919e-01  6.429e-03 -45.397  &lt; 2e-16 ***
-## hhsize2        1.206e-02  4.811e-04  25.067  &lt; 2e-16 ***
-## agehead        2.749e-03  1.712e-03   1.606  0.10835    
-## agehead2      -4.168e-05  1.717e-05  -2.428  0.01519 *  
-## northnorth     8.001e-02  1.439e-02   5.560 2.78e-08 ***
-## central1       2.521e-01  1.023e-02  24.639  &lt; 2e-16 ***
-## rural1        -5.483e-02  1.687e-02  -3.250  0.00116 ** 
-## nevermarried1  2.706e-01  2.839e-02   9.533  &lt; 2e-16 ***
-## sharenoedu    -1.045e-01  2.006e-02  -5.212 1.91e-07 ***
-## shareread      7.514e-02  1.502e-02   5.004 5.72e-07 ***
-## nrooms         3.898e-02  4.032e-03   9.670  &lt; 2e-16 ***
-## floor_cement1  1.016e-01  1.742e-02   5.835 5.58e-09 ***
-## electricity1   3.718e-01  2.696e-02  13.793  &lt; 2e-16 ***
-## flushtoilet1   3.295e-01  3.263e-02  10.099  &lt; 2e-16 ***
-## soap1          2.150e-01  1.413e-02  15.220  &lt; 2e-16 ***
-## bed1           1.040e-01  1.297e-02   8.019 1.20e-15 ***
-## bike1          9.395e-02  1.064e-02   8.831  &lt; 2e-16 ***
-## musicplayer1   1.111e-01  1.451e-02   7.658 2.08e-14 ***
-## coffeetable1   1.369e-01  1.866e-02   7.338 2.36e-13 ***
-## iron1          1.302e-01  1.378e-02   9.455  &lt; 2e-16 ***
-## dimbagarden1   1.018e-01  1.017e-02  10.017  &lt; 2e-16 ***
-## goats1         7.964e-02  1.168e-02   6.820 9.68e-12 ***
-## dependratio   -4.501e-02  5.848e-03  -7.697 1.55e-14 ***
-## hfem1         -6.570e-02  1.238e-02  -5.307 1.14e-07 ***
-## grassroof1    -9.590e-02  1.575e-02  -6.089 1.18e-09 ***
-## mortarpestle1  3.288e-02  1.027e-02   3.200  0.00138 ** 
-## table1         5.074e-02  1.149e-02   4.417 1.01e-05 ***
-## clock1         5.840e-02  1.423e-02   4.103 4.11e-05 ***
-## regionNorth           NA         NA      NA       NA    
-## regionSouth           NA         NA      NA       NA    
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.98e+00   4.41e-02  180.94  &lt; 2e-16 ***
+## hhsize        -2.92e-01   6.43e-03  -45.40  &lt; 2e-16 ***
+## hhsize2        1.21e-02   4.81e-04   25.07  &lt; 2e-16 ***
+## agehead        2.75e-03   1.71e-03    1.61   0.1084    
+## agehead2      -4.17e-05   1.72e-05   -2.43   0.0152 *  
+## northNorth     8.00e-02   1.44e-02    5.56  2.8e-08 ***
+## central1       2.52e-01   1.02e-02   24.64  &lt; 2e-16 ***
+## rural1        -5.48e-02   1.69e-02   -3.25   0.0012 ** 
+## nevermarried1  2.71e-01   2.84e-02    9.53  &lt; 2e-16 ***
+## sharenoedu    -1.05e-01   2.01e-02   -5.21  1.9e-07 ***
+## shareread      7.51e-02   1.50e-02    5.00  5.7e-07 ***
+## nrooms         3.90e-02   4.03e-03    9.67  &lt; 2e-16 ***
+## floor_cement1  1.02e-01   1.74e-02    5.83  5.6e-09 ***
+## electricity1   3.72e-01   2.70e-02   13.79  &lt; 2e-16 ***
+## flushtoilet1   3.29e-01   3.26e-02   10.10  &lt; 2e-16 ***
+## soap1          2.15e-01   1.41e-02   15.22  &lt; 2e-16 ***
+## bed1           1.04e-01   1.30e-02    8.02  1.2e-15 ***
+## bike1          9.39e-02   1.06e-02    8.83  &lt; 2e-16 ***
+## musicplayer1   1.11e-01   1.45e-02    7.66  2.1e-14 ***
+## coffeetable1   1.37e-01   1.87e-02    7.34  2.4e-13 ***
+## iron1          1.30e-01   1.38e-02    9.45  &lt; 2e-16 ***
+## dimbagarden1   1.02e-01   1.02e-02   10.02  &lt; 2e-16 ***
+## goats1         7.96e-02   1.17e-02    6.82  9.7e-12 ***
+## dependratio   -4.50e-02   5.85e-03   -7.70  1.5e-14 ***
+## hfem1         -6.57e-02   1.24e-02   -5.31  1.1e-07 ***
+## grassroof1    -9.59e-02   1.57e-02   -6.09  1.2e-09 ***
+## mortarpestle1  3.29e-02   1.03e-02    3.20   0.0014 ** 
+## table1         5.07e-02   1.15e-02    4.42  1.0e-05 ***
+## clock1         5.84e-02   1.42e-02    4.10  4.1e-05 ***
+## regionNorth          NA         NA      NA       NA    
+## regionSouth          NA         NA      NA       NA    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.4278 on 8995 degrees of freedom
-## Multiple R-squared:  0.5986, Adjusted R-squared:  0.5973 
-## F-statistic:   479 on 28 and 8995 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.428 on 8995 degrees of freedom
+## Multiple R-squared:  0.599,  Adjusted R-squared:  0.597 
+## F-statistic:  479 on 28 and 8995 DF,  p-value: &lt;2e-16</code></pre>
 <p>We have printed our model’s output once more, now using the r base
 command summary(). The other packages (stargazer and modelsummary) are
 great if you want to export your results in text, html, latex format,
@@ -4662,17 +3783,17 @@ cat(&quot;observed summary statistics of target variable in full dataset&quot;)<
 <pre><code>## observed summary statistics of target variable in full dataset</code></pre>
 <pre class="r"><code>print(summary(data_malawi$lnexp_pc_month))</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   4.777   6.893   7.305   7.359   7.758  11.064</code></pre>
+##    4.78    6.89    7.31    7.36    7.76   11.06</code></pre>
 <pre class="r"><code>cat(&quot;predictions based on the training dataset&quot;)</code></pre>
 <pre><code>## predictions based on the training dataset</code></pre>
 <pre class="r"><code>print(summary(p0))</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   6.011   6.980   7.308   7.357   7.661  10.143</code></pre>
+##    6.01    6.98    7.31    7.36    7.66   10.14</code></pre>
 <pre class="r"><code>cat(&quot;predictions from the testing dataset&quot;)</code></pre>
 <pre><code>## predictions from the testing dataset</code></pre>
 <pre class="r"><code>print(summary(p))</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   6.052   6.999   7.323   7.375   7.670   9.774</code></pre>
+##    6.05    7.00    7.32    7.37    7.67    9.77</code></pre>
 <p>The summary statistics for the predictions with the train and test
 datasets are very close to one another. This is an indication that our
 model extrapolates well to other datasets. Compared to the observed
@@ -4686,7 +3807,7 @@ out-of-sample RMSE:</p>
 <pre class="r"><code>error &lt;- p - Test_df[[&quot;lnexp_pc_month&quot;]] # predicted values minus actual values
 RMSE_test &lt;- sqrt(mean(error^2))
 print(RMSE_test) # this is known as the out-of-sample RMSE</code></pre>
-<pre><code>## [1] 0.4284404</code></pre>
+<pre><code>## [1] 0.428</code></pre>
 <p>Notice that the <em>in-sample RMSE</em> [<span
 class="math inline">\(0.4271572\)</span>] is very close to the
 <em>out-of-sample RMSE</em> [<span
@@ -4729,10 +3850,10 @@ place to start for such a thing. In the words of <a
 href="https://www.javatpoint.com/cross-validation-in-machine-learning">The
 Internet™</a>, what k-fold cross validation does is:</p>
 <pre><code>Split the input dataset into K groups
-+ For each group:
-    + Take one group as the reserve or test data set.
-    + Use remaining groups as the training dataset.
-    + Fit the model on the training set and evaluate the performance of the model using the test set.</code></pre>
+    For each group:
+        - Take one group as the reserve or test data set.
+        - Use remaining groups as the training dataset.
+        - Fit the model on the training set and evaluate the performance of the model using the test set.</code></pre>
 <p>TL;DR We’re improving our splitting technique!</p>
 <p>An Illustration by <a
 href="https://eugenia-anello.medium.com/">Eugenia Anello</a></p>
@@ -4789,8 +3910,8 @@ cat(&quot; Linear model with train dataset&quot;)</code></pre>
 ## Summary of sample sizes: 8121, 8121, 8123, 8122, 8121, 8121, ... 
 ## Resampling results:
 ## 
-##   RMSE       Rsquared   MAE      
-##   0.4295064  0.5947776  0.3365398
+##   RMSE  Rsquared  MAE  
+##   0.43  0.595     0.337
 ## 
 ## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
 <pre class="r"><code>cat(&quot; Linear model with test dataset&quot;)</code></pre>
@@ -4806,8 +3927,8 @@ cat(&quot; Linear model with train dataset&quot;)</code></pre>
 ## Summary of sample sizes: 2030, 2030, 2030, 2030, 2031, 2031, ... 
 ## Resampling results:
 ## 
-##   RMSE       Rsquared   MAE      
-##   0.4312944  0.5991526  0.3379473
+##   RMSE   Rsquared  MAE  
+##   0.431  0.599     0.338
 ## 
 ## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
 <pre class="r"><code>cat(&quot; Linear model with full dataset&quot;)</code></pre>
@@ -4823,8 +3944,8 @@ cat(&quot; Linear model with train dataset&quot;)</code></pre>
 ## Summary of sample sizes: 10152, 10152, 10152, 10152, 10152, 10152, ... 
 ## Resampling results:
 ## 
-##   RMSE       Rsquared   MAE      
-##   0.4291473  0.5965825  0.3363802
+##   RMSE   Rsquared  MAE  
+##   0.429  0.597     0.336
 ## 
 ## Tuning parameter &#39;intercept&#39; was held constant at a value of TRUE</code></pre>
 <p>Having cross-validated our model with 10 folds, we can see that the
@@ -4835,12 +3956,13 @@ the model’s predictive ability and the RMSE and MAE the model’s
 accuracy.</p>
 <p><strong>NOTE:</strong> k-fold cross-validation replaces our original
 80/20 split (we don’t need to do that anymore!) Therefore, we use the
-full dataset in the train() function. Using the train,test and full
+full dataset in the train() function. Using the train, test and full
 datasets in the example above was just for pedagogical purposes but it
 is no longer necessary and we can use the reported estimates of R^2
 (close to 1!), RMSE (close to 0!) and MAE (let’s go low!) for model
-assessment without comparing them to another set of predictions.
-<br></p>
+assessment without comparing them to another set of predictions. These
+reported parameters are estimated as the average of the R^2, RMSE, and
+MAE for all the folds. <br></p>
 <h3>
 <ol start="4" style="list-style-type: decimal">
 <li>Feature selection with Lasso linear regression
@@ -4914,48 +4036,48 @@ summary(model1)</code></pre>
 ## lm(formula = lnexp_pc_month ~ ., data = Train_df)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.4839 -0.2887 -0.0079  0.2669  1.8871 
+##    Min     1Q Median     3Q    Max 
+## -3.484 -0.289 -0.008  0.267  1.887 
 ## 
 ## Coefficients: (2 not defined because of singularities)
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    7.978e+00  4.409e-02 180.945  &lt; 2e-16 ***
-## hhsize        -2.919e-01  6.429e-03 -45.397  &lt; 2e-16 ***
-## hhsize2        1.206e-02  4.811e-04  25.067  &lt; 2e-16 ***
-## agehead        2.749e-03  1.712e-03   1.606  0.10835    
-## agehead2      -4.168e-05  1.717e-05  -2.428  0.01519 *  
-## northnorth     8.001e-02  1.439e-02   5.560 2.78e-08 ***
-## central1       2.521e-01  1.023e-02  24.639  &lt; 2e-16 ***
-## rural1        -5.483e-02  1.687e-02  -3.250  0.00116 ** 
-## nevermarried1  2.706e-01  2.839e-02   9.533  &lt; 2e-16 ***
-## sharenoedu    -1.045e-01  2.006e-02  -5.212 1.91e-07 ***
-## shareread      7.514e-02  1.502e-02   5.004 5.72e-07 ***
-## nrooms         3.898e-02  4.032e-03   9.670  &lt; 2e-16 ***
-## floor_cement1  1.016e-01  1.742e-02   5.835 5.58e-09 ***
-## electricity1   3.718e-01  2.696e-02  13.793  &lt; 2e-16 ***
-## flushtoilet1   3.295e-01  3.263e-02  10.099  &lt; 2e-16 ***
-## soap1          2.150e-01  1.413e-02  15.220  &lt; 2e-16 ***
-## bed1           1.040e-01  1.297e-02   8.019 1.20e-15 ***
-## bike1          9.395e-02  1.064e-02   8.831  &lt; 2e-16 ***
-## musicplayer1   1.111e-01  1.451e-02   7.658 2.08e-14 ***
-## coffeetable1   1.369e-01  1.866e-02   7.338 2.36e-13 ***
-## iron1          1.302e-01  1.378e-02   9.455  &lt; 2e-16 ***
-## dimbagarden1   1.018e-01  1.017e-02  10.017  &lt; 2e-16 ***
-## goats1         7.964e-02  1.168e-02   6.820 9.68e-12 ***
-## dependratio   -4.501e-02  5.848e-03  -7.697 1.55e-14 ***
-## hfem1         -6.570e-02  1.238e-02  -5.307 1.14e-07 ***
-## grassroof1    -9.590e-02  1.575e-02  -6.089 1.18e-09 ***
-## mortarpestle1  3.288e-02  1.027e-02   3.200  0.00138 ** 
-## table1         5.074e-02  1.149e-02   4.417 1.01e-05 ***
-## clock1         5.840e-02  1.423e-02   4.103 4.11e-05 ***
-## regionNorth           NA         NA      NA       NA    
-## regionSouth           NA         NA      NA       NA    
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.98e+00   4.41e-02  180.94  &lt; 2e-16 ***
+## hhsize        -2.92e-01   6.43e-03  -45.40  &lt; 2e-16 ***
+## hhsize2        1.21e-02   4.81e-04   25.07  &lt; 2e-16 ***
+## agehead        2.75e-03   1.71e-03    1.61   0.1084    
+## agehead2      -4.17e-05   1.72e-05   -2.43   0.0152 *  
+## northNorth     8.00e-02   1.44e-02    5.56  2.8e-08 ***
+## central1       2.52e-01   1.02e-02   24.64  &lt; 2e-16 ***
+## rural1        -5.48e-02   1.69e-02   -3.25   0.0012 ** 
+## nevermarried1  2.71e-01   2.84e-02    9.53  &lt; 2e-16 ***
+## sharenoedu    -1.05e-01   2.01e-02   -5.21  1.9e-07 ***
+## shareread      7.51e-02   1.50e-02    5.00  5.7e-07 ***
+## nrooms         3.90e-02   4.03e-03    9.67  &lt; 2e-16 ***
+## floor_cement1  1.02e-01   1.74e-02    5.83  5.6e-09 ***
+## electricity1   3.72e-01   2.70e-02   13.79  &lt; 2e-16 ***
+## flushtoilet1   3.29e-01   3.26e-02   10.10  &lt; 2e-16 ***
+## soap1          2.15e-01   1.41e-02   15.22  &lt; 2e-16 ***
+## bed1           1.04e-01   1.30e-02    8.02  1.2e-15 ***
+## bike1          9.39e-02   1.06e-02    8.83  &lt; 2e-16 ***
+## musicplayer1   1.11e-01   1.45e-02    7.66  2.1e-14 ***
+## coffeetable1   1.37e-01   1.87e-02    7.34  2.4e-13 ***
+## iron1          1.30e-01   1.38e-02    9.45  &lt; 2e-16 ***
+## dimbagarden1   1.02e-01   1.02e-02   10.02  &lt; 2e-16 ***
+## goats1         7.96e-02   1.17e-02    6.82  9.7e-12 ***
+## dependratio   -4.50e-02   5.85e-03   -7.70  1.5e-14 ***
+## hfem1         -6.57e-02   1.24e-02   -5.31  1.1e-07 ***
+## grassroof1    -9.59e-02   1.57e-02   -6.09  1.2e-09 ***
+## mortarpestle1  3.29e-02   1.03e-02    3.20   0.0014 ** 
+## table1         5.07e-02   1.15e-02    4.42  1.0e-05 ***
+## clock1         5.84e-02   1.42e-02    4.10  4.1e-05 ***
+## regionNorth          NA         NA      NA       NA    
+## regionSouth          NA         NA      NA       NA    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.4278 on 8995 degrees of freedom
-## Multiple R-squared:  0.5986, Adjusted R-squared:  0.5973 
-## F-statistic:   479 on 28 and 8995 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.428 on 8995 degrees of freedom
+## Multiple R-squared:  0.599,  Adjusted R-squared:  0.597 
+## F-statistic:  479 on 28 and 8995 DF,  p-value: &lt;2e-16</code></pre>
 <pre class="r"><code># notice that region dummies are repeated and therefore return NA in the output. We should clean this before proceeding.
 # these guys are troublesome (recall our conversation about zero-variance predictors?)
 data_malawi2 &lt;- data_malawi[,-which(colnames(data_malawi)==&quot;region&quot;)]
@@ -4965,46 +4087,46 @@ summary(lm(lnexp_pc_month~., data = data_malawi2)) # no more excluded categorica
 ## lm(formula = lnexp_pc_month ~ ., data = data_malawi2)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -3.6626 -0.2906 -0.0096  0.2665  1.8788 
+##    Min     1Q Median     3Q    Max 
+## -3.663 -0.291 -0.010  0.267  1.879 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    7.965e+00  3.947e-02 201.781  &lt; 2e-16 ***
-## hhsize        -2.979e-01  5.854e-03 -50.893  &lt; 2e-16 ***
-## hhsize2        1.246e-02  4.401e-04  28.307  &lt; 2e-16 ***
-## agehead        3.545e-03  1.529e-03   2.319 0.020433 *  
-## agehead2      -5.079e-05  1.532e-05  -3.315 0.000918 ***
-## northnorth     7.452e-02  1.292e-02   5.766 8.32e-09 ***
-## central1       2.552e-01  9.119e-03  27.979  &lt; 2e-16 ***
-## rural1        -5.488e-02  1.507e-02  -3.642 0.000272 ***
-## nevermarried1  2.416e-01  2.507e-02   9.638  &lt; 2e-16 ***
-## sharenoedu    -1.053e-01  1.802e-02  -5.845 5.21e-09 ***
-## shareread      7.838e-02  1.344e-02   5.832 5.63e-09 ***
-## nrooms         4.182e-02  3.609e-03  11.587  &lt; 2e-16 ***
-## floor_cement1  9.460e-02  1.546e-02   6.119 9.73e-10 ***
-## electricity1   3.719e-01  2.387e-02  15.579  &lt; 2e-16 ***
-## flushtoilet1   3.471e-01  2.886e-02  12.027  &lt; 2e-16 ***
-## soap1          2.163e-01  1.261e-02  17.154  &lt; 2e-16 ***
-## bed1           1.051e-01  1.156e-02   9.099  &lt; 2e-16 ***
-## bike1          9.405e-02  9.516e-03   9.883  &lt; 2e-16 ***
-## musicplayer1   1.090e-01  1.287e-02   8.466  &lt; 2e-16 ***
-## coffeetable1   1.311e-01  1.641e-02   7.991 1.47e-15 ***
-## iron1          1.325e-01  1.231e-02  10.761  &lt; 2e-16 ***
-## dimbagarden1   9.140e-02  9.095e-03  10.049  &lt; 2e-16 ***
-## goats1         8.671e-02  1.049e-02   8.269  &lt; 2e-16 ***
-## dependratio   -4.086e-02  5.225e-03  -7.820 5.74e-15 ***
-## hfem1         -6.761e-02  1.102e-02  -6.135 8.80e-10 ***
-## grassroof1    -9.138e-02  1.394e-02  -6.556 5.77e-11 ***
-## mortarpestle1  3.207e-02  9.193e-03   3.489 0.000487 ***
-## table1         5.132e-02  1.029e-02   4.987 6.23e-07 ***
-## clock1         6.254e-02  1.273e-02   4.912 9.16e-07 ***
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    7.96e+00   3.95e-02  201.78  &lt; 2e-16 ***
+## hhsize        -2.98e-01   5.85e-03  -50.89  &lt; 2e-16 ***
+## hhsize2        1.25e-02   4.40e-04   28.31  &lt; 2e-16 ***
+## agehead        3.55e-03   1.53e-03    2.32  0.02043 *  
+## agehead2      -5.08e-05   1.53e-05   -3.32  0.00092 ***
+## northNorth     7.45e-02   1.29e-02    5.77  8.3e-09 ***
+## central1       2.55e-01   9.12e-03   27.98  &lt; 2e-16 ***
+## rural1        -5.49e-02   1.51e-02   -3.64  0.00027 ***
+## nevermarried1  2.42e-01   2.51e-02    9.64  &lt; 2e-16 ***
+## sharenoedu    -1.05e-01   1.80e-02   -5.84  5.2e-09 ***
+## shareread      7.84e-02   1.34e-02    5.83  5.6e-09 ***
+## nrooms         4.18e-02   3.61e-03   11.59  &lt; 2e-16 ***
+## floor_cement1  9.46e-02   1.55e-02    6.12  9.7e-10 ***
+## electricity1   3.72e-01   2.39e-02   15.58  &lt; 2e-16 ***
+## flushtoilet1   3.47e-01   2.89e-02   12.03  &lt; 2e-16 ***
+## soap1          2.16e-01   1.26e-02   17.15  &lt; 2e-16 ***
+## bed1           1.05e-01   1.16e-02    9.10  &lt; 2e-16 ***
+## bike1          9.40e-02   9.52e-03    9.88  &lt; 2e-16 ***
+## musicplayer1   1.09e-01   1.29e-02    8.47  &lt; 2e-16 ***
+## coffeetable1   1.31e-01   1.64e-02    7.99  1.5e-15 ***
+## iron1          1.33e-01   1.23e-02   10.76  &lt; 2e-16 ***
+## dimbagarden1   9.14e-02   9.10e-03   10.05  &lt; 2e-16 ***
+## goats1         8.67e-02   1.05e-02    8.27  &lt; 2e-16 ***
+## dependratio   -4.09e-02   5.22e-03   -7.82  5.7e-15 ***
+## hfem1         -6.76e-02   1.10e-02   -6.14  8.8e-10 ***
+## grassroof1    -9.14e-02   1.39e-02   -6.56  5.8e-11 ***
+## mortarpestle1  3.21e-02   9.19e-03    3.49  0.00049 ***
+## table1         5.13e-02   1.03e-02    4.99  6.2e-07 ***
+## clock1         6.25e-02   1.27e-02    4.91  9.2e-07 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.4278 on 11251 degrees of freedom
-## Multiple R-squared:  0.5997, Adjusted R-squared:  0.5987 
-## F-statistic: 601.9 on 28 and 11251 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.428 on 11251 degrees of freedom
+## Multiple R-squared:   0.6,   Adjusted R-squared:  0.599 
+## F-statistic:  602 on 28 and 11251 DF,  p-value: &lt;2e-16</code></pre>
 <pre class="r"><code>set.seed(12345)
 cv_10fold &lt;- trainControl(
     method = &quot;cv&quot;, 
@@ -5030,10 +4152,10 @@ print(model_lasso) # best R^2 and RMSE is similar to the one using a linear regr
 ## Summary of sample sizes: 10152, 10152, 10152, 10152, 10152, 10152, ... 
 ## Resampling results across tuning parameters:
 ## 
-##   fraction  RMSE       Rsquared   MAE      
-##   0.1       0.5953796  0.4234291  0.4653872
-##   0.5       0.4485973  0.5660193  0.3533998
-##   0.9       0.4295497  0.5957600  0.3368464
+##   fraction  RMSE   Rsquared  MAE  
+##   0.1       0.595  0.423     0.465
+##   0.5       0.449  0.566     0.353
+##   0.9       0.430  0.596     0.337
 ## 
 ## RMSE was used to select the optimal model using the smallest value.
 ## The final value used for the model was fraction = 0.9.</code></pre>
@@ -5727,8 +4849,8 @@ print(lm_results.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     498.3
-## Date:                Wed, 22 Nov 2023   Prob (F-statistic):               0.00
-## Time:                        20:56:11   Log-Likelihood:                -5189.2
+## Date:                Thu, 23 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        11:44:58   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -5786,8 +4908,8 @@ print(lm_robust.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     431.9
-## Date:                Wed, 22 Nov 2023   Prob (F-statistic):               0.00
-## Time:                        20:56:11   Log-Likelihood:                -5189.2
+## Date:                Thu, 23 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        11:44:59   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
