@@ -488,7 +488,7 @@ A **Python Virtual Environment**, also referred to as venv(s), is there to help 
 
 To create a virtual environment, once you've opened a new blank project in VSC, click on shift + cmd + P (or F1) to open the Command Palette (it should display from the top of VSC). Type "Python" and select create python terminal. In the terminal, type `` python -m venv venv '' and that's it! You'll notice the appearance of a venv folder in your dedicated project folder.
 
-Now, you'll need to install and load the libraries you'll need for your project. Yo install them, use the python terminal you have opened. It should be displayed in the bottom of the working environment. Use the following (which should work with both Windows and Macbook, although Mac users can also use the general brew installer): 
+Now, you'll need to install and load the libraries you'll need for your project. To install them, use the python terminal you have opened. It should be displayed in the bottom of the working environment. Use the following (which should work with both Windows and Macbook, although Mac users can also use the general brew installer): 
 
 `` pip install pkg_name '' 
 

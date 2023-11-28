@@ -13,18 +13,18 @@ output: html_document
 
 **Introducing the Prediction Policy Framework**
 
-In the video-lecture below you'll be given a brief introduction to the prediction policy framework, and a primer on machine learning. Please take a moment to watch the 10 minute video.
+In the video-lecture below you'll be given a brief introduction to the prediction policy framework, and a primer on machine learning. Please take a moment to watch the 20 minute video.
 
 <center>
 ```{r, echo=FALSE}
 library("vembedr")
-embed_url("https://www.youtube.com/watch?v=aA7tLQxf1xE")
+embed_url("https://youtu.be/gtYn0aKw-c8")
 
 
 ```
 </center>
 
-After watching the video, we have a practical excercise.
+After watching the video, we have a practical exercise.
 
 **Predicting social assistance beneficiaries**
 
@@ -37,9 +37,12 @@ In this block we'll work with real-world data from the country of Malawi to pred
 
 **Discussion Points**
 
+The points below are meant to help you think critically about why we're about to embark on a machine learning - targeting exercise.
+<br>
+
 <ul>
 <li> Why is this a prediction policy problem? What would be a causal inference problem in this setting? Is it a regression or a classification problem? </li>
-<li> Which variables and characteristics that we include in the prediction model can make a big difference. 
+<li> Which variables and characteristics that we include in the prediction model can make a big difference?
     <ul>
     <li>Programmatically and conceptually, which type of characteristics do we want to consider for the prediction model?</li>
     <li>Technically, how do we select which variables to include in a prediction model? How is this different from a causal inference problem?</li>

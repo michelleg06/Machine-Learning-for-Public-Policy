@@ -295,15 +295,15 @@ Problems: Linear Models &amp; Lasso Regression</strong></h2>
 <p><strong>Introducing the Prediction Policy Framework</strong></p>
 <p>In the video-lecture below you’ll be given a brief introduction to
 the prediction policy framework, and a primer on machine learning.
-Please take a moment to watch the 10 minute video.</p>
+Please take a moment to watch the 20 minute video.</p>
 <center>
 <div class="vembedr">
 <div>
-<iframe src="https://www.youtube.com/embed/aA7tLQxf1xE" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+<iframe src="https://www.youtube.com/embed/gtYn0aKw-c8" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
 </div>
 </div>
 </center>
-<p>After watching the video, we have a practical excercise.</p>
+<p>After watching the video, we have a practical exercise.</p>
 <p><strong>Predicting social assistance beneficiaries</strong></p>
 <p>A key problem in the design of Social Policies is the identification
 of people in need of social assistance. Social policies usually work
@@ -324,6 +324,9 @@ href="https://elibrary.worldbank.org/doi/abs/10.1093/wber/lhw056">Retooling
 poverty targeting using out-of-sample validation and machine
 learning</a>.</p>
 <p><strong>Discussion Points</strong></p>
+<p>The points below are meant to help you think critically about why
+we’re about to embark on a machine learning - targeting exercise.
+<br></p>
 <ul>
 <li>
 Why is this a prediction policy problem? What would be a causal
@@ -332,7 +335,7 @@ classification problem?
 </li>
 <li>
 Which variables and characteristics that we include in the prediction
-model can make a big difference.
+model can make a big difference?
 <ul>
 <li>
 Programmatically and conceptually, which type of characteristics do we
@@ -4849,8 +4852,8 @@ print(lm_results.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     498.3
-## Date:                Mon, 27 Nov 2023   Prob (F-statistic):               0.00
-## Time:                        10:32:50   Log-Likelihood:                -5189.2
+## Date:                Tue, 28 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        16:11:33   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -4908,8 +4911,8 @@ print(lm_robust.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     431.9
-## Date:                Mon, 27 Nov 2023   Prob (F-statistic):               0.00
-## Time:                        10:32:50   Log-Likelihood:                -5189.2
+## Date:                Tue, 28 Nov 2023   Prob (F-statistic):               0.00
+## Time:                        16:11:34   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
