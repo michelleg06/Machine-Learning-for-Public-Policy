@@ -3,6 +3,8 @@
 #author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
+editor_options: 
+  chunk_output_type: inline
 ---
 <style>
     body {
@@ -107,9 +109,9 @@ data_malawi <- read_csv("malawi.csv") # the file is directly read from the worki
 <h3> 2. Get to know your data: visualisation and pre-processing </h3>
 <br>
 
-```{r, skimr_digits = 3}
 
-options(pillar.sigfig = 3) # print only 3 digits after the decimal point (feel free to skip this line)
+```{r}
+
 skim(data_malawi) # describes the dataset in a nice format 
 ```
 <br>
@@ -136,6 +138,7 @@ what that means to what we can learn from our (sub)population. If there is no di
 we can proceed to delete the missing values or impute them. A more detailed explanation and course of action
 can be found [here](https://stefvanbuuren.name/fimd/sec-MCAR.html).
 ```
+<br>
 
 **Feature selection: subsetting the dataset **
 
@@ -147,6 +150,7 @@ That way, we save some memory space; but also, we can call the full set of varia
 variables to delete (not included in the identified set above):
 [ea, EA, hhwght, psu, strataid, lnzline, case_id, eatype] 
 ```
+<br>
 
 **N/B**: Feature selection is a *critical process* (and we normally don't have a paper to guide us through it): from a practical point of view, a model with less predictors may be easier to interpret. Also, some models may be negatively affected by non-informative predictors. This process is similar to traditional econometric modelling, but we should not conflate predictive and explanatory modelling. Importantly, please note that we are not interested in knowing why something happens, but rather in what is likely to happen given some known data. Hence:
 
