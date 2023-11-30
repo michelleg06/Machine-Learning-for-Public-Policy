@@ -13,6 +13,33 @@ At its core, machine learning is primarily interested in making sense of complex
 
 <span style="color:  #7a3b2e;">**Got any questions or thoughts you want to share? Go to our [blog-style discussion board](https://www.ml4pp-blog.com/) and leave a comment underneath the post dedicated to the introduction tab of this site.**</span>
 
+<br>
+
+**Please watch our Welcome video to meet the organisers and hear from Alex Hunns about the dynamics of the course.In case you do not make it until the end, here are some highlights:**
+
+- It is a (mostly) self-paced and fully online course. 
+
+- We provide a non-exhaustive way to go about using the R and Python languages for basic Machine Learning purposes. Some of you may be able to optimise a few lines of code, and we encourage that! 
+
+- There are social hours in gather.town. Join so that you can meet other Machine Learners around the globe!
+
+- There are no grades to this course. If you attend the Collaborative Policy Event, you may be eligible for some form of certification. 
+
+- The content is introductory. 
+
+- Be respectful and kind to other participants!
+
+<br>
+
+<center>
+```{r, echo=FALSE}
+library("vembedr")
+embed_url("https://youtu.be/sILhz3dqfqM?si=ni7aYqoJ9VXUQyN0")
+
+
+```
+</center>
+
 ## **A general introduction** {.tabset .tabset-fade .tabset-pills}
 
 ### **Machine Learning for Public Policy**:

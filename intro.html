@@ -32,6 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -295,6 +296,31 @@ you want to share? Go to our <a
 href="https://www.ml4pp-blog.com/">blog-style discussion board</a> and
 leave a comment underneath the post dedicated to the introduction tab of
 this site.</strong></span></p>
+<p><br></p>
+<p><strong>Please watch our Welcome video to meet the organisers and
+hear from Alex Hunns about the dynamics of the course.In case you do not
+make it until the end, here are some highlights:</strong></p>
+<ul>
+<li><p>It is a (mostly) self-paced and fully online course.</p></li>
+<li><p>We provide a non-exhaustive way to go about using the R and
+Python languages for basic Machine Learning purposes. Some of you may be
+able to optimise a few lines of code, and we encourage that!</p></li>
+<li><p>There are social hours in gather.town. Join so that you can meet
+other Machine Learners around the globe!</p></li>
+<li><p>There are no grades to this course. If you attend the
+Collaborative Policy Event, you may be eligible for some form of
+certification.</p></li>
+<li><p>The content is introductory.</p></li>
+<li><p>Be respectful and kind to other participants!</p></li>
+</ul>
+<p><br></p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/sILhz3dqfqM" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
 <div id="a-general-introduction"
 class="section level2 tabset tabset-fade tabset-pills">
 <h2 class="tabset tabset-fade tabset-pills"><strong>A general
@@ -636,7 +662,7 @@ href="https://ggplot2.tidyverse.org/">Grammar of Graphics</a> site.</p>
 <p>Plotting with R base</p>
 <pre class="r"><code>plot(mtcars$wt, mtcars$mpg, pch = 14, col = &quot;grey&quot;, main =&quot;Mileage and Weight&quot;)
 abline(ols_model, col =&quot;blue&quot;) # Note that to add a line of best fit, we had to call our previously estimate linear model, stored in the ols_model object-</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <pre class="r"><code># with base R, you cannot directly assign an object to a plot, you need to use...
 p_rbase &lt;- recordPlot()
 # plot.new() # don&#39;t forget to clean up your device afterwards!</code></pre>
@@ -653,14 +679,14 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col=am )) + #the color
   theme(legend.position=&quot;none&quot;) #removing legend
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>Thanks to the grammar of graphics, we can continue to edit the plot
 after we have finished it. Perhaps we’ve come up with ideas to make it
 more stylish? Or helpful? Let’s see an example:</p>
 <pre class="r"><code>p_ggplot &lt;- p_ggplot + theme(legend.position = &quot;right&quot;) # I am saving it with the same name again, but I could easily choose another name and keep two versions of the plot. 
 print(p_ggplot) # the legend we just added is NOT helpful. Why is that? </code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <pre class="r"><code># Remember when we talked about data types?!
 
 class(mtcars$am) #for legends, we might prefer levels/categories </code></pre>
@@ -677,7 +703,7 @@ p_ggplot &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
 
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
 <pre class="r"><code># Shall we continue?
 
 p_ggplot &lt;- p_ggplot + ggtitle(&quot;Scatterplot of mileage vs weight of car&quot;) +
@@ -691,7 +717,7 @@ p_ggplot &lt;- p_ggplot + scale_colour_manual(name = &quot;Automatic or Manual&q
 
 print(p_ggplot)</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-16-3.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-17-3.png" width="672" /></p>
 <pre class="r"><code># Finally, perhaps we want two lines of best fit that follow the shape of the value dispersion by car type, and not the linear model function?
 
 p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
@@ -706,7 +732,7 @@ p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
                                values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
 print(p)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-17-4.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
 are going to be relevant for making algorithms of your own:</p>
@@ -1233,8 +1259,8 @@ print(lm_2.summary()) # print linear model parameters</code></pre>
 ## Dep. Variable:                      y   R-squared:                       0.518
 ## Model:                            OLS   Adj. R-squared:                  0.507
 ## Method:                 Least Squares   F-statistic:                     46.27
-## Date:                Tue, 28 Nov 2023   Prob (F-statistic):           3.83e-62
-## Time:                        19:32:34   Log-Likelihood:                -2386.0
+## Date:                Thu, 30 Nov 2023   Prob (F-statistic):           3.83e-62
+## Time:                        11:26:19   Log-Likelihood:                -2386.0
 ## No. Observations:                 442   AIC:                             4794.
 ## Df Residuals:                     431   BIC:                             4839.
 ## Df Model:                          10                                         
@@ -1286,12 +1312,12 @@ age = pandas_diabetes.iloc[:,0] # select and store age variable
 
 plt.hist(bmi)
 plt.show() </code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-34-1.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-1.png" width="614" /></p>
 <pre class="python"><code>plt.clf()
 
 plt.scatter(age,bmi) # order is x,y
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-34-2.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-2.png" width="614" /></p>
 <pre class="python"><code># let&#39;s add some elements#add line of best fit to plot
 
 # find line of best fit
@@ -1302,7 +1328,7 @@ plt.scatter(age,bmi) # order is x,y
 # add the line and then display
 plt.plot(age, a*age+b, color=&#39;red&#39;, linestyle=&#39;--&#39;, linewidth=2)
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-34-3.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-3.png" width="614" /></p>
 <p><strong>Defining functions and loops</strong></p>
 <p>The last useful tip before we begin to use Python in earnest, is to
 remember that we can define functions or use loops (general flow
