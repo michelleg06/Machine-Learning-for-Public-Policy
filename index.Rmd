@@ -69,11 +69,11 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - An introduction to Statistical learning, Chapter 2, 3 (Regression), 5 (Cross-validation) and 6 (for more about Lasso).
 
+- Athey, S. (2017). [Beyond prediction: Using big data for policy problems](https://www.science.org/doi/10.1126/science.aal4321). Science, 355(6324), 483-485.
+
 - Kleinberg, J., Ludwig, J., Mullainathan, S. and Obermeyer, Z., 2015. [Prediction policy problems. American Economic Review](https://www.aeaweb.org/articles?id=10.1257/aer.p20151023), 105(5), pp.491-95.
 
 *Optional readings*
-
-- Athey, S. (2017). [Beyond prediction: Using big data for policy problems](https://www.science.org/doi/10.1126/science.aal4321). Science, 355(6324), 483-485.
 
 - Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J. and Mullainathan, S., 2017. [Human decisions and machine predictions.](https://academic.oup.com/qje/article-abstract/133/1/237/4095198?redirectedFrom=fulltext) The Quarterly Journal of Economics, 133(1), pp.237-293.
 
@@ -101,6 +101,13 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 - An introduction to Statistical learning Chapter 4
 
 - Athey, S., & Imbens, G. W. (2019). [Machine learning methods that economists should know about.](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080217-053433) Annual Review of Economics, 11, 685-725.
+
+
+- McBride, L., & Nichols, A. (2018). [Retooling poverty targeting using out-of-sample validation and machine learning.](https://academic.oup.com/wber/article-abstract/32/3/531/2447896?redirectedFrom=fulltext) The World Bank Economic Review, 32(3), 531-550.pter 5.1
+
+*Optional Readings*
+
+- Bondi-Kelly et al. (2023)- [Predicting micronutrient deficiency with publicly available satellite data.](https://onlinelibrary.wiley.com/doi/10.1002/aaai.12080) In AI Magazine. 
 
 <span style="color: orange;"> **Social hours: tbd. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
 
