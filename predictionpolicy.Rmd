@@ -20,7 +20,7 @@ In the video-lecture below you'll be given a brief introduction to the predictio
 <center>
 ```{r, echo=FALSE}
 library("vembedr")
-embed_url("https://youtu.be/gtYn0aKw-c8")
+embed_url("https://youtu.be/sFbKe4O0tEQ")
 
 
 ```
