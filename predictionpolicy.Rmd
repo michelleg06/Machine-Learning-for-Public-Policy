@@ -22,11 +22,24 @@ In the video-lecture below you'll be given a brief introduction to the predictio
 library("vembedr")
 embed_url("https://youtu.be/sFbKe4O0tEQ")
 
+```
+</center>
+
+<br>
+Are you still wondering what the difference is between Machine Learning and Econometrics? Take a few minutes to watch the video below. 
+<br>
+
+
+<center>
+```{r, echo=FALSE}
+library("vembedr")
+embed_url("https://youtu.be/gx_MBxMu0m4")
 
 ```
 </center>
 
-After watching the video, we have a practical exercise.
+
+After watching the videos, we have a practical exercise.
 
 **Predicting social assistance beneficiaries**
 

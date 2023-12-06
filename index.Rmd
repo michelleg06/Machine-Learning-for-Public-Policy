@@ -44,7 +44,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
     ·  Introduction to the course
     ·  Introduction to the R statistical programming language with the Rstudio IDE
-    ·  Introduction to the Python with Visual Studio Code
+    ·  Introduction to the Python programming language with Visual Studio Code
 
 **Release Date: 30 November 2023**
 

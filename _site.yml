@@ -16,9 +16,9 @@ navbar:
         - text: "Prediction Policy Problems"
           href: predictionpolicy.html
           icon: fa fa-line-chart
-        #- text: "Regression II"
-        #  href: reg2.html
-        #  icon: fa fa-area-chart
+        #- text: "Classification:Logistic"
+        #  href: classification.html
+        #  icon: fa-solid fa-gears
         #- text: "Fair ML/Data Ethics"
         #  href: fairml.html
         #  icon: fa fa-graduation-cap
@@ -28,4 +28,7 @@ navbar:
         #- text: "Random Forests"
         #  href: RandomForests.html
         #  icon: fa-tree
+        - text: "Discussion Board"
+          href: discussionboard.html
+          icon: fa-solid fa-comments
 output_dir: "." # if publishing on Github pages

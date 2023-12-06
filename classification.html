@@ -11,7 +11,7 @@
 
 
 
-<title>Supervised Machine Learning: Classification</title>
+<title>classification.knit</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -32,6 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -268,6 +269,13 @@ $(document).ready(function () {
     Prediction Policy Problems
   </a>
 </li>
+<li>
+  <a href="discussionboard.html">
+    <span class="fa fa-solid fa-comments"></span>
+     
+    Discussion Board
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -277,42 +285,371 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Supervised Machine Learning:
-Classification</h1>
 
 </div>
 
 
+<style>
+    body {
+    text-align: justify}
+</style>
+<div
+id="prediction-policy-problems-classification-with-logistic-regression"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills"><strong>Prediction Policy
+Problems: Classification with Logistic Regression</strong></h2>
 <p>Have you heard the English proverb, “Birds of a feather flock
 together”? It references and old saying that indicates that people with
 similar characteristics tend to group and stay together. In Machine
 Learning, Classification problems deal with the evaluation of models of
 categorical response, such as:</p>
 <ul>
-<li><p>Predictive classification: E.g. is this spam or not? Predictive
+<li>Predictive classification: E.g. is this spam or not? Predictive
 classification concerns itself with unlabeled data, and groups them by
 the proportion of characteristics they commonly share. After which, it
 classifies them into some predetermined category. A common, ‘lazy’
-method is kNearest Neighbors.</p></li>
-<li><p>Binary classification: You may already be familiar with profit or
-logistic regression models. You obtain two types of predictions from
-such models: proportions, and the generation of a predicted discrete
-choice. For Policy purposes, we are interested in the discrete choice.
-E.g. filtering low-income individuals to select those who will receive
-social assistance and those who will not, based on some income
-threshold. But, we still need the probability estimates of each of the
-two categories. They are relevant when working out the model’s
-confidence about the predicted discrete choice.</p></li>
-<li><p>Multi-label classification: Not unlike binary classification, it
-is a labeled data model that relies on techniques such as multinomial
+method is kNearest Neighbors.</li>
+</ul>
+<p><strong>- Binary classification:</strong> You may already be familiar
+with probit or logistic regression models. You obtain two types of
+predictions from such models: proportions, and the generation of a
+predicted discrete choice. For Policy purposes, we are interested in the
+discrete choice. E.g. filtering low-income individuals to select those
+who will receive social assistance and those who will not, based on some
+income/expenditure threshold. But, we still need the probability
+estimates of each of the two categories. They are relevant when working
+out the model’s confidence about the predicted discrete choice.</p>
+<ul>
+<li>Multi-label classification: Not unlike binary classification, it is
+a labeled data model that relies on techniques such as multinomial
 logistic regression. It deals with data with more than two categories,
 and generates discrete choices, which policymakers then rely on to make
-decisions.</p></li>
+decisions.</li>
 </ul>
-<p><strong>R practical Excercise</strong></p>
-<a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Classification.R">
-<button class="btn btn-info"><i class="fa fa-save"></i> Download R script Classification: ProbitLogit</button>
-</a>
+<p>In the video-lecture below you’ll get an intuitive explanation of
+what a logistic regression model is, and how we can use it in the
+context of a prediction policy framework.</p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/A9qVrFhlRMY" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
+<p>After watching the video, below you’ll find a continuation of our
+previous exercise. Previously, we were working on predicting per capita
+monthly expenditures of a sample of individuals from Malawi. Our
+assumption is that by predicting how much a person spends per month, we
+can infer whether they are in poverty (or not) by contrasting that value
+to other relevant information, such as the cost of food and rent in the
+country. Another way to go about this is to use the estimated poverty
+line, and generate a variable that takes on the value <span
+class="math inline">\(1\)</span> if the person’s expenditure is below
+the poverty line (they are poor) and <span
+class="math inline">\(0\)</span> otherwise (not poor). Thus, our policy
+problem becomes one of classification.</p>
+<div id="r-practical" class="section level3">
+<h3><strong>R practical</strong></h3>
+<p>We will continue to work with the Malawi dataset, which can be
+downloaded in the (Prediction Policy Problems)[<a
+href="https://www.ml4publicpolicy.com/predictionpolicy.html"
+class="uri">https://www.ml4publicpolicy.com/predictionpolicy.html</a>]
+tab of this website.</p>
+<h3>
+<ol style="list-style-type: decimal">
+<li>Preliminaries: working directory, libraries, data upload
+</h3>
+<br></li>
+</ol>
+<pre class="r"><code>rm(list = ls()) # this line cleans your Global Environment.
+setwd(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy&quot;) # set your working directory
+
+# Do not forget to install a package with the install.packages() function if it&#39;s the first time you use it!
+
+library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
+library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
+library(caret) # a package with key functions that streamline the process for predictive modelling 
+library(skimr) # a package to describe dataframes
+library(plyr) # a package for data wrangling
+
+data_malawi &lt;- read_csv(&quot;malawi.csv&quot;) # the file is directly read from the working directory/folder previously set</code></pre>
+<h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Data pre-processing
+</h3>
+<br></li>
+</ol>
+<p>This section will not be a thorough step-by-step of the
+pre-processing and visualisation of our data because we have already
+done that. However, we have to do something very important: recover a
+static variable from the original dataset that contains a single number:
+the poverty line in Malawi.</p>
+<p><strong>Feature selection: subsetting the dataset </strong></p>
+<p>The variable that we’re interested in recovering is
+<strong>lnzline</strong>. The code below reproduces the dataframe
+subsetting from our previous exercise. Except, this time we will NOT
+delete de static vector lnzline.</p>
+</div>
+</div>
+<div
+id="objectvector-that-contains-the-names-of-the-variables-that-we-want-to-get-rid-of"
+class="section level1">
+<h1>object:vector that contains the names of the variables that we want
+to get rid of</h1>
+<pre class="r"><code>cols &lt;- c(&quot;ea&quot;, &quot;EA&quot;, &quot;psu&quot;,&quot;hhwght&quot;, &quot;strataid&quot;, &quot;case_id&quot;,&quot;eatype&quot;)
+
+
+# subset of the data_malawi object:datframe
+data_malawi &lt;- data_malawi[,-which(colnames(data_malawi) %in% cols)] # the minus sign indicates deletion of cols
+
+colnames(data_malawi) # print the names of the remaining vectors in our dataframe</code></pre>
+<pre><code>##  [1] &quot;lnexp_pc_month&quot; &quot;hhsize&quot;         &quot;hhsize2&quot;        &quot;agehead&quot;       
+##  [5] &quot;agehead2&quot;       &quot;north&quot;          &quot;central&quot;        &quot;rural&quot;         
+##  [9] &quot;nevermarried&quot;   &quot;sharenoedu&quot;     &quot;shareread&quot;      &quot;nrooms&quot;        
+## [13] &quot;floor_cement&quot;   &quot;electricity&quot;    &quot;flushtoilet&quot;    &quot;soap&quot;          
+## [17] &quot;bed&quot;            &quot;bike&quot;           &quot;musicplayer&quot;    &quot;coffeetable&quot;   
+## [21] &quot;iron&quot;           &quot;dimbagarden&quot;    &quot;goats&quot;          &quot;dependratio&quot;   
+## [25] &quot;hfem&quot;           &quot;grassroof&quot;      &quot;mortarpestle&quot;   &quot;table&quot;         
+## [29] &quot;clock&quot;          &quot;region&quot;         &quot;lnzline&quot;</code></pre>
+<p><br></p>
+<p>At this point, we still need to do two more pre-processing step:
+correctly define the vector/variable class in the dataframe, and create
+the binary outcome/target variable. We will repeat the
+class-transformation code chunk below so that you have all that is
+needed in one section. However, we won’t spend time explaining it in
+detail as all of that is done in the previous exercise.</p>
+<pre class="r"><code># transform all binary/categorical data into factor class
+
+min_count &lt;- 3 # vector: 3 categories is our max number of categories found
+
+# store boolean (true/false) if the number of unique values is lower or equal to the min_count vector
+n_distinct2 &lt;- apply(data_malawi, 2, function(x) length(unique(x))) &lt;= min_count
+
+# select the identified categorical variables and transform them into factors
+data_malawi[n_distinct2] &lt;- lapply(data_malawi[n_distinct2], factor) 
+
+# recall poverty line contains 1 unique value (it is static), let&#39;s transform the variable into numeric again
+data_malawi$lnzline &lt;- as.numeric(as.character(data_malawi$lnzline))
+
+# you can use ``skim(data_malawi)&#39;&#39; to check that the dataframe is in working order</code></pre>
+<p><br></p>
+<p><strong>Feature creation: create a binary variable</strong></p>
+<p><br></p>
+<pre class="r"><code># print summary statistics of target variable
+summary(data_malawi$lnexp_pc_month)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   4.777   6.893   7.305   7.359   7.758  11.064</code></pre>
+<pre class="r"><code># if the log of per capita expenditure is below the estimated poverty line, classify individual as poor, else classify individual as not poor. Store as factor (default with text is class character)
+data_malawi$poor &lt;- as.factor(ifelse(data_malawi$lnexp_pc_month&lt;= data_malawi$lnzline,&quot;Y&quot;,&quot;N&quot;)) # Y(es) N(o)
+
+# print a proportions table to get a first impression of the state of poverty in Malawi
+prop.table(table(data_malawi$poor))</code></pre>
+<pre><code>## 
+##    N    Y 
+## 0.35 0.65</code></pre>
+<p>According to our sample, about 65% of Malawians are considered poor.
+This number is not unreasonable. According to The World Bank’s (Country
+Report)[<a
+href="https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf"
+class="uri">https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf</a>]
+for Malawi, ca. <span class="math inline">\(70\%\)</span> of the
+population lives with under <span class="math inline">\(\$2.15\)</span>
+a day, and the poverty rate is estimated to be at <span
+class="math inline">\(50\%\)</span>. About half of their population is
+labelled as poor. These estimates were done with <span
+class="math inline">\(2019\)</span> data (so, a bit more recent than our
+sample).</p>
+<p><br></p>
+<pre class="r"><code># Final data pre-processing: delete static variable (poverty line)
+# and along with it: remove the continuous target (as it perfectly predicts the binary target)
+
+which(colnames(data_malawi)==&quot;lnzline&quot;) # returns column number 31</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>which(colnames(data_malawi)==&quot;lnexp_pc_month&quot;) # returns column number 1</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>data_malawi &lt;- data_malawi[,-c(1,31)] # delete columns no. 1 and 31 from the dataset</code></pre>
+<br>
+<h3>
+<ol start="3" style="list-style-type: decimal">
+<li>Model Validation
+</h3>
+<br></li>
+</ol>
+<p>Let’s use a simple 80:20 split of our data. We will use the caret
+package again.</p>
+<pre class="r"><code>set.seed(1234) # ensures reproducibility of our data split
+
+# data partitioning: train and test datasets
+train_idx &lt;- createDataPartition(data_malawi$poor, p = .8, list = FALSE, times = 1) 
+
+Train_df &lt;- data_malawi[ train_idx,]
+Test_df  &lt;- data_malawi[-train_idx,]</code></pre>
+<p><br> Now, let’s fit a logistic model: <br></p>
+<pre class="r"><code># Step 1: create trainControl object
+TrControl &lt;- trainControl(
+    method = &quot;cv&quot;,
+    number = 5,
+    summaryFunction = twoClassSummary,
+    classProbs = TRUE, # IMPORTANT!
+    verboseIter = FALSE
+)</code></pre>
+<p>We’re going to pass the TrControl object onto the caret model
+estimation to ask for the following: - cross-validate with 5 folds -
+show model summary: performance metrics for when we have two distinct
+classes (binary outcome), including the area under the ROC curve, the
+sensitivity and specificity. - the ROC curve is based on the predicted
+class probabilities, so the classProbs = TRUE parameter must accompany a
+twoClassSummary setup. - veboseIter = TRUE shows you the output for each
+iteration (but we don’t want to display all the details atm).</p>
+<pre class="r"><code># Step 2: train the model.
+m &lt;- train(
+    poor ~ ., 
+    Train_df, 
+    method = &quot;glm&quot;,
+    family=&quot;binomial&quot;,
+    trControl = TrControl,
+    preProcess=c(&quot;center&quot;, &quot;scale&quot;)
+)</code></pre>
+<pre><code>## Warning in train.default(x, y, weights = w, ...): The metric &quot;Accuracy&quot; was not
+## in the result set. ROC will be used instead.</code></pre>
+<p>Notice the warning. If we want to report the “Accuracy” metric, we
+should remove the twoClassSummary parameter specification in the
+TrControl object. <br></p>
+<pre class="r"><code># print the model&#39;s performance metrics
+print(m) </code></pre>
+<pre><code>## Generalized Linear Model 
+## 
+## 9025 samples
+##   29 predictor
+##    2 classes: &#39;N&#39;, &#39;Y&#39; 
+## 
+## Pre-processing: centered (30), scaled (30) 
+## Resampling: Cross-Validated (5 fold) 
+## Summary of sample sizes: 7219, 7221, 7220, 7220, 7220 
+## Resampling results:
+## 
+##   ROC        Sens     Spec     
+##   0.8787263  0.66572  0.8927722</code></pre>
+<p><strong>Performance metrics</strong> <br></p>
+<ul>
+<li><p><strong>ROC:</strong> it is a probability curve plotted with the
+True Positive Rate (y-axis) against the False Positive Rate (x-axis);
+you can think of it as plotting the tradeoff between maximising the true
+positive rate and minimising the false positive rate. The preferred area
+under the curve is 1. Our estimated 0.8 indicates that a logistic
+classification is a good model fit (close to 1).</p></li>
+<li><p><strong>Sensitivity:</strong> it is a measure of the proportion
+of the positive (1 = poor) values that are correctly identified.
+Therefore, we have correctly identified <span
+class="math inline">\(66.5\%\)</span> of the actual positives. Or, out
+of all of the individuals that are poor, how many of them did we predict
+to be poor? The formula is: tp / (tp + fn); where tp = true positive and
+fn = false negative. In the video-lecture, Stephan used the term
+<strong>Recall</strong>, where we now use sensitivity.</p></li>
+<li><p><strong>Specificity:</strong> measures the proportion of actual
+negatives that are correctly identified by the model; i.e. the ability
+of our model to predict if an observation doesn’t belong to a certain
+category. Or, out all of the individuals that are not poor, how many of
+them were predicted not to be poor? The formula is: tn / (tn + fp);
+where tn = true negative and fp = false positive. At <span
+class="math inline">\(89.2\%\)</span>, we can trust a predicted negative
+(<span class="math inline">\(0\)</span>) value.</p></li>
+</ul>
+<p><br> <strong>Out of sammple performance</strong> <br></p>
+<p>Notice that we have used cross-validation in our training dataset. In
+theory, our performance metrics have been validated in 5 different
+folds. Nevertheless, we will still see how our trained model performs in
+our test dataset. We know that the performance of a logistic
+classification model on the train set is good, is it the same for the
+test dataset?</p>
+<pre class="r"><code># First, use the logistic classification model (trained on the Train_df) to make predictions on the test dataset:
+
+pr1 &lt;- predict(m, Test_df, type = &quot;raw&quot;)
+head(pr1) # Yes and No output</code></pre>
+<pre><code>## [1] N Y Y Y N Y
+## Levels: N Y</code></pre>
+<p>We have specified the type of prediction we want: raw. This will
+return the predicted classification (<span
+class="math inline">\(0\)</span> or <span
+class="math inline">\(1\)</span>) as opposed to the individual’s
+probability of falling into the selected category <span
+class="math inline">\(1\)</span> (or the estimated probability of being
+poor). There is a rule of thumb that says you will be categorised as
+poor (or any chosen category) if your estimated probability is &gt;= to
+<span class="math inline">\(0.5\)</span>. With this information, we can
+create a Confusion Matrix which will be accompanied by performance
+metrics.</p>
+<pre class="r"><code># Next, we call the caret package&#39;s confusionMatrix function, and select the two elements to be contrasted:
+# the predicted classification vector, and the actual observed vector from the test dataframe. 
+confusionMatrix(pr1, Test_df[[&quot;poor&quot;]])</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    N    Y
+##          N  546  174
+##          Y  243 1292
+##                                           
+##                Accuracy : 0.8151          
+##                  95% CI : (0.7984, 0.8309)
+##     No Information Rate : 0.6501          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5851          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 0.0008685       
+##                                           
+##             Sensitivity : 0.6920          
+##             Specificity : 0.8813          
+##          Pos Pred Value : 0.7583          
+##          Neg Pred Value : 0.8417          
+##              Prevalence : 0.3499          
+##          Detection Rate : 0.2421          
+##    Detection Prevalence : 0.3193          
+##       Balanced Accuracy : 0.7867          
+##                                           
+##        &#39;Positive&#39; Class : N               
+## </code></pre>
+<p><br></p>
+<p>The first element from the above function returns the confusion
+matrix, a 2×2 table that shows the predicted values from the model
+vs. the actual values from the test dataset. You may be acquainted with
+this sort of table, but know it as a cross-tabulation. From the
+confusion matrix, we obtain the information that we need to estimate
+some performance metrics. For instance, sensitivity and specificity
+(used above) require the total count of true positives: tp (true
+positive) would be the Y/Y cell, with <span
+class="math inline">\(1,292\)</span> correctly identified individuals in
+poverty. <br></p>
+<p>Besides the performance metrics discussed previously, this function
+also shows the Accuracy of our model (or <span
+class="math inline">\(1\)</span> - the error rate) which, at <span
+class="math inline">\(0.8\)</span>, indicates that our classification
+algorithm is highly accurate.</p>
+<p><br></p>
+<pre><code>**Imbalanced data**
+When you have a large number of zeros (or No, in this case), the Accuracy metric may not be the most reliable one. If we look at the formula: number of correct predictions / total number of predictions, we see why this might be an issue. It is a lot easier to correctly predict that of which there is plenty of (zeros), than the category for which we have less instances. </code></pre>
+<p><br></p>
+<p>Imbalance is not a problem for our target variable, as we have
+roughly as many zeros as ones. Nonetheless, this sets the stage for us
+to introduce the Kappa statistic (<span
+class="math inline">\(0.58\)</span>), which is a measure of model
+accuracy that is adjusted by accounting for the possibility of a correct
+prediction by chance alone. It ranges from 0 to 1, and can be
+interpreted using the following thresholds:</p>
+<ul>
+<li><p>Poor = Less than 0.20</p></li>
+<li><p>Fair = 0.20 to 0.40</p></li>
+<li><p>Moderate = 0.40 to 0.60</p></li>
+<li><p>Good = 0.60 to 0.80</p></li>
+<li><p>Very good = 0.80 to 1.00</p></li>
+</ul>
+<p>At <span class="math inline">\(0.58\)</span>, our classification
+model performs moderately well. Finally, Sensitivity and Specificity
+scores on the test dataset are very close to the ones obtained from the
+train dataset. This is a good sign for the out-of-sample stability of
+our model. <br></p>
+<p><strong>Model Visualisation</strong> <br></p>
+</div>
 
 <!DOCTYPE html>
 <hr>

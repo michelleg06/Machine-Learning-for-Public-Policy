@@ -1,0 +1,31 @@
+---
+title: "We have a blog!"
+#author: "Economics, Public Policy and Computational Social Sciences"
+#date: '2022-09-21'
+output: html_document
+
+---
+<style>
+    body {
+    text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+
+library(magick)
+
+```
+
+<center>
+```{r pressure, echo=FALSE, fig.cap=" ", out.width = '65%'}
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/ML4PP_blog_logo.png")
+```
+</center>
+
+<h3> [Visit the ML4PP blog](https://www.ml4pp-blog.com/) </h3> 
+
+<br>
+
+Please make sure to visit our blog-style discussion board and interact with your peers and the course contributors by leaving comments on the posts. There are hyperlinks to the blog throughout the website, but just in case:
+<br>
+<center> [https://www.ml4pp-blog.com/](https://www.ml4pp-blog.com/) </center>

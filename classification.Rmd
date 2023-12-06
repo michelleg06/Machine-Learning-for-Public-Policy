@@ -1,29 +1,270 @@
 ---
-title: "Supervised Machine Learning: Classification"
+#title: "Classification with Logistic Regression"
 #author: "Dr. Stephan Dietrich & Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
 ---
 
+<style>
+    body {
+    text-align: justify}
+</style>
+
+## **Prediction Policy Problems: Classification with Logistic Regression** {.tabset .tabset-fade .tabset-pills}
+
+
 Have you heard the English proverb, “Birds of a feather flock together”? It references and old saying that indicates that people with similar characteristics tend to group and stay together. In Machine Learning, Classification problems deal with the evaluation of models of categorical response, such as: 
 
 - Predictive classification: E.g. is this spam or not? Predictive classification concerns itself with unlabeled data, and groups them by the proportion of characteristics they commonly share. After which, it classifies them into some predetermined category. A common, ‘lazy’ method is kNearest Neighbors. 
 
-- Binary classification: You may already be familiar with profit or logistic regression models. You obtain two types of predictions from such models: proportions, and the generation of a predicted discrete choice. For Policy purposes, we are interested in the discrete choice. E.g. filtering low-income individuals to select those who will receive social assistance and those who will not, based on some income threshold. But, we still need the probability estimates of each of the two categories. They are relevant when working out the model’s confidence about the predicted discrete choice. 
+**- Binary classification:** You may already be familiar with probit or logistic regression models. You obtain two types of predictions from such models: proportions, and the generation of a predicted discrete choice. For Policy purposes, we are interested in the discrete choice. E.g. filtering low-income individuals to select those who will receive social assistance and those who will not, based on some income/expenditure threshold. But, we still need the probability estimates of each of the two categories. They are relevant when working out the model’s confidence about the predicted discrete choice. 
 
 - Multi-label classification: Not unlike binary classification, it is a labeled data model that relies on techniques such as multinomial logistic regression. It deals with data with more than two categories, and generates discrete choices, which policymakers then rely on to make decisions.
 
-**R practical Excercise**
 
+In the video-lecture below you'll get an intuitive explanation of what a logistic regression model is, and how we can use it in the context of a prediction policy framework.
+
+<center>
 ```{r, echo=FALSE}
-library(downloadthis)
-download_link(
-  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Classification.R",
-  button_label = "Download R script Classification: ProbitLogit",
-  button_type = "info",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
+library("vembedr")
+embed_url("https://youtu.be/A9qVrFhlRMY?si=ExusvC9elkiRhtXe")
+
 
 ```
+</center>
+
+After watching the video, below you'll find a continuation of our previous exercise. Previously, we were working on predicting per capita monthly expenditures of a sample of individuals from Malawi. Our assumption is that by predicting how much a person spends per month, we can infer whether they are in poverty (or not) by contrasting that value to other relevant information, such as the cost of food and rent in the country. Another way to go about this is to use the estimated poverty line, and generate a variable that takes on the value $1$ if the person's expenditure is below the poverty line (they are poor) and $0$ otherwise (not poor). Thus, our policy problem becomes one of classification. 
+
+
+### **R practical**
+
+We will continue to work with the Malawi dataset, which can be downloaded in the (Prediction Policy Problems)[https://www.ml4publicpolicy.com/predictionpolicy.html] tab of this website. 
+
+<h3> 1. Preliminaries: working directory, libraries, data upload </h3>
+<br>
+
+```{r, message=FALSE}
+rm(list = ls()) # this line cleans your Global Environment.
+setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy") # set your working directory
+
+# Do not forget to install a package with the install.packages() function if it's the first time you use it!
+
+library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
+library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
+library(caret) # a package with key functions that streamline the process for predictive modelling 
+library(skimr) # a package to describe dataframes
+library(plyr) # a package for data wrangling
+
+data_malawi <- read_csv("malawi.csv") # the file is directly read from the working directory/folder previously set
+
+```
+
+<h3> 2. Data pre-processing </h3>
+<br>
+
+This section will not be a thorough step-by-step of the pre-processing and visualisation of our data because we have already done that. However, we have to do something very important: recover a static variable from the original dataset that contains a single number: the poverty line in Malawi. 
+
+**Feature selection: subsetting the dataset **
+
+The variable that we're interested in recovering is **lnzline**. The code below reproduces the dataframe subsetting from our previous exercise. Except, this time we will NOT delete de static vector lnzline. 
+
+# object:vector that contains the names of the variables that we want to get rid of
+
+```{r}
+cols <- c("ea", "EA", "psu","hhwght", "strataid", "case_id","eatype")
+
+
+# subset of the data_malawi object:datframe
+data_malawi <- data_malawi[,-which(colnames(data_malawi) %in% cols)] # the minus sign indicates deletion of cols
+
+colnames(data_malawi) # print the names of the remaining vectors in our dataframe
+
+```
+
+<br>
+
+At this point, we still need to do two more pre-processing step: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as all of that is done in the previous exercise. 
+
+```{r}
+
+# transform all binary/categorical data into factor class
+
+min_count <- 3 # vector: 3 categories is our max number of categories found
+
+# store boolean (true/false) if the number of unique values is lower or equal to the min_count vector
+n_distinct2 <- apply(data_malawi, 2, function(x) length(unique(x))) <= min_count
+
+# select the identified categorical variables and transform them into factors
+data_malawi[n_distinct2] <- lapply(data_malawi[n_distinct2], factor) 
+
+# recall poverty line contains 1 unique value (it is static), let's transform the variable into numeric again
+data_malawi$lnzline <- as.numeric(as.character(data_malawi$lnzline))
+
+# you can use ``skim(data_malawi)'' to check that the dataframe is in working order
+
+```
+
+<br>
+
+**Feature creation: create a binary variable**
+
+<br>
+
+```{r}
+
+# print summary statistics of target variable
+summary(data_malawi$lnexp_pc_month)
+
+# if the log of per capita expenditure is below the estimated poverty line, classify individual as poor, else classify individual as not poor. Store as factor (default with text is class character)
+data_malawi$poor <- as.factor(ifelse(data_malawi$lnexp_pc_month<= data_malawi$lnzline,"Y","N")) # Y(es) N(o)
+
+# print a proportions table to get a first impression of the state of poverty in Malawi
+prop.table(table(data_malawi$poor))
+```
+
+According to our sample, about 65% of Malawians are considered poor. This number is not unreasonable. According to The World Bank's (Country Report)[https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf] for Malawi, ca. $70\%$ of the population lives with under $\$2.15$ a day, and the poverty rate is estimated to be at $50\%$. About half of their population is labelled as poor. These estimates were done with $2019$ data (so, a bit more recent than our sample). 
+
+
+<br>
+
+```{r}
+
+# Final data pre-processing: delete static variable (poverty line)
+# and along with it: remove the continuous target (as it perfectly predicts the binary target)
+
+which(colnames(data_malawi)=="lnzline") # returns column number 31
+which(colnames(data_malawi)=="lnexp_pc_month") # returns column number 1
+
+data_malawi <- data_malawi[,-c(1,31)] # delete columns no. 1 and 31 from the dataset
+
+
+```
+<br>
+<h3> 3. Model Validation </h3>
+<br>
+
+Let's use a simple 80:20 split of our data. We will use the caret package again. 
+
+```{r}
+
+set.seed(1234) # ensures reproducibility of our data split
+
+# data partitioning: train and test datasets
+train_idx <- createDataPartition(data_malawi$poor, p = .8, list = FALSE, times = 1) 
+
+Train_df <- data_malawi[ train_idx,]
+Test_df  <- data_malawi[-train_idx,]
+
+```
+
+<br>
+Now, let's fit a logistic model:
+<br>
+
+```{r}
+# Step 1: create trainControl object
+TrControl <- trainControl(
+    method = "cv",
+    number = 5,
+    summaryFunction = twoClassSummary,
+    classProbs = TRUE, # IMPORTANT!
+    verboseIter = FALSE
+)
+```
+
+We're going to pass the TrControl object onto the caret model estimation to ask for the following:
+- cross-validate with 5 folds
+- show model summary: performance metrics for when we have two distinct classes (binary outcome), including the area under the ROC curve, the sensitivity and specificity.
+- the ROC curve is based on the predicted class probabilities, so the classProbs = TRUE parameter must accompany a twoClassSummary setup. 
+- veboseIter = TRUE shows you the output for each iteration (but we don't want to display all the details atm).
+
+```{r}
+
+# Step 2: train the model.
+m <- train(
+    poor ~ ., 
+    Train_df, 
+    method = "glm",
+    family="binomial",
+    trControl = TrControl,
+    preProcess=c("center", "scale")
+)
+```
+Notice the warning. If we want to report the "Accuracy" metric, we should remove the twoClassSummary parameter specification in the TrControl object. 
+<br>
+
+```{r}
+# print the model's performance metrics
+print(m) 
+
+```
+**Performance metrics**
+<br>
+
+- **ROC:** it is a probability curve plotted with the True Positive Rate (y-axis) against the False Positive Rate (x-axis); you can think of it as plotting the tradeoff between maximising the true positive rate and minimising the false positive rate. The preferred area under the curve is 1. Our estimated 0.8 indicates that a logistic classification is a good model fit (close to 1).
+
+- **Sensitivity:** it is a measure of the proportion of the positive (1 = poor) values that are correctly identified. Therefore, we have correctly identified $66.5\%$ of the actual positives. Or, out of all of the individuals that are poor, how many of them did we predict to be poor? The formula is: tp / (tp + fn); where tp = true positive and fn = false negative. In the video-lecture, Stephan used the term **Recall**, where we now use sensitivity.
+
+- **Specificity:** measures the proportion of actual negatives that are correctly identified by the model; i.e. the ability of our model to predict if an observation doesn't belong to a certain category. Or, out all of the individuals that are not poor, how many of them were predicted not to be poor? The formula is: tn / (tn + fp); where tn = true negative and fp = false positive. At $89.2\%$, we can trust a predicted negative ($0$) value. 
+
+
+<br>
+**Out of sammple performance**
+<br>
+
+Notice that we have used cross-validation in our training dataset. In theory, our performance metrics have been validated in 5 different folds. Nevertheless, we will still see how our trained model performs in our test dataset. We know that the performance of a logistic classification model on the train set is good, is it the same for the test dataset?
+
+```{r}
+
+# First, use the logistic classification model (trained on the Train_df) to make predictions on the test dataset:
+
+pr1 <- predict(m, Test_df, type = "raw")
+head(pr1) # Yes and No output
+
+```
+
+We have specified the type of prediction we want: raw. This will return the predicted classification ($0$ or $1$) as opposed to the individual's probability of falling into the selected category $1$ (or the estimated probability of being poor). There is a rule of thumb that says you will be categorised as poor (or any chosen category) if your estimated probability is >= to $0.5$. With this information, we can create a Confusion Matrix which will be accompanied by performance metrics. 
+
+```{r}
+
+# Next, we call the caret package's confusionMatrix function, and select the two elements to be contrasted:
+# the predicted classification vector, and the actual observed vector from the test dataframe. 
+confusionMatrix(pr1, Test_df[["poor"]])
+```
+<br>
+
+The first element from the above function returns the confusion matrix, a 2×2 table that shows the predicted values from the model vs. the actual values from the test dataset. You may be acquainted with this sort of table, but know it as a cross-tabulation. From the confusion matrix, we obtain the information that we need to estimate some performance metrics. For instance, sensitivity and specificity (used above) require the total count of true positives: tp (true positive) would be the Y/Y cell, with $1,292$ correctly identified individuals in poverty.
+<br>
+
+Besides the performance metrics discussed previously, this function also shows the Accuracy of our model (or $1$ - the error rate) which, at $0.8$, indicates that our classification algorithm is highly accurate. 
+
+<br>
+
+```
+**Imbalanced data**
+When you have a large number of zeros (or No, in this case), the Accuracy metric may not be the most reliable one. If we look at the formula: number of correct predictions / total number of predictions, we see why this might be an issue. It is a lot easier to correctly predict that of which there is plenty of (zeros), than the category for which we have less instances. 
+```
+<br>
+
+Imbalance is not a problem for our target variable, as we have roughly as many zeros as ones. Nonetheless, this sets the stage for us to introduce the Kappa statistic ($0.58$), which is a measure of model accuracy that is adjusted by accounting for the possibility of a correct prediction by chance alone. It ranges from 0 to 1, and can be interpreted using the following thresholds:
+
+- Poor = Less than 0.20
+
+- Fair = 0.20 to 0.40
+
+- Moderate = 0.40 to 0.60
+
+- Good = 0.60 to 0.80
+
+- Very good = 0.80 to 1.00
+
+At $0.58$, our classification model performs moderately well. Finally, Sensitivity and Specificity scores on the test dataset are very close to the ones obtained from the train dataset. This is a good sign for the out-of-sample stability of our model.
+<br>
+
+**Model Visualisation**
+<br>
+
+```{r}
+
+```
+
