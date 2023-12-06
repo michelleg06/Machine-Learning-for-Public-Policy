@@ -48,12 +48,15 @@ rm(list = ls()) # this line cleans your Global Environment.
 setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy") # set your working directory
 
 # Do not forget to install a package with the install.packages() function if it's the first time you use it!
+# install.packages(caTools, plotROC) # these guys are new for us 
 
 library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
 library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
-library(caret) # a package with key functions that streamline the process for predictive modelling 
-library(skimr) # a package to describe dataframes
+library(caret) # a library with key functions that streamline the process for predictive modelling 
+library(skimr) # a package with a set of functions to describe dataframes and more
 library(plyr) # a package for data wrangling
+library(caTools) # a library with several basic utility functions (e.g. ROC curves, LogitBoos classifier, etc.)
+library(plotROC) # a companion to ggplot2 (loaded with the tidyverse) for plotting ROC curves
 
 data_malawi <- read_csv("malawi.csv") # the file is directly read from the working directory/folder previously set
 
@@ -209,7 +212,7 @@ print(m)
 
 
 <br>
-**Out of sammple performance**
+**Out-of-sample performance**
 <br>
 
 Notice that we have used cross-validation in our training dataset. In theory, our performance metrics have been validated in 5 different folds. Nevertheless, we will still see how our trained model performs in our test dataset. We know that the performance of a logistic classification model on the train set is good, is it the same for the test dataset?
@@ -264,7 +267,58 @@ At $0.58$, our classification model performs moderately well. Finally, Sensitivi
 **Model Visualisation**
 <br>
 
+We can visualise the performance of our classification model in various ways. For now, we'll focus on a simple ROC AUC. 
+
+
 ```{r}
+
+# ROC AUC: Area Under the Curve
+# colAUC function from the caTools library
+
+# transform predicted values and observed values into class numeric (needed for the colAUC function)
+
+pr_numeric <- as.numeric(as.factor(pr1))
+# sanity check:
+head(cbind(pr_numeric, pr1)) # the numeric values of both vectors seem to be the same. 
+
+poor_numeric <- as.numeric(as.factor(Test_df$poor))
+# sanity check
+head(cbind(poor_numeric,Test_df$poor)) # all good 
+
+# plot the ROC area under the curve
+colAUC(pr_numeric, poor_numeric, plotROC = TRUE)
+
+# We can also plot the ROC AUC with ggplot
+# First, we create a dataframe containing the observed and the predicted values (in numeric form)
+roc_df <- data.frame(Observed = poor_numeric, Predicted = pr_numeric)
+
+# Second, we add the geom_roc() layer to a ggplot object
+
+roc_gg <- ggplot(roc_df, aes (d = Observed, m = Predicted)) + 
+            geom_roc(labels = FALSE) +
+            style_roc(theme=theme_get()) # adds a diagonal guideline, minor grid lines, and optionally direct labels to ggplot objects containing a geom_roc layer
+
+direct_label(roc_gg, nudge_y = 0.5) # direct_label tells you what the plotted line represents, nudge_y option places the label (you can play around with that number to see where different values place the label)
 
 ```
 
+
+
+Notice the warning on the ggplot2 ROC AUC plot. The assumption that they are making is correct, so we do not need to do anything else at this moment. You can check this by contrasting the values of the labelled vs. the numeric vectors (use the head() function).  
+
+**Conclusion**
+<br>
+
+How did our classification model do? Is a logistic regression the right algorithm? I trust you can form your own judgement based on the performance metrics above. Personally, I think we only marginally improved from a linear regression, and perhaps we can do better with Ensemble Learning techniques!
+
+### **Python practical**
+
+### **Practice at home**
+
+As before, you can use the Bolivia dataset to try your hand at a logistic model. The data can be downloaded in the [Practice at home](https://www.ml4publicpolicy.com/predictionpolicy.html) sub-tab in the Prediction Policy Problems webpage of this site.
+<br>
+
+Let us know you are completing the tasks by answering a simple question via this [Qualtrics link](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_5bPRxhgDBqCAzxc).
+<br>
+
+It is important for us to know that you are engaging with the course. Sending an answer - even if it is incorrect - to our Qualtrics question lets us know just that. So please say hi on Qualtrics! (And on our blog, too.)

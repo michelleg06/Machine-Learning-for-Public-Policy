@@ -365,12 +365,15 @@ tab of this website.</p>
 setwd(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy&quot;) # set your working directory
 
 # Do not forget to install a package with the install.packages() function if it&#39;s the first time you use it!
+# install.packages(caTools, plotROC) # these guys are new for us 
 
 library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
 library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
-library(caret) # a package with key functions that streamline the process for predictive modelling 
-library(skimr) # a package to describe dataframes
+library(caret) # a library with key functions that streamline the process for predictive modelling 
+library(skimr) # a package with a set of functions to describe dataframes and more
 library(plyr) # a package for data wrangling
+library(caTools) # a library with several basic utility functions (e.g. ROC curves, LogitBoos classifier, etc.)
+library(plotROC) # a companion to ggplot2 (loaded with the tidyverse) for plotting ROC curves
 
 data_malawi &lt;- read_csv(&quot;malawi.csv&quot;) # the file is directly read from the working directory/folder previously set</code></pre>
 <h3>
@@ -555,7 +558,7 @@ where tn = true negative and fp = false positive. At <span
 class="math inline">\(89.2\%\)</span>, we can trust a predicted negative
 (<span class="math inline">\(0\)</span>) value.</p></li>
 </ul>
-<p><br> <strong>Out of sammple performance</strong> <br></p>
+<p><br> <strong>Out-of-sample performance</strong> <br></p>
 <p>Notice that we have used cross-validation in our training dataset. In
 theory, our performance metrics have been validated in 5 different
 folds. Nevertheless, we will still see how our trained model performs in
@@ -649,6 +652,82 @@ scores on the test dataset are very close to the ones obtained from the
 train dataset. This is a good sign for the out-of-sample stability of
 our model. <br></p>
 <p><strong>Model Visualisation</strong> <br></p>
+<p>We can visualise the performance of our classification model in
+various ways. For now, we’ll focus on a simple ROC AUC.</p>
+<pre class="r"><code># ROC AUC: Area Under the Curve
+# colAUC function from the caTools library
+
+# transform predicted values and observed values into class numeric (needed for the colAUC function)
+
+pr_numeric &lt;- as.numeric(as.factor(pr1))
+# sanity check:
+head(cbind(pr_numeric, pr1)) # the numeric values of both vectors seem to be the same. </code></pre>
+<pre><code>##      pr_numeric pr1
+## [1,]          1   1
+## [2,]          2   2
+## [3,]          2   2
+## [4,]          2   2
+## [5,]          1   1
+## [6,]          2   2</code></pre>
+<pre class="r"><code>poor_numeric &lt;- as.numeric(as.factor(Test_df$poor))
+# sanity check
+head(cbind(poor_numeric,Test_df$poor)) # all good </code></pre>
+<pre><code>##      poor_numeric  
+## [1,]            2 2
+## [2,]            2 2
+## [3,]            2 2
+## [4,]            2 2
+## [5,]            1 1
+## [6,]            2 2</code></pre>
+<pre class="r"><code># plot the ROC area under the curve
+colAUC(pr_numeric, poor_numeric, plotROC = TRUE)</code></pre>
+<p><img src="classification_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre><code>##              [,1]
+## 1 vs. 2 0.7866624</code></pre>
+<pre class="r"><code># We can also plot the ROC AUC with ggplot
+# First, we create a dataframe containing the observed and the predicted values (in numeric form)
+roc_df &lt;- data.frame(Observed = poor_numeric, Predicted = pr_numeric)
+
+# Second, we add the geom_roc() layer to a ggplot object
+
+roc_gg &lt;- ggplot(roc_df, aes (d = Observed, m = Predicted)) + 
+            geom_roc(labels = FALSE) +
+            style_roc(theme=theme_get()) # adds a diagonal guideline, minor grid lines, and optionally direct labels to ggplot objects containing a geom_roc layer
+
+direct_label(roc_gg, nudge_y = 0.5) # direct_label tells you what the plotted line represents, nudge_y option places the label (you can play around with that number to see where different values place the label)</code></pre>
+<pre><code>## Warning in verify_d(data$d): D not labeled 0/1, assuming 1 = 0 and 2 = 1!
+
+## Warning in verify_d(data$d): D not labeled 0/1, assuming 1 = 0 and 2 = 1!</code></pre>
+<p><img src="classification_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p>Notice the warning on the ggplot2 ROC AUC plot. The assumption that
+they are making is correct, so we do not need to do anything else at
+this moment. You can check this by contrasting the values of the
+labelled vs. the numeric vectors (use the head() function).</p>
+<p><strong>Conclusion</strong> <br></p>
+<p>How did our classification model do? Is a logistic regression the
+right algorithm? I trust you can form your own judgement based on the
+performance metrics above. Personally, I think we only marginally
+improved from a linear regression, and perhaps we can do better with
+Ensemble Learning techniques!</p>
+<div id="python-practical" class="section level3">
+<h3><strong>Python practical</strong></h3>
+</div>
+<div id="practice-at-home" class="section level3">
+<h3><strong>Practice at home</strong></h3>
+<p>As before, you can use the Bolivia dataset to try your hand at a
+logistic model. The data can be downloaded in the <a
+href="https://www.ml4publicpolicy.com/predictionpolicy.html">Practice at
+home</a> sub-tab in the Prediction Policy Problems webpage of this site.
+<br></p>
+<p>Let us know you are completing the tasks by answering a simple
+question via this <a
+href="https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_5bPRxhgDBqCAzxc">Qualtrics
+link</a>. <br></p>
+<p>It is important for us to know that you are engaging with the course.
+Sending an answer - even if it is incorrect - to our Qualtrics question
+lets us know just that. So please say hi on Qualtrics! (And on our blog,
+too.)</p>
+</div>
 </div>
 
 <!DOCTYPE html>

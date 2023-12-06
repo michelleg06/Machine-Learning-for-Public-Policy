@@ -1307,10 +1307,12 @@ The performance of our model with a smaller alpha (closer to $0$, or NO penalisa
 At this point, our best predictions are made with a linear regression algorithm, which bested a lasso model. As we progress, we will explore other common machine learning algorithms to see whether our prediction capabilities improve!.
 
 ### **Practice at home**
+<br>
 
-You can go to our [blog](https://www.ml4pp-blog.com/) and ask questions about the practical exercise on the Prediction Policy Problems post. One of the instructors, or even one of your peers is likely to reply to your thread! You can also leave messages there and propose a meeting on the [Gather.Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy), were you can interact with other people following the course in other parts of the world. 
+You can go to our [blog](https://www.ml4pp-blog.com/) and ask questions about the practical exercise on the Prediction Policy Problems post. One of the instructors, or even one of your peers, is likely to reply to your thread! You can also leave messages there and propose a meeting on the [Gather.Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy), where you can interact with other people following the course in other parts of the world. 
+<br>
 
-You can replicate the exercises in Python or R using the Malawi dataset. However, if you'd like a challenge, you can also try running Linear and Lasso Linear Model using a similar dataset for the country of Bolivia. The dataset was put together by McBride and Nichols for the same paper for which they used the Malawi dataset. 
+You can replicate the exercises in Python or R using the Malawi dataset. However, if you'd like a challenge, you can also try running a Linear and a Lasso Linear model using a similar dataset for the country of Bolivia. The dataset was put together by McBride and Nichols for the same paper for which they used the Malawi dataset. 
 <br>
 
 ```{r, echo=FALSE}
@@ -1324,5 +1326,8 @@ download_link(
   self_contained = FALSE
 )
 ```
+<br>
 
-If you do try your hand at it, let us know by answering one simple question in [this link](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_8vjYJqfwiQWalMi).
+Let us know that you are engaging with the content by answering one simple question in [this link](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_8vjYJqfwiQWalMi). We are happy if you can replicate the script at home, and happier even if you can *extrapolate* your knowledge to a different dataset. So, please send a reply to our Qualtrics question - even incorrect answers count! 
+
+
