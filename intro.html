@@ -270,6 +270,13 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
+  <a href="classification.html">
+    <span class="fa fa-solid fa-gears"></span>
+     
+    Classification:Logistic
+  </a>
+</li>
+<li>
   <a href="discussionboard.html">
     <span class="fa fa-solid fa-comments"></span>
      
@@ -1266,8 +1273,8 @@ print(lm_2.summary()) # print linear model parameters</code></pre>
 ## Dep. Variable:                      y   R-squared:                       0.518
 ## Model:                            OLS   Adj. R-squared:                  0.507
 ## Method:                 Least Squares   F-statistic:                     46.27
-## Date:                Wed, 06 Dec 2023   Prob (F-statistic):           3.83e-62
-## Time:                        17:59:09   Log-Likelihood:                -2386.0
+## Date:                Thu, 07 Dec 2023   Prob (F-statistic):           3.83e-62
+## Time:                        20:13:49   Log-Likelihood:                -2386.0
 ## No. Observations:                 442   AIC:                             4794.
 ## Df Residuals:                     431   BIC:                             4839.
 ## Df Model:                          10                                         
@@ -1319,12 +1326,12 @@ age = pandas_diabetes.iloc[:,0] # select and store age variable
 
 plt.hist(bmi)
 plt.show() </code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-1.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <pre class="python"><code>plt.clf()
 
 plt.scatter(age,bmi) # order is x,y
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-2.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-2.png" width="672" /></p>
 <pre class="python"><code># let&#39;s add some elements#add line of best fit to plot
 
 # find line of best fit
@@ -1335,7 +1342,7 @@ plt.scatter(age,bmi) # order is x,y
 # add the line and then display
 plt.plot(age, a*age+b, color=&#39;red&#39;, linestyle=&#39;--&#39;, linewidth=2)
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-3.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-3.png" width="672" /></p>
 <p><strong>Defining functions and loops</strong></p>
 <p>The last useful tip before we begin to use Python in earnest, is to
 remember that we can define functions or use loops (general flow

@@ -16,9 +16,9 @@ navbar:
         - text: "Prediction Policy Problems"
           href: predictionpolicy.html
           icon: fa fa-line-chart
-        #- text: "Classification:Logistic"
-        #  href: classification.html
-        #  icon: fa-solid fa-gears
+        - text: "Classification:Logistic"
+          href: classification.html
+          icon: fa-solid fa-gears
         #- text: "Fair ML/Data Ethics"
         #  href: fairml.html
         #  icon: fa fa-graduation-cap

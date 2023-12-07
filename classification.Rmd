@@ -17,7 +17,7 @@ Have you heard the English proverb, “Birds of a feather flock together”? It 
 
 - Predictive classification: E.g. is this spam or not? Predictive classification concerns itself with unlabeled data, and groups them by the proportion of characteristics they commonly share. After which, it classifies them into some predetermined category. A common, ‘lazy’ method is kNearest Neighbors. 
 
-**- Binary classification:** You may already be familiar with probit or logistic regression models. You obtain two types of predictions from such models: proportions, and the generation of a predicted discrete choice. For Policy purposes, we are interested in the discrete choice. E.g. filtering low-income individuals to select those who will receive social assistance and those who will not, based on some income/expenditure threshold. But, we still need the probability estimates of each of the two categories. They are relevant when working out the model’s confidence about the predicted discrete choice. 
+- **Binary classification:** You may already be familiar with probit or logistic regression models. You obtain two types of predictions from such models: proportions, and the generation of a predicted discrete choice. For Policy purposes, we are interested in the discrete choice. E.g. filtering low-income individuals to select those who will receive social assistance and those who will not, based on some income/expenditure threshold. But, we still need the probability estimates of each of the two categories. They are relevant when working out the model’s confidence about the predicted discrete choice. 
 
 - Multi-label classification: Not unlike binary classification, it is a labeled data model that relies on techniques such as multinomial logistic regression. It deals with data with more than two categories, and generates discrete choices, which policymakers then rely on to make decisions.
 
@@ -86,7 +86,7 @@ colnames(data_malawi) # print the names of the remaining vectors in our datafram
 
 <br>
 
-At this point, we still need to do two more pre-processing step: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as all of that is done in the previous exercise. 
+At this point, we still need to do two more pre-processing steps: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as that was done in the previous session.
 
 ```{r}
 
@@ -121,11 +121,15 @@ summary(data_malawi$lnexp_pc_month)
 # if the log of per capita expenditure is below the estimated poverty line, classify individual as poor, else classify individual as not poor. Store as factor (default with text is class character)
 data_malawi$poor <- as.factor(ifelse(data_malawi$lnexp_pc_month<= data_malawi$lnzline,"Y","N")) # Y(es) N(o)
 
+# make sure that the factor target variable has poor = Y as reference category (this step is important when running the logistic regression)
+data_malawi$poor <- relevel(data_malawi$poor, ref="Y") # make Y reference category
+
+
 # print a proportions table to get a first impression of the state of poverty in Malawi
 prop.table(table(data_malawi$poor))
 ```
 
-According to our sample, about 65% of Malawians are considered poor. This number is not unreasonable. According to The World Bank's (Country Report)[https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf] for Malawi, ca. $70\%$ of the population lives with under $\$2.15$ a day, and the poverty rate is estimated to be at $50\%$. About half of their population is labelled as poor. These estimates were done with $2019$ data (so, a bit more recent than our sample). 
+According to our sample, about 65% of Malawians are considered poor. This number is not unreasonable. According to The World Bank's [Country Report](https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf) for Malawi, ca. $70\%$ of the population lives with under $\$2.15$ a day, and the poverty rate is estimated to be at $50\%$. About half of their population is labelled as poor. These estimates were done with $2019$ data (so, a bit more recent than our sample). 
 
 
 <br>
@@ -133,13 +137,12 @@ According to our sample, about 65% of Malawians are considered poor. This number
 ```{r}
 
 # Final data pre-processing: delete static variable (poverty line)
-# and along with it: remove the continuous target (as it perfectly predicts the binary target)
+# and along with it: remove the continuous target (as it perfectly predicts the binary target) 
 
 which(colnames(data_malawi)=="lnzline") # returns column number 31
 which(colnames(data_malawi)=="lnexp_pc_month") # returns column number 1
 
 data_malawi <- data_malawi[,-c(1,31)] # delete columns no. 1 and 31 from the dataset
-
 
 ```
 <br>
@@ -184,6 +187,7 @@ We're going to pass the TrControl object onto the caret model estimation to ask 
 ```{r}
 
 # Step 2: train the model.
+set.seed(12345)
 m <- train(
     poor ~ ., 
     Train_df, 
@@ -193,6 +197,7 @@ m <- train(
     preProcess=c("center", "scale")
 )
 ```
+<br>
 Notice the warning. If we want to report the "Accuracy" metric, we should remove the twoClassSummary parameter specification in the TrControl object. 
 <br>
 
@@ -201,26 +206,29 @@ Notice the warning. If we want to report the "Accuracy" metric, we should remove
 print(m) 
 
 ```
-**Performance metrics**
+**Performance metrics (on the train set!)**
 <br>
 
-- **ROC:** it is a probability curve plotted with the True Positive Rate (y-axis) against the False Positive Rate (x-axis); you can think of it as plotting the tradeoff between maximising the true positive rate and minimising the false positive rate. The preferred area under the curve is 1. Our estimated 0.8 indicates that a logistic classification is a good model fit (close to 1).
+- **ROC:** it is a probability curve plotted with the True Positive Rate (y-axis) against the False Positive Rate (x-axis); you can think of it as plotting the tradeoff between maximising the true positive rate and minimising the false positive rate. The preferred area under the curve is $1$. Our estimated $0.8$ score indicates that a logistic classification is a good fit for our data (close to $1$).
 
-- **Sensitivity:** it is a measure of the proportion of the positive (1 = poor) values that are correctly identified. Therefore, we have correctly identified $66.5\%$ of the actual positives. Or, out of all of the individuals that are poor, how many of them did we predict to be poor? The formula is: tp / (tp + fn); where tp = true positive and fn = false negative. In the video-lecture, Stephan used the term **Recall**, where we now use sensitivity.
+- **Sensitivity:** it is a measure of the proportion of the positive ($1$ = poor) values that are correctly identified. Therefore, we have correctly identified $89\%$ of the actual positives. The formula is: $\frac{tp}{tp + fn}$; where tp = true positive and fn = false negative. In the video-lecture, Stephan used the term **Recall**, where we now use sensitivity. This means that our model does pretty well at predicting/identifying people living below the poverty line in Malawi!
 
-- **Specificity:** measures the proportion of actual negatives that are correctly identified by the model; i.e. the ability of our model to predict if an observation doesn't belong to a certain category. Or, out all of the individuals that are not poor, how many of them were predicted not to be poor? The formula is: tn / (tn + fp); where tn = true negative and fp = false positive. At $89.2\%$, we can trust a predicted negative ($0$) value. 
-
+- **Specificity:** measures the proportion of actual negatives that are correctly identified by the model; i.e. the ability of our model to predict if an observation doesn't belong to a certain category. The formula is: $\frac{tn}{tn + fp}$; where tn = true negative and fp = false positive. At $67\%$, we can trust a predicted negative ($0$) value to be real more than half the time. Our model is not as good at predicting who doesn't live below the poverty line in Malawi. 
 
 <br>
+The performance metrics we have interpreted above are based on the training dataset only. We are interested in our model's ability to make out-of-sample predictions. Therefore, we will use the definitions above, but to take the scores on the test-dataset predictions to make our final evaluation.
+<br>
+
 **Out-of-sample performance**
 <br>
 
-Notice that we have used cross-validation in our training dataset. In theory, our performance metrics have been validated in 5 different folds. Nevertheless, we will still see how our trained model performs in our test dataset. We know that the performance of a logistic classification model on the train set is good, is it the same for the test dataset?
+Notice that we have used cross-validation in our training dataset. In theory, our performance metrics have been validated in 5 different folds. To a certain extent, that means that our performance metrics above did reflect the model's ability to extrapolate. Nevertheless, we will still see how our trained model performs in our test dataset. You can think of this step as predicting on a sixth fold. We know that the performance of a logistic classification model on the train set is relatively good, is it the same for the test dataset?
 
 ```{r}
 
 # First, use the logistic classification model (trained on the Train_df) to make predictions on the test dataset:
 
+set.seed(12345)
 pr1 <- predict(m, Test_df, type = "raw")
 head(pr1) # Yes and No output
 
@@ -232,11 +240,11 @@ We have specified the type of prediction we want: raw. This will return the pred
 
 # Next, we call the caret package's confusionMatrix function, and select the two elements to be contrasted:
 # the predicted classification vector, and the actual observed vector from the test dataframe. 
-confusionMatrix(pr1, Test_df[["poor"]])
+confusionMatrix(pr1, Test_df[["poor"]], positive = "Y") # positive = "Y" indicates that our category of interest is Y (1)
 ```
 <br>
 
-The first element from the above function returns the confusion matrix, a 2×2 table that shows the predicted values from the model vs. the actual values from the test dataset. You may be acquainted with this sort of table, but know it as a cross-tabulation. From the confusion matrix, we obtain the information that we need to estimate some performance metrics. For instance, sensitivity and specificity (used above) require the total count of true positives: tp (true positive) would be the Y/Y cell, with $1,292$ correctly identified individuals in poverty.
+The first element from the above function returns the confusion matrix, a 2×2 table that shows the predicted values from the model vs. the actual values from the test dataset. You may be acquainted with this sort of table, but know it as a cross-tabulation. From the confusion matrix, we obtain the information that we need to estimate some performance metrics. If you need a reminder of what each cell in the 2x2 matrix represents, recall that the structure of our target variable is [$Y(1),N(0)$]. Therefore, the first cell would be the intersection of Predicted $Y$ vs Observed $Y$ (or True Positive) = $1294$, the fourth cell would be the intersection of Predicted $N$ vs Observed $N$ (or True Negative) = $519$. These guys are the predictions that have hit the mark! On the other hand, the second cell would be the intersection of Predicted $Y$ vs Observed $N$ (or False Positive) = $270$, and the third cell Predicted $N$ vs Observed $Y$ (or False Negative) = $172$. These were incorrect predictions. We use these counts (true positives, true negatives, false positives, false negatives) to estimate performance metrics
 <br>
 
 Besides the performance metrics discussed previously, this function also shows the Accuracy of our model (or $1$ - the error rate) which, at $0.8$, indicates that our classification algorithm is highly accurate. 
@@ -261,7 +269,7 @@ Imbalance is not a problem for our target variable, as we have roughly as many z
 
 - Very good = 0.80 to 1.00
 
-At $0.58$, our classification model performs moderately well. Finally, Sensitivity and Specificity scores on the test dataset are very close to the ones obtained from the train dataset. This is a good sign for the out-of-sample stability of our model.
+At $0.55$, our classification model performs moderately well. Finally, Sensitivity and Specificity scores on the test dataset are very close to the ones obtained from the train dataset. This is a good sign for the out-of-sample stability of our model.
 <br>
 
 **Model Visualisation**
@@ -295,10 +303,10 @@ roc_df <- data.frame(Observed = poor_numeric, Predicted = pr_numeric)
 # Second, we add the geom_roc() layer to a ggplot object
 
 roc_gg <- ggplot(roc_df, aes (d = Observed, m = Predicted)) + 
-            geom_roc(labels = FALSE) +
-            style_roc(theme=theme_get()) # adds a diagonal guideline, minor grid lines, and optionally direct labels to ggplot objects containing a geom_roc layer
+            geom_roc(labels = FALSE, color='orange') +
+            style_roc(theme = theme_bw, guide = TRUE) # guide=TRUE adds a diagonal guideline, style_roc() adds minor grid lines, and optionally direct labels to ggplot objects containing a geom_roc layer
 
-direct_label(roc_gg, nudge_y = 0.5) # direct_label tells you what the plotted line represents, nudge_y option places the label (you can play around with that number to see where different values place the label)
+direct_label(roc_gg, nudge_y = 0.2) # direct_label tells you what the plotted line represents, nudge_y option places the label (you can play around with that number to see where different values place the label)
 
 ```
 
@@ -309,7 +317,7 @@ Notice the warning on the ggplot2 ROC AUC plot. The assumption that they are mak
 **Conclusion**
 <br>
 
-How did our classification model do? Is a logistic regression the right algorithm? I trust you can form your own judgement based on the performance metrics above. Personally, I think we only marginally improved from a linear regression, and perhaps we can do better with Ensemble Learning techniques!
+How did our classification model do? Is a logistic regression the right algorithm? I trust you can form your own judgement based on the performance metrics above. Personally, I think we have improved from a linear regression, but perhaps we can do better with Ensemble Learning techniques!
 
 ### **Python practical**
 
@@ -327,7 +335,20 @@ use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
 #==== Python version: 3.10.12 ====#
 
 # Opening libraries
+
 import sklearn as sk # our trusted Machine Learning library
+from sklearn.model_selection import train_test_split # split the dataset into train and test
+from sklearn.model_selection import cross_val_score # to obtain the cross-validation score
+from sklearn.model_selection import cross_validate # to perform cross-validation
+from sklearn.linear_model import LogisticRegression # computation of logistic model for classification
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix # returns a confusion matrix
+from sklearn.metrics import roc_curve, roc_auc_score, auc # roc area under the curve
+from sklearn.metrics import accuracy_score # performance metric for classification models
+from sklearn.metrics import classification_report # general report for classification model
+
+# Non-ML libraries
+import random # for random state 
 import csv # a library to read and write csv files 
 import numpy as np # a library for handling 
 import pandas as pd # a library to help us easily navigate and manipulate dataframes
@@ -345,7 +366,15 @@ malawi = pd.read_csv('/Users/michellegonzalez/Documents/GitHub/Machine-Learning-
 <h3> 2. Data pre-processing </h3>
 <br>
 
-This section will not be a thorough step-by-step of the pre-processing and visualisation of our data because we have already done that in the previous session. However, we have to do something very important: recover a static variable from the original dataset that contains a single number: the poverty line in Malawi. 
+This section will not be a thorough step-by-step of the pre-processing and visualisation of our data because we have already done that in the previous session. However, we have to do something very important: recover a static variable from the original dataset that contains a single number: the poverty line in Malawi.
+<br>
+
+**Feature selection: subsetting the dataset **
+<br>
+
+The variable that we're interested in recovering is **lnzline**. The code below reproduces the dataframe subsetting from our previous exercise. Except, this time we will make sure to store the lnzline vector for future use. 
+
+<br>
 
 ```{python}
 # Retrieve information from the poverty line static vector:
@@ -370,20 +399,164 @@ print(malawi.shape)
 
 ```
 
-**Feature selection: subsetting the dataset **
 
-The variable that we're interested in recovering is **lnzline**. The code below reproduces the dataframe subsetting from our previous exercise. Except, this time we will NOT delete de static vector lnzline. 
 
-<br>
-
-At this point, we still need to do two more pre-processing step: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as all of that is done in the previous exercise. 
+At this point, we still need to do two more pre-processing steps: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as that was done in the previous session. 
 
 
 <br>
 
 **Feature creation: create a binary variable**
 
+```{python}
 
+#==== Correctly identify each vector type: ====#
+
+# for-loop that iterates over variables in dataframe, if they have 2 unique values, transform vector into categorical
+for column in malawi:
+    if malawi[column].nunique() == 2:
+        malawi[column] = pd.Categorical(malawi[column])
+
+#==== Create a binary target variable: ====#
+
+# print summary statistics of target variable
+malawi['lnexp_pc_month'].describe()
+
+# if the log of per capita expenditure is below the estimated poverty line, classify individual as poor, else classify individual as not poor. Store as factor (default with text is class character)
+
+print(lnzline[0]) # copy the static number 7.555 to use as threshold / we're printing the first row of a static vector --- i.e. all rows contain the same number
+
+# use numPy to create a binary vector (notice we have rounded up the threshold)
+malawi['Poor'] = np.where(malawi['lnexp_pc_month'] <= 7.555, 1, 0)
+
+# sanity check
+malawi['Poor'].describe() # returns binary [0,1] float vector, let's turn this into a categorical vector
+malawi['Poor'] = pd.Categorical(malawi['Poor']) # use malawi['Poor'].info() if you want to see the transformation
+
+# alternatively...
+# malawi['Poor'] = (malawi['lnexp_pc_month'] <= 7.555).astype(bool) # anlso numpy, but directly specifying boolean type (true (poor) /false (not poor))
+
+# print a proportions table to get a first impression of the state of poverty in Malawi
+malawi['Poor'].value_counts(normalize=True)
+
+```
+<br>
+
+According to our sample, about 65% of Malawians are considered poor. This number is not unreasonable. According to The World Bank's [Country Report](https://databankfiles.worldbank.org/public/ddpext_download/poverty/987B9C90-CB9F-4D93-AE8C-750588BF00QA/current/Global_POVEQ_MWI.pdf) for Malawi, ca. $70\%$ of the population lives with under $\$2.15$ a day, and the poverty rate is estimated to be at $50\%$. About half of their population is labelled as poor. These estimates were done with $2019$ data (so, a bit more recent than our sample). 
+
+
+<br>
+
+```{python}
+
+# Final data pre-processing: remove the continuous target (as it perfectly predicts the binary target in a non-informative way)
+
+cont_target  = ['lnexp_pc_month']
+malawi = malawi.drop(cont_target , axis=1)
+
+
+```
+
+<br>
+<h3> 3. Model Validation </h3>
+<br>
+
+Let's use a simple 80:20 split of our data. 
+
+```{python}
+# First, recall the df structure
+malawi.info() # returns the column number, e.g. hhsize = column number 0, hhsize2 = 1... etc.
+
+# Then, split!
+X = malawi.iloc[:, 0:27] # x is a matrix containing all variables except the last one, which conveniently is our binary target variable
+y = malawi.iloc[:, 28] # y is a vector containing our target variable 
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=12345) # random_state is for reproducibility purposes
+```
+<br>
+
+**Fit a logistic model**
+<br>
+```{python}
+
+#==== Create a Logistic Regression Object and Fit the Model ====#
+
+# We are going to add a random_state (reproducibility) and increase the number of iterations from the default (100) to 1000
+# We have also stated that we want to fit the intercept and have no penalty (remember the penalisation parameter from the Lasso regression? sklearn has the option of including it in the Logistic Regression as well). 
+
+m = LogisticRegression(random_state=12345, max_iter=1000, fit_intercept = True, penalty 
+= None).fit(X_train, y_train) 
+
+```
+<br>
+
+We have successfully fit a logistic classification model. A limitation of the sklearn python library is that we cannot easily access the output of the model. Instead, we immediately estimate performance metrics based on the testing dataset and evaluate accordingly. If you'd like to see the output of your model, I recommend re-estimating using the statsmodel.api library. I won't do it here, since we're not particularly interested in interpreting coefficients, but on the overall predictive ability of our model. I also trust that you can do that yourself, given that we have an example of the statsmodel.api usage in the Linear Regression tutorial. 
+<br>
+
+Also, please note that the Logistic Regression algorithm included in the sklearn library has more capabilities than a simple logistic regression function. You might have already seen that given that we had to set a number of parameters before fitting the model. If you'd like to know more about what is included, you can read the [documentation](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html) for it. Otherwise, what we have set above can be taken as a standard model fit. 
+<br>
+
+**Predictions and Performance**
+<br>
+```{python}
+# Make out-of-sample predictions on the test dataset
+
+y_pred = m.predict(X_test)
+
+# Report the performance of your model using chosen metrics
+
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Classification Report:\n", classification_report(y_test, y_pred))
+
+```
+<br>
+
+- The Accuracy of our model (or $1$ - the error rate) is $0.8$. The high score indicates that our classification algorithm is highly accurate. 
+
+- We have printed a confusion matrix.If you need a reminder of what each cell in the 2x2 matrix represents, recall that the structure of our target variable is [$0,1$]. Therefore, the first cell would be the intersection of Predicted $0$ vs Observed $0$ (or True Negative) = $546$, the fourth cell would be the intersection of Predicted $1$ vs Observed $1$ (or True Positive) = $1292$. These guys are the predictions that have hit the mark! On the other hand, the second cell would be the intersection of Predicted $0$ vs Observed $1$ (or False Positive) = $278$, and the third cell Predicted $0$ vs Observed $1$ (or False Negative) = $142$. These were incorrect predictions. We use these counts (true positives, true negatives, false positives, false negatives) to estimate performance metrics, including Accuracy = $\frac{tp + tn}{tp + tn + fp + fn}$ for instance, Precision, Recall, and the F1-score.
+
+- The Classification Report includes three more performance metrics (explained in the video-lecture by Stephan), besides the Accuracy of our model. 
+    - Precision: it is the percentage of the overall predictions that are correct. Defined as the ratio of true positives to the sum of a true positive and false positive. Based on the output above, we are more *precise* in our predictions of the poor ($1$) than our predictions of the non-poor ($0$). Both values are high, close to 1, and indicate good performance.
+    - Recall: it is a measure of the proportion of the positive values that are correctly identified. Again, we can correctly identify a larger percentage of $1$ instances ($90\%$ of the time!) than $0$ instances (only $66\%$). 
+    - F1-score: it is the percentage of positive predictions that are correct. It is not, however, the same as recall. The F1-score is a weighted mean that can be used to compare different classification models (and not necessarily a measure of global accuracy). It is computed from the two previous measures: 2 * (Recall * Precision) / (Recall + Precision). Results are similar as above, better prediction ability for the poor than the non-poor. 
+<br>
+Overall, we seem to be good at predicting $1$ instances, but less so for $0$ instances. We are indeed interested in predicting who is poor ($1$) so perhaps given the scores (all very close to $1$) of all our metrics, we are doing well. However, if we are unable to perform equally well for both categories, then we may still misallocate public resources. 
+<br>
+
+**Model Visualisation**
+
+To conclude our evaluation, let's compute the ROC AUC:
+
+
+```{python}
+
+# Compute the ROC curve
+fpr, tpr, thresholds = roc_curve(y_test, y_pred)
+
+# Compute the ROC AUC score
+roc_auc = auc(fpr, tpr)
+print(f'ROC Area Under the Curve score: {roc_auc}')
+
+# Plot the ROC curve! :) (it's nice to get a visual)
+
+plt.figure(figsize=(8, 6))
+plt.plot(fpr, tpr, color='orange', lw=2, label=f'ROC Curve (AUC = {roc_auc:.1f})')
+plt.plot([0, 1], [0, 1], color='darkblue', lw=2, linestyle='--')
+plt.xlabel('False Positive Rate (FPR)')
+plt.ylabel('True Positive Rate (TPR)')
+plt.title('ROC Curve')
+plt.legend(loc='lower right')
+plt.show()
+
+```
+<br>
+The ROC (Receiver Operating Characteristic) is a probability curve plotted with the True Positive Rate (y-axis) against the False Positive Rate (x-axis); you can think of it as plotting the tradeoff between maximising the true positive rate and minimising the false positive rate. The preferred area under the curve is $1$. Our estimated $0.8$ (rounded up) indicates that a logistic classification is a good model for our data (close to $1$).
+
+**Conclusion**
+<br>
+
+How did our classification model do? Is a logistic regression the right algorithm? I trust you can form your own judgement based on the performance metrics above. Personally, I think we only marginally improved from a linear regression, and perhaps we can do better with Ensemble Learning techniques! 
 
 ### **Practice at home**
 

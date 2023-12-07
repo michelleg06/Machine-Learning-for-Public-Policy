@@ -681,6 +681,7 @@ download_link(
 library(reticulate)
 use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
 ```
+<br>
 
 <h3> 1. Preliminaries: packages and data upload </h3>
 <br>
@@ -819,7 +820,7 @@ for column in cat_df.columns:
     table = pd.crosstab(index=cat_df[column], columns='count')
     print(f'Table for {column}:\n{table}\n')
     
-# maybe bar graphs for a quick visual check of start ownership scarcity?
+# maybe bar graphs for a quick visual check of asset ownership scarcity?
 
 for column in cat_df.columns:
     plt.figure(figsize=(6, 4)) 
@@ -942,7 +943,6 @@ We will start by fitting a predictive model using the training dataset; that is,
 from sklearn.linear_model import LinearRegression
 
 model1 = LinearRegression(fit_intercept=True).fit(X_train, y_train)
- # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable lnexp_pc_month
 
 # visualise the output from the linear model
 
@@ -967,7 +967,7 @@ Recall that one of the assumptions of a linear model is that errors are independ
 
 ```{python}
 
-lm_robust = sm.OLS(y_train, X_train_with_constant).fit(cov_type='HC3') # HC3 are alsow known as robust std errors
+lm_robust = sm.OLS(y_train, X_train_with_constant).fit(cov_type='HC3') # HC3 are also known as robust std errors
 print(lm_robust.summary())
 
 ```

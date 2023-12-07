@@ -272,6 +272,13 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
+  <a href="classification.html">
+    <span class="fa fa-solid fa-gears"></span>
+     
+    Classification:Logistic
+  </a>
+</li>
+<li>
   <a href="discussionboard.html">
     <span class="fa fa-solid fa-comments"></span>
      
@@ -4240,6 +4247,7 @@ Data Science Post</a>.</p>
 <a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/malawi.csv">
 <button class="btn btn-info"><i class="fa fa-save"></i> Download malawi df (.csv)</button>
 </a>
+<p><br></p>
 <h3>
 <ol style="list-style-type: decimal">
 <li>Preliminaries: packages and data upload
@@ -4626,7 +4634,7 @@ for column in cat_df.columns:
 ## 0       9039
 ## 1       2241</code></pre>
 <pre class="python"><code>    
-# maybe bar graphs for a quick visual check of start ownership scarcity?
+# maybe bar graphs for a quick visual check of asset ownership scarcity?
 
 for column in cat_df.columns:
     plt.figure(figsize=(6, 4)) 
@@ -4840,7 +4848,6 @@ class="math inline">\(x&#39;\beta\)</span>.</p>
 from sklearn.linear_model import LinearRegression
 
 model1 = LinearRegression(fit_intercept=True).fit(X_train, y_train)
- # the dot after the squiggle ~ asks the lm() function tu use all other variables in the dataframe as predictors to the dependent variable lnexp_pc_month
 
 # visualise the output from the linear model
 
@@ -4870,8 +4877,8 @@ print(lm_results.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     498.3
-## Date:                Wed, 06 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        17:59:21   Log-Likelihood:                -5189.2
+## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
+## Time:                        20:14:01   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -4922,15 +4929,15 @@ print(lm_results.summary())</code></pre>
 are independent and identically distributed. We could run some tests to
 determine this, but with another quick way to check is to contrast the
 iid and robust errors (HC3) in the summary output:</p>
-<pre class="python"><code>lm_robust = sm.OLS(y_train, X_train_with_constant).fit(cov_type=&#39;HC3&#39;) # HC3 are alsow known as robust std errors
+<pre class="python"><code>lm_robust = sm.OLS(y_train, X_train_with_constant).fit(cov_type=&#39;HC3&#39;) # HC3 are also known as robust std errors
 print(lm_robust.summary())</code></pre>
 <pre><code>##                             OLS Regression Results                            
 ## ==============================================================================
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     431.9
-## Date:                Wed, 06 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        17:59:21   Log-Likelihood:                -5189.2
+## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
+## Time:                        20:14:02   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
