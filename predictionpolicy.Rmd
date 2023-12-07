@@ -38,6 +38,8 @@ embed_url("https://youtu.be/gx_MBxMu0m4")
 ```
 </center>
 
+<br>
+
 
 After watching the videos, we have a practical exercise.
 
@@ -68,6 +70,18 @@ The points below are meant to help you think critically about why we're about to
 </ul>
 
 <br>
+
+**If you'd like to learn more about Social Protection Policies, take a look at this video Alex has made for us with a brilliant summary of the field**
+
+(Yes, more videos!)
+
+<center>
+```{r, echo=FALSE, out.width=300}
+library("vembedr")
+embed_url("https://youtu.be/Pn9DntDejKU")
+
+```
+</center>
 
 ### **R practical**
 

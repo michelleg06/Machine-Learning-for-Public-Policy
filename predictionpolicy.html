@@ -327,6 +327,7 @@ Learning and Econometrics? Take a few minutes to watch the video below.
 </div>
 </div>
 </center>
+<p><br></p>
 <p>After watching the videos, we have a practical exercise.</p>
 <p><strong>Predicting social assistance beneficiaries</strong></p>
 <p>A key problem in the design of Social Policies is the identification
@@ -380,6 +381,17 @@ What are potential risks of such a data driven targeting approach?
 </li>
 </ul>
 <p><br></p>
+<p><strong>If you’d like to learn more about Social Protection Policies,
+take a look at this video Alex has made for us with a brilliant summary
+of the field</strong></p>
+<p>(Yes, more videos!)</p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/Pn9DntDejKU" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
 <div id="r-practical" class="section level3">
 <h3><strong>R practical</strong></h3>
 <p>You can download the dataset by clicking on the button below.
@@ -2527,7 +2539,7 @@ dependratio
 # but first, make sure to adjust the number of rows and columns to be displayed on your Plot Viewer
 par(mfrow = c(3, 3)) # 3 rows * 3 columns (9 variables)
 hist.data.frame(malawi_continuous)</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>Now, let’s plot bar graphs and write tables of factor (categorical)
 variables:</p>
 <pre class="r"><code># == BAR GRAPHS == #
@@ -2549,7 +2561,7 @@ for (i in 1:ncol(malawi_factor)) { # Loop over all the columns in the factor df 
     )
     
 }</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code># == TABLES == #
 
 # We can also show tables of all factor variables (to get precise frequencies not displayed in bar plots)
@@ -2691,7 +2703,7 @@ correlation).</p>
 
 M &lt;- cor(malawi_continuous) # create a correlation matrix of the continuous dataset, cor() uses Pearson&#39;s correlation coefficient as default. This means we can only take the correlation between continuous variables
 corrplot(M, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.8) # visualise it in a nice way</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 We can already tell that the size of the household and dependent ratio
 are highly negatively correlated to our target variable.</p>
 <pre class="r"><code># = = SPEARMAN CORRELATION MATRIX = = #
@@ -2701,7 +2713,7 @@ malawi_factorC$lnexp_pc_month &lt;- malawi_continuous$lnexp_pc_month # include t
 
 M2 &lt;- cor(malawi_factorC, method = &quot;spearman&quot;)
 corrplot(M2, method=&quot;circle&quot;, addCoef.col =&quot;black&quot;, number.cex = 0.3) # visualise it in a nice way</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>Ownership of some assets stands out: soap, a cement floor,
 electricity, a bed… ownership of these (and a couple of other) assets is
 positively correlated to per capita expenditure. Living in a rural area,
@@ -3658,7 +3670,7 @@ class="math inline">\(0\)</span> line, the larger the magnitude.</p>
           aes(color = ifelse(p.value &lt; 0.001, &quot;Significant&quot;, &quot;Not significant&quot;)) +
               scale_color_manual(values = c(&quot;grey&quot;, &quot;black&quot;)
                                  )</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <pre class="r"><code>           # grey points indicate statistically insignificat (p&gt;0.001) coefficient estimates
            # The scale of the plot is large due to the intercept estimate</code></pre>
 <p>Not unlike what we saw in out correlation matrix, household size,
@@ -4210,7 +4222,7 @@ prediction error.</p>
 <p>This tuning is already included in the chunk of code above.</p>
 <pre class="r"><code># Let&#39;s visualise our lasso model:
 plot(model_lasso)</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <pre class="r"><code>cat(&quot;The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)&quot;)</code></pre>
 <pre><code>## The x-axis is the fraction of the full solution (i.e., ordinary least squares with no penalty)</code></pre>
 <p>It seems that the fraction used (0.9) is close to the non-penalised
@@ -4502,7 +4514,7 @@ for column in numeric_df.columns:
     plt.xlabel(column)
     plt.ylabel(&#39;Count&#39;)
     plt.show()</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-1.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-2.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-3.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-4.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-5.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-6.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-7.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-8.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-28-9.png" width="288" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-1.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-2.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-3.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-4.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-5.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-6.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-7.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-8.png" width="288" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-9.png" width="288" /></p>
 <p>We can apply a similar logic to plotting/visualising categorical
 data: bar graphs, but also tables work well.</p>
 <pre class="python"><code># subset of categorical data
@@ -4643,7 +4655,7 @@ for column in cat_df.columns:
     plt.xlabel(column)
     plt.ylabel(&#39;Count&#39;)
     plt.show()</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-19.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-20.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-21.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-22.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-23.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-24.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-25.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-26.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-27.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-28.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-29.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-30.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-31.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-32.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-33.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-34.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-35.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-36.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-37.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-29-38.png" width="576" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-19.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-20.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-21.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-22.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-23.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-24.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-25.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-26.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-27.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-28.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-29.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-30.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-31.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-32.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-33.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-34.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-35.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-36.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-37.png" width="576" /><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-38.png" width="576" /></p>
 <p>What have we learned from the data visualisation?</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Nothing worrying about the data itself. McBride and Nichols did a
@@ -4680,7 +4692,7 @@ plt.figure(figsize=(8, 6))
 sns.heatmap(correlation_matrix, annot=True, cmap=&#39;coolwarm&#39;, fmt=&#39;.2f&#39;, linewidths=0.5)
 plt.title(&#39;Pearson Correlation Matrix&#39;)
 plt.show()</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-59.png" width="768" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-31-59.png" width="768" /></p>
 <pre class="python"><code># Spearman correlation matrix
 # unfortunately, only numeric values can be used in corr()
 # detour: transform categorical into numeric type...
@@ -4728,7 +4740,7 @@ plt.figure(figsize=(8, 6))
 sns.heatmap(spearman_matrix, annot=True, cmap=&#39;coolwarm&#39;, fmt=&#39;.2f&#39;, linewidths=0.5, annot_kws={&#39;size&#39;: 6})
 plt.title(&#39;Spearman Correlation Matrix&#39;)
 plt.show()</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-30-60.png" width="768" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-31-60.png" width="768" /></p>
 <p>Ideally, we would print a correlation matrix with ALL the variables.
 For display purposes, we’ve separated them here. If we were interested
 in relationships between two variables that are not our target variable,
@@ -4878,7 +4890,7 @@ print(lm_results.summary())</code></pre>
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     498.3
 ## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        20:14:01   Log-Likelihood:                -5189.2
+## Time:                        20:33:13   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -4937,7 +4949,7 @@ print(lm_robust.summary())</code></pre>
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     431.9
 ## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        20:14:02   Log-Likelihood:                -5189.2
+## Time:                        20:33:13   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -5411,7 +5423,7 @@ plt.title(&#39;Variable Importance - Lasso Regression with 0.01 alpha&#39;)
 plt.xlabel(&#39;Coefficient Magnitude&#39;)
 plt.ylabel(&#39;Feature&#39;)
 plt.show()</code></pre>
-<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-43-1.png" width="960" /></p>
+<p><img src="predictionpolicy_files/figure-html/unnamed-chunk-44-1.png" width="960" /></p>
 <p>The performance of our model with a smaller alpha (closer to <span
 class="math inline">\(0\)</span>, or NO penalisation = simple linear
 regression) based on the RMSE indicates that the best performing machine
