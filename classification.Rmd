@@ -71,9 +71,9 @@ This section will not be a thorough step-by-step of the pre-processing and visua
 
 The variable that we're interested in recovering is **lnzline**. The code below reproduces the dataframe subsetting from our previous exercise. Except, this time we will NOT delete de static vector lnzline. 
 
-# object:vector that contains the names of the variables that we want to get rid of
 
 ```{r}
+# object:vector that contains the names of the variables that we want to get rid of (notice this time lnzline is still there)
 cols <- c("ea", "EA", "psu","hhwght", "strataid", "case_id","eatype")
 
 
@@ -312,6 +312,78 @@ Notice the warning on the ggplot2 ROC AUC plot. The assumption that they are mak
 How did our classification model do? Is a logistic regression the right algorithm? I trust you can form your own judgement based on the performance metrics above. Personally, I think we only marginally improved from a linear regression, and perhaps we can do better with Ensemble Learning techniques!
 
 ### **Python practical**
+
+We will continue to work with the Malawi dataset, which can be downloaded in the (Prediction Policy Problems)[https://www.ml4publicpolicy.com/predictionpolicy.html] tab of this website. 
+
+<h3> 1. Preliminaries: libraries and data upload </h3>
+<br>
+
+```{r, setup, include = FALSE}
+library(reticulate)
+use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
+```
+
+```{python}
+#==== Python version: 3.10.12 ====#
+
+# Opening libraries
+import sklearn as sk # our trusted Machine Learning library
+import csv # a library to read and write csv files 
+import numpy as np # a library for handling 
+import pandas as pd # a library to help us easily navigate and manipulate dataframes
+import seaborn as sns # a data visualisation library
+import matplotlib.pyplot as plt # a data visualisation library
+import statsmodels.api as sm # computation of linear and logistic regressions
+
+
+# Uploading data
+
+malawi = pd.read_csv('/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/malawi.csv')
+
+```
+<br>
+<h3> 2. Data pre-processing </h3>
+<br>
+
+This section will not be a thorough step-by-step of the pre-processing and visualisation of our data because we have already done that in the previous session. However, we have to do something very important: recover a static variable from the original dataset that contains a single number: the poverty line in Malawi. 
+
+```{python}
+# Retrieve information from the poverty line static vector:
+malawi['lnzline'].describe()
+# Let's store this in an object outside of the dataframe and get rid of it in the dataframe
+# Static variables have zero-variance, and we already know zero-variance predictors are troublesome..
+lnzline = malawi['lnzline']
+
+# Instead of deleting case_id, we will set it as an index (we did not do this last time!). 
+# This is essentially using the case_id variable as row names (and won't be included in your ML model)
+malawi = malawi.set_index('case_id')
+
+# sanity check: notice that case_id is there, but doesn't have a corresponding column (it is now only considered a row name)
+malawi.head()
+
+# deleting variables from pandas dataframe 
+cols2delete = ['ea', 'EA', 'hhwght', 'psu', 'strataid', 'lnzline', 'eatype', 'region']
+malawi = malawi.drop(cols2delete,axis=1) # axis=0 means delete rows and axis=1 means delete columns
+
+# check if we have deleted the columns: we originally had 37 variables, we now should have 29
+print(malawi.shape)
+
+```
+
+**Feature selection: subsetting the dataset **
+
+The variable that we're interested in recovering is **lnzline**. The code below reproduces the dataframe subsetting from our previous exercise. Except, this time we will NOT delete de static vector lnzline. 
+
+<br>
+
+At this point, we still need to do two more pre-processing step: correctly define the vector/variable class in the dataframe, and create the binary outcome/target variable. We will repeat the class-transformation code chunk below so that you have all that is needed in one section. However, we won't spend time explaining it in detail as all of that is done in the previous exercise. 
+
+
+<br>
+
+**Feature creation: create a binary variable**
+
+
 
 ### **Practice at home**
 
