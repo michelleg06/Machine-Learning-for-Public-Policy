@@ -915,15 +915,13 @@ But we do observe some near-zero-variance predictors. Besides uninformative, the
 
 We now have a general idea of the structure of the data we are working with, and what we're trying to predict: per capita expenditures, which we believe are a proxy for poverty prevalence. Measured by the log of per capita monthly expenditure in our dataset, the variable is named lnexp_pc_month.
 
-The next step is to create a simple linear model (OLS) to predict monthly per capita expenditure using the variables in our dataset,
-and introduce the elements with which we will evaluate our model.
+The next step is to create a simple linear model (OLS) to predict monthly per capita expenditure using the variables in our dataset,and introduce the elements with which we will evaluate our model.
 
 **Data Partinioning**
 
 When we want to build predictive models for machine learning purposes, it is important to have (at least) two data sets. A training data set from which our model will learn, and a test data set containing the same features as our training data set; we use the second dataset to see how well our predictive model extrapolates to other samples (i.e. is it generalisable?). To split our main data set into two, we will work with an 80/20 split. 
 
-The 80/20 split has its origins in the Pareto Principle, which states that 'in most cases, 80% of effects from from 20% of causes'. 
-Though there are other test/train splitting options, this partitioning method is a good place to start, and indeed standard in the machine learning field. 
+The 80/20 split has its origins in the Pareto Principle, which states that 'in most cases, 80% of effects from from 20% of causes'. Though there are other test/train splitting options, this partitioning method is a good place to start, and indeed standard in the machine learning field. 
 
 ```{python}
 
@@ -963,7 +961,7 @@ model1 = LinearRegression(fit_intercept=True).fit(X_train, y_train)
 print(f'Coefficients: {model1.coef_}')
 print(f'Intercept: {model1.intercept_}')
 
-# visualise in a nice way (using the statsmodel library)
+# visualise in a nice way (using the statsmodel.api library)
 
 
 X_train_with_constant = sm.add_constant(X_train) # add a constant to the X feature matrix
@@ -1064,21 +1062,19 @@ Now that we have built and evaluated our model in the training dataset, we can p
 
 ```{python}
 
-# Fit the model to the training data
-model2 = LinearRegression(fit_intercept=True).fit(X_test, y_test)
 
-# predict y(target) values based on the test data model
-y_test_pred = model2.predict(X_test)
+# predict y(target) values based on the test data model, with model trained on 
+y_test_pred = model1.predict(X_test)
 
 # Calculate Root Mean Squared Error on the test set
 rmse_test = mean_squared_error(y_test, y_test_pred, squared=False)
 
 # Estimate the R squared of the test model
-r2_test = r2_score(y_test, model2.predict(X_test))
+r2_test = r2_score(y_test, model1.predict(X_test))
 
 # Print the Mean Squared Error and R-squared on the test set
 print(f"Root Mean Squared Error on the test set: {rmse_test}")
-print(f"R-squared on the test dataset: {r2_train}")
+print(f"R-squared on the test dataset: {r2_test}")
 
 
 ```
@@ -1087,7 +1083,7 @@ print(f"R-squared on the test dataset: {r2_train}")
 
 We previously mentioned that the RMSE metric could also be used to compare between train and test model predictions: 
 
-Notice that the *in-sample RMSE* [$0.43003$] is very close to the *out-of-sample RMSE* [$0.41435$]. This means that our model makes consistent predictions across different data sets. We also know by now  that these predictions are relatively good. At least, we hit the mark around 60 per cent of the time. What we are observing here is a model that has found a balance between bias and variance. However, both measures can still improve. For one, McBride and Nichols (2018) report > 80 per cent accuracy in their poverty predictions for Malawi. But please note that, at this point, we are not replicating their approach. They document using a classification model, which means that they previously used a poverty line score and divided the sample between individuals below and above the poverty line. 
+Notice that the *in-sample RMSE* [$0.43$] is very close to the *out-of-sample RMSE* [$0.41$]. This means that our model makes consistent predictions across different data sets. We also know by now  that these predictions are relatively good. At least, we hit the mark around 59 per cent of the time. What we are observing here is a model that has found a balance between bias and variance. However, both measures can still improve. For one, McBride and Nichols (2018) report > 80 per cent accuracy in their poverty predictions for Malawi. But please note that, at this point, we are not replicating their approach. They document using a classification model, which means that they previously used a poverty line score and divided the sample between individuals below and above the poverty line. 
 
 *What do we mean by bias in a model?*
 
@@ -1097,7 +1093,7 @@ The bias is the difference between the average prediction of our model and the t
 
 It is the observed variability of our model prediction for a given data point (how much the model can adjust given the data set). A model with high variance would yield low error values in the training data but high errors in the test data.
 
-Hence, consistent in and out of sample RMSE scores = bias/variance balance. 
+Hence, consistent in and out of sample RMSE and R^2 scores = bias/variance balance. 
 
 **Fine-tuning model parameters**
 

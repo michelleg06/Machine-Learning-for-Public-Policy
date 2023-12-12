@@ -4778,7 +4778,7 @@ which we believe are a proxy for poverty prevalence. Measured by the log
 of per capita monthly expenditure in our dataset, the variable is named
 lnexp_pc_month.</p>
 <p>The next step is to create a simple linear model (OLS) to predict
-monthly per capita expenditure using the variables in our dataset, and
+monthly per capita expenditure using the variables in our dataset,and
 introduce the elements with which we will evaluate our model.</p>
 <p><strong>Data Partinioning</strong></p>
 <p>When we want to build predictive models for machine learning
@@ -4873,7 +4873,7 @@ print(f&#39;Coefficients: {model1.coef_}&#39;)</code></pre>
 ##  -8.59920259e-02  2.97336875e-02  5.09616025e-02]</code></pre>
 <pre class="python"><code>print(f&#39;Intercept: {model1.intercept_}&#39;)</code></pre>
 <pre><code>## Intercept: 7.9286268681021985</code></pre>
-<pre class="python"><code># visualise in a nice way (using the statsmodel library)
+<pre class="python"><code># visualise in a nice way (using the statsmodel.api library)
 
 
 X_train_with_constant = sm.add_constant(X_train) # add a constant to the X feature matrix
@@ -4889,8 +4889,8 @@ print(lm_results.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     498.3
-## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        20:33:13   Log-Likelihood:                -5189.2
+## Date:                Tue, 12 Dec 2023   Prob (F-statistic):               0.00
+## Time:                        22:17:24   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -4948,8 +4948,8 @@ print(lm_robust.summary())</code></pre>
 ## Dep. Variable:         lnexp_pc_month   R-squared:                       0.599
 ## Model:                            OLS   Adj. R-squared:                  0.598
 ## Method:                 Least Squares   F-statistic:                     431.9
-## Date:                Thu, 07 Dec 2023   Prob (F-statistic):               0.00
-## Time:                        20:33:13   Log-Likelihood:                -5189.2
+## Date:                Tue, 12 Dec 2023   Prob (F-statistic):               0.00
+## Time:                        22:17:24   Log-Likelihood:                -5189.2
 ## No. Observations:                9024   AIC:                         1.043e+04
 ## Df Residuals:                    8996   BIC:                         1.063e+04
 ## Df Model:                          27                                         
@@ -5107,40 +5107,36 @@ target, log of per capita monthly expenditures).</p>
 <p>Now that we have built and evaluated our model in the training
 dataset, we can proceed to make out-of-sample predictions. That is, see
 how our model performs in the test dataset.</p>
-<pre class="python"><code># Fit the model to the training data
-model2 = LinearRegression(fit_intercept=True).fit(X_test, y_test)
-
-# predict y(target) values based on the test data model
-y_test_pred = model2.predict(X_test)
+<pre class="python"><code># predict y(target) values based on the test data model, with model trained on 
+y_test_pred = model1.predict(X_test)
 
 # Calculate Root Mean Squared Error on the test set
 rmse_test = mean_squared_error(y_test, y_test_pred, squared=False)
 
 # Estimate the R squared of the test model
-r2_test = r2_score(y_test, model2.predict(X_test))
+r2_test = r2_score(y_test, model1.predict(X_test))
 
 # Print the Mean Squared Error and R-squared on the test set
 print(f&quot;Root Mean Squared Error on the test set: {rmse_test}&quot;)</code></pre>
-<pre><code>## Root Mean Squared Error on the test set: 0.4143593687999341</code></pre>
-<pre class="python"><code>print(f&quot;R-squared on the test dataset: {r2_train}&quot;)</code></pre>
-<pre><code>## R-squared on the test dataset: 0.5992973775467874</code></pre>
+<pre><code>## Root Mean Squared Error on the test set: 0.41946592264787785</code></pre>
+<pre class="python"><code>print(f&quot;R-squared on the test dataset: {r2_test}&quot;)</code></pre>
+<pre><code>## R-squared on the test dataset: 0.5947626941805604</code></pre>
 <p><strong>The bias-variance tradeoff in practice</strong></p>
 <p>We previously mentioned that the RMSE metric could also be used to
 compare between train and test model predictions:</p>
 <p>Notice that the <em>in-sample RMSE</em> [<span
-class="math inline">\(0.43003\)</span>] is very close to the
-<em>out-of-sample RMSE</em> [<span
-class="math inline">\(0.41435\)</span>]. This means that our model makes
-consistent predictions across different data sets. We also know by now
-that these predictions are relatively good. At least, we hit the mark
-around 60 per cent of the time. What we are observing here is a model
-that has found a balance between bias and variance. However, both
-measures can still improve. For one, McBride and Nichols (2018) report
-&gt; 80 per cent accuracy in their poverty predictions for Malawi. But
-please note that, at this point, we are not replicating their approach.
-They document using a classification model, which means that they
-previously used a poverty line score and divided the sample between
-individuals below and above the poverty line.</p>
+class="math inline">\(0.43\)</span>] is very close to the
+<em>out-of-sample RMSE</em> [<span class="math inline">\(0.41\)</span>].
+This means that our model makes consistent predictions across different
+data sets. We also know by now that these predictions are relatively
+good. At least, we hit the mark around 59 per cent of the time. What we
+are observing here is a model that has found a balance between bias and
+variance. However, both measures can still improve. For one, McBride and
+Nichols (2018) report &gt; 80 per cent accuracy in their poverty
+predictions for Malawi. But please note that, at this point, we are not
+replicating their approach. They document using a classification model,
+which means that they previously used a poverty line score and divided
+the sample between individuals below and above the poverty line.</p>
 <p><em>What do we mean by bias in a model?</em></p>
 <p>The bias is the difference between the average prediction of our
 model and the true (observed) value. Minimising the bias is analogous to
@@ -5150,8 +5146,8 @@ minimising the RMSE.</p>
 data point (how much the model can adjust given the data set). A model
 with high variance would yield low error values in the training data but
 high errors in the test data.</p>
-<p>Hence, consistent in and out of sample RMSE scores = bias/variance
-balance.</p>
+<p>Hence, consistent in and out of sample RMSE and R^2 scores =
+bias/variance balance.</p>
 <p><strong>Fine-tuning model parameters</strong></p>
 <p>Can we fine-tune model parameters? The quick answer is yes! Every
 machine learning algorithm has a set of parameters that can be
