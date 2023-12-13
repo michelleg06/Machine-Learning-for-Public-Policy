@@ -155,7 +155,7 @@ skim(data_malawi) # describes the dataset in a nice format
 
 - Luckily for us, we have no missing values (n_missing in summary output)!
 
-    A) Machine learning models cannot be trained when missing values are present.
+    A) Many machine learning models cannot be trained when missing values are present (some exceptions exist).
 
     B) Dealing with missingness is a non-trivial task: 
     
@@ -748,7 +748,7 @@ malawi.info()
 
 - Luckily for us, we have no missing values (Non-Null Count in info() output)!
 
-A) Machine learning models cannot be trained when missing values are present.
+A) Many machine learning models cannot be trained when missing values are present (some exceptions exist).
 
 B) Dealing with missingness is a non-trivial task: 
 First and foremost, we should assess whether there is a pattern to missingness and if so, 
