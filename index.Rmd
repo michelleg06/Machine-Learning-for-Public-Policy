@@ -125,6 +125,10 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - An introduction to Statistical Learning, Chapter 8.
 
+*Optional Readings*
+
+- Dietrich et al. (2022) - [Economic Development, weather shocks, and child marriage in South Asia: A machine learning approach.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271373)
+
 ## 5. Neural Networks
 
     ·  	The concept of a neuron
