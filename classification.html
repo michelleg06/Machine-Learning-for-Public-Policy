@@ -659,12 +659,12 @@ class="math inline">\(0.8\)</span>, indicates that our classification
 algorithm is highly accurate.</p>
 <p><br></p>
 <pre><code>**Imbalanced data**
-When you have a large number of zeros (or No, in this case), the Accuracy metric may not be the most reliable one. If we look at the formula: number of correct predictions / total number of predictions, we see why this might be an issue. It is a lot easier to correctly predict that of which there is plenty of (zeros), than the category for which we have less instances. </code></pre>
+When you have a large number of zeros (or No, in this case), the Accuracy metric may not be the most reliable one. If we look at the formula: number of correct predictions / total number of predictions, we see why this might be an issue. It is a lot easier to correctly predict that of which there is plenty of (Yes), than the category for which we have less instances. </code></pre>
 <p><br></p>
 <p>Imbalance is not a problem for our target variable, as we have
-roughly as many zeros as ones. Nonetheless, this sets the stage for us
-to introduce the Kappa statistic (<span
-class="math inline">\(0.58\)</span>), which is a measure of model
+roughly as many zeros as ones. In fact, we have more Yes (1) responses.
+Nonetheless, this sets the stage for us to introduce the Kappa statistic
+(<span class="math inline">\(0.58\)</span>), which is a measure of model
 accuracy that is adjusted by accounting for the possibility of a correct
 prediction by chance alone. It ranges from 0 to 1, and can be
 interpreted using the following thresholds:</p>
