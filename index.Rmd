@@ -109,7 +109,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - Bondi-Kelly et al. (2023)- [Predicting micronutrient deficiency with publicly available satellite data.](https://onlinelibrary.wiley.com/doi/10.1002/aaai.12080) In AI Magazine. 
 
-<span style="color: orange;"> **Social hours: tbd. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** </span>
+<span style="color: orange;"> **Social hours: Monday, January 8, 6pm CET / 11am GMT-6. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** Please register for a slot in the following [link](https://docs.google.com/spreadsheets/d/19SHtRynrXq8laemMTShJ0uiK-sZIKELI3vRRUwnmK7k/edit?usp=sharing)</span>
 
 ## 4. Tree-based methods
 
@@ -125,6 +125,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - An introduction to Statistical Learning, Chapter 8.
 
+
 *Optional Readings*
 
 - Dietrich et al. (2022) - [Economic Development, weather shocks, and child marriage in South Asia: A machine learning approach.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271373)
@@ -137,7 +138,7 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 **Release date: 25 January, 2024.**
 
-**Instructor:** [Dr. Emanuele Pugliese](https://scholar.google.com/citations?user=6lDNFOYAAAAJ&hl=en)
+**Instructor:** [Dr. Emanuele Pugliese](https://scholar.google.com/citations?user=6lDNFOYAAAAJ&hl=en) and [Prof. Dr. Robin Cowan](https://ideas.repec.org/e/pco61.html)
 
 ## 6. Fair Machine Learning / Ethics
 
