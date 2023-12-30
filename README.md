@@ -2,7 +2,7 @@
 
 ## Repository for the Machine Learning for Public Policy course
 
-![ml4pp](https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Images/ML4PP2.png)
+![ml4pp](https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Images/ML4PP.png)
 
 Machine learning has become an increasingly integral part of public policies. It is applied for policy problems that do not require causal inference but instead require predictive inference. Solving these prediction policy problems requires tools that are tuned to minimizing prediction errors, but also frameworks to ensure that models are efficient and fair. EMX+ will introduce the theory and applications of machine learning algorithms with a focus on policy applications and issues. The goals of this course include:
 
