@@ -1,0 +1,33 @@
+digraph Tree {
+node [shape=box, style="filled", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label="hhsize2 <= 6.5\nsamples = 100.0%\nvalue = [0.345, 0.655]", fillcolor="#a1d1f3"] ;
+1 [label="grassroof <= 0.5\nsamples = 19.7%\nvalue = [0.666, 0.334]", fillcolor="#f2c09c"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="agehead <= 62.5\nsamples = 4.8%\nvalue = [0.882, 0.118]", fillcolor="#e89253"] ;
+1 -> 2 ;
+3 [label="(...)", fillcolor="#C0C0C0"] ;
+2 -> 3 ;
+24 [label="(...)", fillcolor="#C0C0C0"] ;
+2 -> 24 ;
+53 [label="bed <= 0.5\nsamples = 14.9%\nvalue = [0.594, 0.406]", fillcolor="#f7d7c0"] ;
+1 -> 53 ;
+54 [label="(...)", fillcolor="#C0C0C0"] ;
+53 -> 54 ;
+101 [label="(...)", fillcolor="#C0C0C0"] ;
+53 -> 101 ;
+136 [label="musicplayer <= 0.5\nsamples = 80.3%\nvalue = [0.267, 0.733]", fillcolor="#81c1ee"] ;
+0 -> 136 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+137 [label="bike <= 0.5\nsamples = 66.1%\nvalue = [0.204, 0.796]", fillcolor="#6cb6ec"] ;
+136 -> 137 ;
+138 [label="(...)", fillcolor="#C0C0C0"] ;
+137 -> 138 ;
+193 [label="(...)", fillcolor="#C0C0C0"] ;
+137 -> 193 ;
+252 [label="bed <= 0.5\nsamples = 14.2%\nvalue = [0.545, 0.455]", fillcolor="#fbeade"] ;
+136 -> 252 ;
+253 [label="(...)", fillcolor="#C0C0C0"] ;
+252 -> 253 ;
+304 [label="(...)", fillcolor="#C0C0C0"] ;
+252 -> 304 ;
+}

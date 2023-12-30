@@ -25,9 +25,9 @@ navbar:
         #- text: "Classification"
         #  href: classification.html
         #  icon: fa-gear
-        #- text: "Random Forests"
-        #  href: RandomForests.html
-        #  icon: fa-tree
+        - text: "TreeModels:RandomForests"
+          href: treebasedmodels.html
+          icon: fa-tree
         - text: "Discussion Board"
           href: discussionboard.html
           icon: fa-solid fa-comments

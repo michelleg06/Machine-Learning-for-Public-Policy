@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Tree-based models</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Machine Learning for Public Policy</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="intro.html">
+    <span class="fa fa-duotone fa-robot"></span>
+     
+    Introduction
+  </a>
+</li>
+<li>
+  <a href="predictionpolicy.html">
+    <span class="fa fa-line-chart"></span>
+     
+    Prediction Policy Problems
+  </a>
+</li>
+<li>
+  <a href="classification.html">
+    <span class="fa fa-solid fa-gears"></span>
+     
+    Classification:Logistic
+  </a>
+</li>
+<li>
+  <a href="discussionboard.html">
+    <span class="fa fa-solid fa-comments"></span>
+     
+    Discussion Board
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Tree-based models</h1>
+
+</div>
+
+
+<div id="tree-based-models-for-classification-problems"
+class="section level2 tabset tabset-fade tabset-pills">
+<h2 class="tabset tabset-fade tabset-pills"><strong>Tree-based models
+for classification problems </strong></h2>
+<p><strong>A general overview of tree-based methods</strong></p>
+<p>An introduction to Tree-based machine learning models is given to us
+by <a href="https://www.linkedin.com/in/fraroma/">Dr. Francisco
+Rosales</a>, Assistant Professor at ESAN University (Perú) and Lead Data
+Scientist (<a
+href="https://www.linkedin.com/company/breinhub/">BREIN</a>). You can
+watch the pre-recorded session below:</p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/l7s3k2TlQeY" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
+<p>Some key points to keep in mind when working through the practical
+exercise include:</p>
+<ul>
+<li><p>Tree-based methods work for both classification and regression
+problems.</p></li>
+<li><p>Decision Trees are both a logical and a technical tool:</p>
+<ul>
+<li><p>they involve stratifying or segmenting the predictor space into a
+number of simple regions</p></li>
+<li><p>from each region, we obtain a relevant metric (e.g. mean/average)
+and then use that information to make predictions about the observations
+that belong to that region</p></li>
+</ul></li>
+<li><p>Decision Trees are the simplest version of a tree-based method.
+To improve on a simple splitting algorithm, there exist ensemble
+learning techniques such as bagging and boosting:</p>
+<ul>
+<li><p>bagging: also known as bootstrap aggregating, it is an ensemble
+technique used to decrease a model’s variance. A <strong> Random Forest
+</strong> is a tree-based method that functions on the concept of
+bagging. The main idea behind a Random Forest model is that, if you
+partition the data that would be used to create a single decision tree
+into different parts, create one tree for each of these partitions, and
+then use a method to “average” the results of all of these different
+trees, you should end up with a better model.</p></li>
+<li><p>boosting: an ensemble technique mainly used to decrease a model’s
+bias. Like bagging, we create multiple trees from various splits of our
+training dataset. However, whilst bagging uses bootstrap to create the
+various data splits (from which each tree is born), in boosting each
+tree is grown sequentially, using information from the previously built
+tree. So, boosting doesn’t use bootstrap. Instead each tree is a
+modified version of the original dataset (each subsequent tree is built
+from the residuals of the previous model).<br />
+<br></p></li>
+</ul></li>
+</ul>
+<p>To conclude our Malawi case study, we will implement a Random Forest
+algorithm to our classification problem: given a set of features X
+(e.g. ownership of a toilet, size of household, etc.), how likely are we
+to correctly identify an individual’s income class? Recall that this
+problem has already been approached using a linear regression model (and
+a lasso linear model) and a logistic classification (i.e. an eager
+learner model) and whilst there was no improvement between a linear and
+a lasso linear model, we did increase our model’s predictive ability
+when we switched from a linear prediction to a classification approach.
+I had previously claimed that the improvement was marginal — but since
+the model will be used to determine who gets and who doesn’t get an
+income supplement (i.e. who’s an eligible recipient of a cash transfer,
+as part of Malawi’s social protection policies), any improvement is
+critical and we should try various methods until we find the one that
+best fits our data. <br></p>
+<p>Some discussion points before the practical:</p>
+<ul>
+<li><p>Why did we decide to switch models (from linear to
+classification)?</p></li>
+<li><p>Intuitively, why did a classification model perform better than a
+linear regression at predicting an individual’s social class based on
+their monthly per capita consumption?</p></li>
+<li><p>How would a Random Forest classification approach improve our
+predictive ability? (hint, the answer may be similar to the above
+one)</p></li>
+</ul>
+<div id="r-practical" class="section level3">
+<h3><strong>R practical</strong></h3>
+<p><br> As always, start by opening the libraries that you’ll need to
+reproduce the script below. We will continue to use the Caret library
+for machine learning purposes, and some other general libraries for data
+wrangling and visualisation. <br></p>
+<pre class="r"><code>rm(list = ls()) # this line cleans your Global Environment.
+setwd(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy&quot;) # set your working directory
+
+# Do not forget to install a package with the install.packages() function if it&#39;s the first time you use it!
+
+library(dplyr) # core package for dataframe manipulation. Usually installed and loaded with the tidyverse, but sometimes needs to be loaded in conjunction to avoid warnings.
+library(tidyverse) # a large collection of packages for data manipulation and visualisation.  
+library(caret) # a library with key functions that streamline the process for predictive modelling 
+library(skimr) # a package with a set of functions to describe dataframes and more
+library(plyr) # a package for data wrangling
+library(party) # provides a user-friendly interface for creating and analyzing decision trees using recursive partitioning
+library(rpart) # recursive partitioning and regression trees
+library(rpart.plot) # visualising decision trees
+library(rattle) # to obtain a fancy wrapper for the rpart.plot
+library(RColorBrewer) # import more colours 
+
+# import data
+data_malawi &lt;- read_csv(&quot;malawi.csv&quot;) # the file is directly read from the working directory/folder previously set</code></pre>
+<p><br></p>
+<p>For this exercise, we will skip all the data pre-processing steps. At
+this point, we are all well acquainted with the Malawi dataset, and
+should be able to create our binary outcome, poor (or not), and clean
+the dataset in general. If you need to, you can always go back to the <a
+href="https://www.ml4publicpolicy.com/classification.html">Logistic
+Classification tab</a> and repeat the data preparation process described
+there. <br></p>
+<h3>
+Data Split and Fit
+</h3>
+<pre class="r"><code>set.seed(1234) # ensures reproducibility of our data split
+
+# data partitioning: train and test datasets
+train_idx &lt;- createDataPartition(data_malawi$poor, p = .8, list = FALSE, times = 1) 
+
+Train_df &lt;- data_malawi[ train_idx,]
+Test_df  &lt;- data_malawi[-train_idx,]
+
+# data fit: fit a random forest model
+# (be warned that this may take longer to run than previous models)
+
+rf_train &lt;- train(poor ~ .,
+                  data = Train_df,
+                  method = &quot;ranger&quot; # estimates a Random Forest algorithm via the ranger pkg (you may need to install the ranger pkg)
+                  )</code></pre>
+<pre><code>## Growing trees.. Progress: 53%. Estimated remaining time: 1 minute, 35 seconds.</code></pre>
+<pre class="r"><code># First glimpse at our random forest model
+print(rf_train)</code></pre>
+<pre><code>## Random Forest 
+## 
+## 9025 samples
+##   29 predictor
+##    2 classes: &#39;Y&#39;, &#39;N&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 9025, 9025, 9025, 9025, 9025, 9025, ... 
+## Resampling results across tuning parameters:
+## 
+##   mtry  splitrule   Accuracy   Kappa    
+##    2    gini        0.8108829  0.5557409
+##    2    extratrees  0.7698647  0.4280448
+##   16    gini        0.7999474  0.5472253
+##   16    extratrees  0.8023850  0.5525424
+##   30    gini        0.7946432  0.5359787
+##   30    extratrees  0.7974024  0.5425408
+## 
+## Tuning parameter &#39;min.node.size&#39; was held constant at a value of 1
+## Accuracy was used to select the optimal model using the largest value.
+## The final values used for the model were mtry = 2, splitrule = gini
+##  and min.node.size = 1.</code></pre>
+<p><br> If you read the final box of the print() output, you’ll notice
+that, given our input Y and X features, and no other information, the
+optimal random forest model, uses the following:</p>
+<ul>
+<li><p>mtry = 2: mtry is the number of variables to sample at random at
+each split. This is the number we feed to the recursive partitioning
+algorithm. At each split, the algorithm will search mtry (=2) variables
+(a completely different set from the previous split) chosen at random,
+and pick the best split point.</p></li>
+<li><p>splitrule = gini: the splitting rule/algorithm used. Gini, or the
+Gini Impurity is a probability that ranges from <span
+class="math inline">\(0\)</span> to <span
+class="math inline">\(1\)</span>. The lower the value, the more pure the
+node. Recall that a node that is <span
+class="math inline">\(100\%\)</span> pure includes only data from a
+single class (no noise!), and therefore the splitting stops.</p></li>
+<li><p>Accuracy (or <span class="math inline">\(1\)</span> - the error
+rate): at <span class="math inline">\(0.81\)</span>, it improves from
+our eager learner classification (logistic) approach by <span
+class="math inline">\(0.01\)</span> and it is highly accurate.</p></li>
+<li><p>Kappa (adjusted accuracy): at <span
+class="math inline">\(0.55\)</span>, it indicates that our random forest
+model (on the training data) seems to perform the same as out logistic
+model. To make a proper comparison, we need to look at the out-of-sample
+predictions evaluation statistics.</p></li>
+</ul>
+<br>
+<h3>
+Out-of-sample predictions
+</h3>
+<p><br></p>
+<pre class="r"><code># make predictions using the trained model and the test dataset
+
+set.seed(12345)
+pr1 &lt;- predict(rf_train, Test_df, type = &quot;raw&quot;)
+head(pr1) # Yes and No output</code></pre>
+<pre><code>## [1] Y Y Y Y Y Y
+## Levels: Y N</code></pre>
+<pre class="r"><code># evaluate the predictions using the ConfusionMatrix function from Caret pkg
+
+confusionMatrix(pr1, Test_df[[&quot;poor&quot;]], positive = &quot;Y&quot;) # positive = &quot;Y&quot; indicates that our category of interest is Y (1)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    Y    N
+##          Y 1344  324
+##          N  122  465
+##                                           
+##                Accuracy : 0.8022          
+##                  95% CI : (0.7852, 0.8185)
+##     No Information Rate : 0.6501          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5379          
+##                                           
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+##                                           
+##             Sensitivity : 0.9168          
+##             Specificity : 0.5894          
+##          Pos Pred Value : 0.8058          
+##          Neg Pred Value : 0.7922          
+##              Prevalence : 0.6501          
+##          Detection Rate : 0.5960          
+##    Detection Prevalence : 0.7397          
+##       Balanced Accuracy : 0.7531          
+##                                           
+##        &#39;Positive&#39; Class : Y               
+## </code></pre>
+<p>Based on our out-of-sample predictions, the Random Forest algorithm
+seems to yield pretty similar accuracy in its predictions as the
+logistic classification algorithm. The performance metrics (accuracy,
+sensitivity, specificity, kappa) remain the same (as for most
+classification problems). If you want a refresher of what they mean and
+how to interpret them, go back one session for a more thorough
+explanation!</p>
+<br>
+<h3>
+Fine-tuning parameters
+</h3>
+<p><br></p>
+<p>We can try to improve our Random Forest model by fine-tuning two
+parameters: grid and cross-validation</p>
+<pre class="r"><code># prepare the grid (create a larger random draw space)
+
+tuneGrid &lt;- expand.grid(mtry = c(1,2, 3, 4),
+                      splitrule = c(&quot;gini&quot;, &quot;extratrees&quot;),
+                      min.node.size = c(1, 3, 5)) 
+
+# prepare the folds
+trControl &lt;- trainControl( method = &quot;cv&quot;,
+                                    number=5,
+                                    search = &#39;grid&#39;,
+                                    classProbs = TRUE,
+                                    savePredictions = &quot;final&quot;
+                           ) # 5-folds cross-validation 
+
+
+# fine-tune the model with optimised paramters
+# (again, be ready to wait a few minutes for this to run)
+
+rf_train_tuned &lt;- train(poor ~ .,
+                            data = Train_df,
+                            method = &quot;ranger&quot;,
+                            tuneGrid = tuneGrid, 
+                            trControl = trControl
+                  )
+
+# let&#39;s see how the fine-tuned model fared
+print(rf_train_tuned)</code></pre>
+<pre><code>## Random Forest 
+## 
+## 9025 samples
+##   29 predictor
+##    2 classes: &#39;Y&#39;, &#39;N&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (5 fold) 
+## Summary of sample sizes: 7219, 7220, 7220, 7221, 7220 
+## Resampling results across tuning parameters:
+## 
+##   mtry  splitrule   min.node.size  Accuracy   Kappa    
+##   1     gini        1              0.7819382  0.4594359
+##   1     gini        3              0.7822701  0.4593051
+##   1     gini        5              0.7826031  0.4600870
+##   1     extratrees  1              0.7404976  0.3310123
+##   1     extratrees  3              0.7396100  0.3287570
+##   1     extratrees  5              0.7404971  0.3308480
+##   2     gini        1              0.8142918  0.5674387
+##   2     gini        3              0.8134056  0.5653133
+##   2     gini        5              0.8137385  0.5661639
+##   2     extratrees  1              0.7828240  0.4695433
+##   2     extratrees  3              0.7840429  0.4730871
+##   2     extratrees  5              0.7830448  0.4705301
+##   3     gini        1              0.8160649  0.5769315
+##   3     gini        3              0.8144026  0.5730246
+##   3     gini        5              0.8156218  0.5755611
+##   3     extratrees  1              0.8089749  0.5519067
+##   3     extratrees  3              0.8073122  0.5469591
+##   3     extratrees  5              0.8070911  0.5471121
+##   4     gini        1              0.8139609  0.5730598
+##   4     gini        3              0.8157331  0.5778242
+##   4     gini        5              0.8146244  0.5748192
+##   4     extratrees  1              0.8115228  0.5636714
+##   4     extratrees  3              0.8122979  0.5662566
+##   4     extratrees  5              0.8131842  0.5681043
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final values used for the model were mtry = 3, splitrule = gini
+##  and min.node.size = 1.</code></pre>
+<p><br> Fine tuning parameters has not done much for our in-sample
+model. The chosen mtry value and splitting rule were the same. The only
+parameter where I see improvement is in the (training set) Kappa, from
+<span class="math inline">\(0.55\)</span> to <span
+class="math inline">\(0.56\)</span>. Will out of sample predictions
+improve? <br></p>
+<pre class="r"><code># make predictions using the trained model and the test dataset
+
+set.seed(12345)
+pr2 &lt;- predict(rf_train_tuned, Test_df, type = &quot;raw&quot;)
+head(pr2) # Yes and No output</code></pre>
+<pre><code>## [1] Y Y Y Y Y Y
+## Levels: Y N</code></pre>
+<pre class="r"><code># evaluate the predictions using the ConfusionMatrix function from Caret pkg
+
+confusionMatrix(pr2, Test_df[[&quot;poor&quot;]], positive = &quot;Y&quot;) # positive = &quot;Y&quot; indicates that our category of interest is Y (1)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    Y    N
+##          Y 1316  291
+##          N  150  498
+##                                           
+##                Accuracy : 0.8044          
+##                  95% CI : (0.7875, 0.8206)
+##     No Information Rate : 0.6501          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5516          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 2.617e-11       
+##                                           
+##             Sensitivity : 0.8977          
+##             Specificity : 0.6312          
+##          Pos Pred Value : 0.8189          
+##          Neg Pred Value : 0.7685          
+##              Prevalence : 0.6501          
+##          Detection Rate : 0.5836          
+##    Detection Prevalence : 0.7126          
+##       Balanced Accuracy : 0.7644          
+##                                           
+##        &#39;Positive&#39; Class : Y               
+## </code></pre>
+<p><br> Consistent with the improvements on the train set, the
+out-of-sample predictions also return a higher adjusted accurcacy (Kappa
+statistic), and improved specificity and sensitivity. Not by much
+(e.g. Kappa increase of <span class="math inline">\(0.01\)</span>), but
+we’ll take what we can get.</p>
+<p><br> These results also show that the biggest prediction improvements
+happen when we make big decisions - such as foregoing the variability of
+continuous outcomes in favour of classes. Exploring classification
+algorithms - in this case a logistic and a random forest model - was
+definitely worthwhile, but did not yield large returns on our predictive
+abilities.</p>
+<h3>
+Visualising our model
+</h3>
+<p><br></p>
+<p>To close the chapter, let’s have a quick look at the sort of plots we
+can make with a Random Forest algorithm.</p>
+<pre class="r"><code># we&#39;ll need to re-estimate the rf model using rpart
+
+MyRandomForest &lt;- rpart(poor ~ ., data = Train_df)
+
+# visualise the decision tree (first of many in the forest)
+fancyRpartPlot(MyRandomForest, palettes = c(&quot;Oranges&quot;,&quot;Blues&quot;), main = &quot;Visualising nodes and splits&quot;) </code></pre>
+<p><img src="treebasedmodels_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The fancy Rpart Plot returns the flow chart that we have now learned
+to call a decision tree. Recall that we have used different packages
+(and different specifications) for the Random Forest. So, the
+visualisation that we’re looking at now is not the exact replica of our
+preferred fine-tuned model. It is, nonetheless, a good way to help you
+understand how classifications and decisions are made with tree-based
+methods. If you’d like an in-depth explanation of the plot, you can
+visit the <a href="http://www.milbo.org/rpart-plot/prp.pdf">Rpart.plot
+pkg documentation</a>.</p>
+</div>
+<div id="python-practical" class="section level3">
+<h3><strong>Python practical</strong></h3>
+<p><br> As always, start by opening the libraries that you’ll need to
+reproduce the script below. We will continue to use the scikit-learn
+library for machine learning purposes, and some other general libraries
+for data wrangling and visualisation. <br></p>
+<pre class="python"><code>#==== Python version: 3.10.12 ====#
+
+# Opening libraries
+
+import sklearn as sk # our trusted Machine Learning library
+from sklearn.model_selection import train_test_split # split the dataset into train and test
+from sklearn.model_selection import cross_val_score # to obtain the cross-validation score
+from sklearn.model_selection import cross_validate # to perform cross-validation
+from sklearn.ensemble import RandomForestClassifier # to perform a Random Forest classification model
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay # returns performance evaluation metrics
+from sklearn.model_selection import RandomizedSearchCV # for fine-tuning parameters
+from scipy.stats import randint # generate random integer
+
+# Tree visualisation
+from sklearn.tree import export_graphviz
+from IPython.display import Image # for Jupyter Notebook users
+import graphviz as gv
+
+# Non-ML libraries
+import random # for random state 
+import csv # a library to read and write csv files 
+import numpy as np # a library for handling 
+import pandas as pd # a library to help us easily navigate and manipulate dataframes
+import seaborn as sns # a data visualisation library
+import matplotlib.pyplot as plt # a data visualisation library
+
+
+# Uploading data
+
+malawi = pd.read_csv(&#39;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/malawi.csv&#39;)</code></pre>
+<p><br></p>
+<p>For this exercise, we will skip all the data pre-processing steps. At
+this point, we are all well acquainted with the Malawi dataset, and
+should be able to create our binary outcome, poor (or not), and clean
+the dataset in general. If you need to, you can always go back to the <a
+href="https://www.ml4publicpolicy.com/classification.html">Logistic
+Classification tab</a> and repeat the data preparation process described
+there. <br></p>
+<h3>
+Data Split and Fit
+</h3>
+<p>Let’s use a simple 80:20 split for train and test data subsets.</p>
+<pre class="python"><code># First, recall the df structure
+malawi.info() # returns the column number, e.g. hhsize = column number 0, hhsize2 = 1... etc.</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## Int64Index: 11280 entries, 10101002025 to 31202086374
+## Data columns (total 29 columns):
+##  #   Column        Non-Null Count  Dtype   
+## ---  ------        --------------  -----   
+##  0   hhsize        11280 non-null  int64   
+##  1   hhsize2       11280 non-null  int64   
+##  2   agehead       11280 non-null  int64   
+##  3   agehead2      11280 non-null  int64   
+##  4   north         11280 non-null  category
+##  5   central       11280 non-null  category
+##  6   rural         11280 non-null  category
+##  7   nevermarried  11280 non-null  category
+##  8   sharenoedu    11280 non-null  float64 
+##  9   shareread     11280 non-null  float64 
+##  10  nrooms        11280 non-null  int64   
+##  11  floor_cement  11280 non-null  category
+##  12  electricity   11280 non-null  category
+##  13  flushtoilet   11280 non-null  category
+##  14  soap          11280 non-null  category
+##  15  bed           11280 non-null  category
+##  16  bike          11280 non-null  category
+##  17  musicplayer   11280 non-null  category
+##  18  coffeetable   11280 non-null  category
+##  19  iron          11280 non-null  category
+##  20  dimbagarden   11280 non-null  category
+##  21  goats         11280 non-null  category
+##  22  dependratio   11280 non-null  float64 
+##  23  hfem          11280 non-null  category
+##  24  grassroof     11280 non-null  category
+##  25  mortarpestle  11280 non-null  category
+##  26  table         11280 non-null  category
+##  27  clock         11280 non-null  category
+##  28  Poor          11280 non-null  category
+## dtypes: category(21), float64(3), int64(5)
+## memory usage: 1.0 MB</code></pre>
+<pre class="python"><code>
+# Then, split!
+X = malawi.iloc[:, 0:27] # x is a matrix containing all variables except the last one, which conveniently is our binary target variable
+y = malawi.iloc[:, 28] # y is a vector containing our target variable 
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=12345) # random_state is for reproducibility purposes</code></pre>
+<p>Now, let’s fit a Random Forest model:</p>
+<pre class="python"><code># data fit: fit a random forest model
+
+rf = RandomForestClassifier(random_state=42) # empty random forest object
+rf.fit(X_train, y_train) # fit the rf classifier using the training data</code></pre>
+<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestClassifier(random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(random_state=42)</pre></div></div></div></div></div>
+<p>We have now successfully trained a Random Forest model, and there is
+no need to go over in-sample predictions. We can simply evaluate the
+model’s ability to make out-of-sample predictions.</p>
+<br>
+<h3>
+Out-of-sample predictions
+</h3>
+<p><br></p>
+<pre class="python"><code># predict our test-dataset target variable based on the trained model
+
+y_pred = rf.predict(X_test)
+
+# evaluate the prediction&#39;s performance (estimate accuracy score, report confusion matrix)
+    # create a confusion matrix object (we&#39;re improving from our previous confusion matrix exploration ;))
+cm = confusion_matrix(y_test, y_pred)
+
+print(&quot;Accuracy:&quot;, accuracy_score(y_test, y_pred))</code></pre>
+<pre><code>## Accuracy: 0.8098404255319149</code></pre>
+<pre class="python"><code>print(&quot;Precision:&quot;, precision_score(y_test, y_pred))</code></pre>
+<pre><code>## Precision: 0.8230818008877616</code></pre>
+<pre class="python"><code>print(&quot;Recall:&quot;, recall_score(y_test, y_pred))</code></pre>
+<pre><code>## Recall: 0.8964088397790055</code></pre>
+<pre class="python"><code>print(&quot;Confusion Matrix:&quot;, cm)</code></pre>
+<pre><code>## Confusion Matrix: [[ 529  279]
+##  [ 150 1298]]</code></pre>
+<pre class="python"><code>ConfusionMatrixDisplay(confusion_matrix=cm).plot() # create confusion matrix plot</code></pre>
+<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x291d82aa0&gt;</code></pre>
+<pre class="python"><code>plt.show() # display confusion matrix plot created above</code></pre>
+<p><img src="treebasedmodels_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+Based on our out-of-sample predictions, the Random Forest algorithm
+seems to yield pretty similar accuracy in its predictions as the
+logistic classification algorithm. If you want a reminder of how to
+interpret accuracy, precision and recall scores or how to read the
+confusion matrix, go back one session for a thorough explanation!</p>
+<br>
+<h3>
+Fine-tuning parameters
+</h3>
+<p><br></p>
+<p>To improve the performance of our random forest model, we can try
+hyperparameter tuning. You can think of the process as optimising the
+learning model by defining the settings that will govern the learning
+process of the model. In Python, and for a random forest model, we can
+use RandomizedSearchCV to find the optimal parameters within a range of
+parameters.</p>
+<pre class="python"><code># define hyperparameters and their ranges in a &quot;parameter_distance&quot; dictionary
+
+parameter_distance = {&#39;n_estimators&#39;: randint(50,500),
+                      &#39;max_depth&#39;: randint(1,10)
+                      }
+
+# n_estimators: the number of decision trees in the forest (at least 50 and at most 500)
+# max_depth: the maximum depth of each decision tree (at least 1 split, and at most 20 splits of the tree into branches)</code></pre>
+<p><br> There are other hyperparameters, but a search of the optimal
+value of these is a good start to our model optimisation! <br></p>
+<pre class="python"><code># Please note that the script below might take a while to run (don&#39;t be alarmed if you have to wait a couple of minutes)
+
+# Use a random search to find the best hyperparameters
+random_search = RandomizedSearchCV(rf, 
+                                 param_distributions = parameter_distance, 
+                                 n_iter=5, 
+                                 cv=5,
+                                 random_state=42)
+
+# Fit the random search object to the training model
+random_search.fit(X_train, y_train)</code></pre>
+<style>#sk-container-id-2 {color: black;background-color: white;}#sk-container-id-2 pre{padding: 0;}#sk-container-id-2 div.sk-toggleable {background-color: white;}#sk-container-id-2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-2 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-2 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-2 div.sk-item {position: relative;z-index: 1;}#sk-container-id-2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-2 div.sk-item::before, #sk-container-id-2 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-2 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-2 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-2 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-2 div.sk-label-container {text-align: center;}#sk-container-id-2 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-2 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomizedSearchCV(cv=5, estimator=RandomForestClassifier(random_state=42),
+                   n_iter=5,
+                   param_distributions={&#x27;max_depth&#x27;: &lt;scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x295597af0&gt;,
+                                        &#x27;n_estimators&#x27;: &lt;scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x295597b20&gt;},
+                   random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">RandomizedSearchCV</label><div class="sk-toggleable__content"><pre>RandomizedSearchCV(cv=5, estimator=RandomForestClassifier(random_state=42),
+                   n_iter=5,
+                   param_distributions={&#x27;max_depth&#x27;: &lt;scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x295597af0&gt;,
+                                        &#x27;n_estimators&#x27;: &lt;scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x295597b20&gt;},
+                   random_state=42)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(random_state=42)</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(random_state=42)</pre></div></div></div></div></div></div></div></div></div></div>
+<pre class="python"><code># create an object / variable that containes the best hyperparameters, according to our search:
+
+best_rf_hype = random_search.best_estimator_
+print(&#39;Best random forest hyperparameters:&#39;,  random_search.best_params_)</code></pre>
+<pre><code>## Best random forest hyperparameters: {&#39;max_depth&#39;: 8, &#39;n_estimators&#39;: 238}</code></pre>
+<p><strong>Now we can re-train our model using the retrieved
+hyperparameters and evaluate the out-of-sample-predictions of the
+model.</strong></p>
+<pre class="python"><code># for simplicity, store the best parameters again in a variable called x
+x = random_search.best_params_
+
+# Train the ranfom forest model using the best max_depth and n_estimators
+rf_best = RandomForestClassifier(**x, random_state=1234) # pass the integers from the best parameters with **
+rf_best.fit(X_train, y_train)</code></pre>
+<style>#sk-container-id-3 {color: black;background-color: white;}#sk-container-id-3 pre{padding: 0;}#sk-container-id-3 div.sk-toggleable {background-color: white;}#sk-container-id-3 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-3 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-3 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-3 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-3 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-3 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-3 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-3 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-3 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-3 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-3 div.sk-item {position: relative;z-index: 1;}#sk-container-id-3 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-3 div.sk-item::before, #sk-container-id-3 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-3 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-3 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-3 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-3 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-3 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-3 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-3 div.sk-label-container {text-align: center;}#sk-container-id-3 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-3 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestClassifier(max_depth=8, n_estimators=238, random_state=1234)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" checked><label for="sk-estimator-id-5" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(max_depth=8, n_estimators=238, random_state=1234)</pre></div></div></div></div></div>
+<pre class="python"><code># Make out-of-sample predictions
+y_pred_hype = rf_best.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred_hype)
+recall = recall_score(y_test, y_pred_hype)
+precision = precision_score(y_test, y_pred_hype)
+
+print(f&quot;Accuracy with best hyperparameters: {accuracy}&quot;)</code></pre>
+<pre><code>## Accuracy with best hyperparameters: 0.8067375886524822</code></pre>
+<pre class="python"><code>print(f&quot;Recall with best hyperparameters: {recall}&quot;)</code></pre>
+<pre><code>## Recall with best hyperparameters: 0.9233425414364641</code></pre>
+<pre class="python"><code>print(f&quot;Precision with best hyperparameters: {precision}&quot;)</code></pre>
+<pre><code>## Precision with best hyperparameters: 0.8044524669073405</code></pre>
+<p><br> It looks like we have not improved our accuracy or other
+peformance evaluation metrics by fine-tuning our model parameters.
+Perhaps a marginal improvement of <span
+class="math inline">\(0.01\)</span> on the precision score.</p>
+<p>These results show that the biggest prediction improvements happen
+when we make big decisions - such as foregoing the variability of
+continuous outcomes in favour of classes. Exploring classification
+algorithms - in this case a logistic and a random forest model - was
+definitely worthwhile, but did not yield large returns on our predictive
+abilities. <br></p>
+<h3>
+Visualising our model
+</h3>
+<p><br></p>
+<p>To close the chapter, let’s have a quick look at the sort of plots we
+can make with a Random Forest algorithm. While we cannot visualise the
+entirety of the forest, we can certainly have a look at the first two or
+three trees in our forest.</p>
+<pre class="python"><code># Use for-loop to display the first decision-tree in our random forest:
+# (Alternatively, use a for-loop to display the first two, three, four... trees)
+
+tree = rf_best.estimators_[0]
+dot_data = export_graphviz(tree,
+                            feature_names=X_train.columns,  
+                            filled=True,  
+                            max_depth=2, 
+                            impurity=False, 
+                            proportion=True
+                            )
+graph = gv.Source(dot_data)
+graph.render(&#39;tree_visualisation&#39;, format=&#39;png&#39;) # this will save the tree visualisation directly into your working folder</code></pre>
+<pre><code>## &#39;tree_visualisation.png&#39;</code></pre>
+<center>
+<div class="float">
+<img src="tree_visualisation.png" alt="Decision Tree" />
+<div class="figcaption">Decision Tree</div>
+</div>
+</center>
+</div>
+<div id="practice-at-home" class="section level3">
+<h3><strong>Practice at home</strong></h3>
+<p>As usual, you can replicate this exercise using the Bolivia dataset.
+To let us know that you’re still active, please answer this <a
+href="https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_1RNFd75exNEZVvU">Qualtrics-based
+question</a>.</p>
+</div>
+</div>
+
+<!DOCTYPE html>
+<hr>
+<p style="text-align: center;">Copyright &copy; 2022 <i class="fa-light fa-person-to-portal"></i> Michelle González Amador & Stephan Dietrich <i class="fa-light fa-person-from-portal"></i>. All rights reserved.</p>
+<p style="text-align: center;"><a href="https://github.com/michelleg06/Machine-Learning-for-Public-Policy" class="fa fa-github"></a></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
