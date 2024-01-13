@@ -326,12 +326,12 @@ We will continue to work with the Malawi dataset, which can be downloaded in the
 <h3> 1. Preliminaries: libraries and data upload </h3>
 <br>
 
-```{r, setup, include = FALSE, cache=TRUE}
+```{r, setup, include = FALSE}
 library(reticulate)
 use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
 ```
 
-```{python, cache=TRUE}
+```{python}
 #==== Python version: 3.10.12 ====#
 
 # Opening libraries
@@ -376,7 +376,7 @@ The variable that we're interested in recovering is **lnzline**. The code below 
 
 <br>
 
-```{python, cache=TRUE}
+```{python}
 # Retrieve information from the poverty line static vector:
 malawi['lnzline'].describe()
 # Let's store this in an object outside of the dataframe and get rid of it in the dataframe
@@ -408,7 +408,7 @@ At this point, we still need to do two more pre-processing steps: correctly defi
 
 **Feature creation: create a binary variable**
 
-```{python, cache=TRUE}
+```{python}
 
 #==== Correctly identify each vector type: ====#
 
@@ -447,7 +447,7 @@ According to our sample, about 65% of Malawians are considered poor. This number
 
 <br>
 
-```{python, cache=TRUE}
+```{python}
 
 # Final data pre-processing: remove the continuous target (as it perfectly predicts the binary target in a non-informative way)
 
@@ -463,7 +463,7 @@ malawi = malawi.drop(cont_target , axis=1)
 
 Let's use a simple 80:20 split of our data. 
 
-```{python, cache=TRUE}
+```{python}
 # First, recall the df structure
 malawi.info() # returns the column number, e.g. hhsize = column number 0, hhsize2 = 1... etc.
 
@@ -477,7 +477,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 **Fit a logistic model**
 <br>
-```{python, cache=TRUE}
+```{python}
 
 #==== Create a Logistic Regression Object and Fit the Model ====#
 
@@ -498,7 +498,7 @@ Also, please note that the Logistic Regression algorithm included in the sklearn
 
 **Predictions and Performance**
 <br>
-```{python, cache=TRUE}
+```{python}
 # Make out-of-sample predictions on the test dataset
 
 y_pred = m.predict(X_test)
@@ -530,7 +530,7 @@ Overall, we seem to be good at predicting $1$ instances, but less so for $0$ ins
 To conclude our evaluation, let's compute the ROC AUC:
 
 
-```{python, cache=TRUE}
+```{python}
 
 # Compute the ROC curve
 fpr, tpr, thresholds = roc_curve(y_test, y_pred)
