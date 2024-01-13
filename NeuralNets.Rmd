@@ -1,0 +1,34 @@
+---
+title: "Tree-based models"
+#author: "Robin Cowan"
+#date: '2022-09-21'
+output: html_document
+---
+
+## ** Neural Networks ** {.tabset .tabset-fade .tabset-pills}
+
+**A general overview of Neural Networks**
+
+### **R practical**
+
+### **Python practical**
+
+```{r, setup, include = FALSE}
+library(reticulate)
+use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
+
+```
+
+```{python}
+#==== Python version: 3.10.12 ====#
+
+# Opening libraries
+
+# PyTorch
+import torch # open source machine learning (ML) framework based on the Python programming language and the Torch library
+import torch.nn as nn # neural network from PyTorch
+
+# scikit-learn
+
+# numpy
+import numpy as np # a library for numeric analysis
