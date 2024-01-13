@@ -549,8 +549,8 @@ True Positive Rate (y-axis) against the False Positive Rate (x-axis);
 you can think of it as plotting the tradeoff between maximising the true
 positive rate and minimising the false positive rate. The preferred area
 under the curve is <span class="math inline">\(1\)</span>. Our estimated
-<span class="math inline">\(0.8\)</span> score indicates that a logistic
-classification is a good fit for our data (close to <span
+<span class="math inline">\(0.88\)</span> score indicates that a
+logistic classification is a good fit for our data (close to <span
 class="math inline">\(1\)</span>).</p></li>
 <li><p><strong>Sensitivity:</strong> it is a measure of the proportion
 of the positive (<span class="math inline">\(1\)</span> = poor) values
@@ -671,7 +671,7 @@ When you have a large number of zeros (or No, in this case), the Accuracy metric
 <p>Imbalance is not a problem for our target variable, as we have
 roughly as many zeros as ones. In fact, we have more Yes (1) responses.
 Nonetheless, this sets the stage for us to introduce the Kappa statistic
-(<span class="math inline">\(0.58\)</span>), which is a measure of model
+(<span class="math inline">\(0.55\)</span>), which is a measure of model
 accuracy that is adjusted by accounting for the possibility of a correct
 prediction by chance alone. It ranges from 0 to 1, and can be
 interpreted using the following thresholds:</p>
@@ -983,12 +983,12 @@ m = LogisticRegression(random_state=12345, max_iter=1000, fit_intercept = True, 
 limitation of the sklearn python library is that we cannot easily access
 the output of the model. Instead, we immediately estimate performance
 metrics based on the testing dataset and evaluate accordingly. If you’d
-like to see the output of your model, I recommend re-estimating using
+like to see the output of your model, I recommend re-estimating it using
 the statsmodel.api library. I won’t do it here, since we’re not
 particularly interested in interpreting coefficients, but on the overall
 predictive ability of our model. I also trust that you can do that
-yourself, given that we have an example of the statsmodel.api usage in
-the Linear Regression tutorial. <br></p>
+yourself, given that we have an example of how to use the statsmodel.api
+library in the Linear Regression tutorial. <br></p>
 <p>Also, please note that the Logistic Regression algorithm included in
 the sklearn library has more capabilities than a simple logistic
 regression function. You might have already seen that given that we had
@@ -1028,14 +1028,14 @@ class="math inline">\(0.8\)</span>. The high score indicates that our
 classification algorithm is highly accurate.</p></li>
 <li><p>We have printed a confusion matrix.If you need a reminder of what
 each cell in the 2x2 matrix represents, recall that the structure of our
-target variable is [<span class="math inline">\(0,1\)</span>].
+target variable is [<span class="math inline">\(0[N],1[Y]\)</span>].
 Therefore, the first cell would be the intersection of Predicted <span
 class="math inline">\(0\)</span> vs Observed <span
 class="math inline">\(0\)</span> (or True Negative) = <span
-class="math inline">\(546\)</span>, the fourth cell would be the
+class="math inline">\(530\)</span>, the fourth cell would be the
 intersection of Predicted <span class="math inline">\(1\)</span> vs
 Observed <span class="math inline">\(1\)</span> (or True Positive) =
-<span class="math inline">\(1292\)</span>. These guys are the
+<span class="math inline">\(1306\)</span>. These guys are the
 predictions that have hit the mark! On the other hand, the second cell
 would be the intersection of Predicted <span
 class="math inline">\(0\)</span> vs Observed <span
@@ -1071,17 +1071,17 @@ weighted mean that can be used to compare different classification
 models (and not necessarily a measure of global accuracy). It is
 computed from the two previous measures: 2 * (Recall * Precision) /
 (Recall + Precision). Results are similar as above, better prediction
-ability for the poor than the non-poor. <br> Overall, we seem to be good
-at predicting <span class="math inline">\(1\)</span> instances, but less
-so for <span class="math inline">\(0\)</span> instances. We are indeed
-interested in predicting who is poor (<span
-class="math inline">\(1\)</span>) so perhaps given the scores (all very
-close to <span class="math inline">\(1\)</span>) of all our metrics, we
-are doing well. However, if we are unable to perform equally well for
-both categories, then we may still misallocate public resources.
-<br></li>
+ability for the poor than the non-poor.</li>
 </ul></li>
 </ul>
+<p><br> Overall, we seem to be good at predicting <span
+class="math inline">\(1\)</span> instances, but less so for <span
+class="math inline">\(0\)</span> instances. We are indeed interested in
+predicting who is poor (<span class="math inline">\(1\)</span>) so
+perhaps given the scores (all very close to <span
+class="math inline">\(1\)</span>) of all our metrics, we are doing well.
+However, if we are unable to perform equally well for both categories,
+then we may still misallocate public resources. <br></p>
 <p><strong>Model Visualisation</strong></p>
 <p>To conclude our evaluation, let’s compute the ROC AUC:</p>
 <pre class="python"><code># Compute the ROC curve
@@ -1114,8 +1114,8 @@ class="math inline">\(1\)</span>).</p>
 <p><strong>Conclusion</strong> <br></p>
 <p>How did our classification model do? Is a logistic regression the
 right algorithm? I trust you can form your own judgement based on the
-performance metrics above. Personally, I think we only marginally
-improved from a linear regression, and perhaps we can do better with
+performance metrics above. Personally, I think we have definitely
+improved from a linear regression, but perhaps we can do better with
 Ensemble Learning techniques!</p>
 </div>
 <div id="practice-at-home" class="section level3">
