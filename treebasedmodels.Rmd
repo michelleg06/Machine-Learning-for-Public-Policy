@@ -54,7 +54,7 @@ Some discussion points before the practical:
 As always, start by opening the libraries that you'll need to reproduce the script below. We will continue to use the Caret library for machine learning purposes, and some other general libraries for data wrangling and visualisation. 
 <br>
 
-```{r, message=FALSE, cache=TRUE}
+```{r, message=FALSE}
 rm(list = ls()) # this line cleans your Global Environment.
 setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy") # set your working directory
 
@@ -83,7 +83,7 @@ For this exercise, we will skip all the data pre-processing steps. At this point
 
 <h3> Data Split and Fit </h3>
 
-```{r, echo=FALSE, cache=TRUE}
+```{r, echo=FALSE}
 # object:vector that contains the names of the variables that we want to get rid of (notice this time lnzline is still there)
 cols <- c("ea", "EA", "psu","hhwght", "strataid", "case_id","eatype")
 
@@ -117,7 +117,7 @@ data_malawi <- data_malawi[,-c(1,31)] # delete columns no. 1 and 31 from the dat
 
 ```
 
-```{r, cache=TRUE}
+```{r}
 
 
 set.seed(1234) # ensures reproducibility of our data split
@@ -154,7 +154,7 @@ If you read the final box of the print() output, you'll notice that, given our i
 <h3> Out-of-sample predictions</h3>
 <br>
 
-```{r, cache=TRUE}
+```{r}
 
 # make predictions using the trained model and the test dataset
 
@@ -174,7 +174,7 @@ Based on our out-of-sample predictions, the Random Forest algorithm seems to yie
 <br>
 
 We can try to improve our Random Forest model by fine-tuning two parameters: grid and cross-validation
-```{r, cache=TRUE}
+```{r}
 
 # prepare the grid (create a larger random draw space)
 
@@ -208,7 +208,7 @@ print(rf_train_tuned)
 Fine tuning parameters has not done much for our in-sample model. The chosen mtry value and splitting rule were the same. The only parameter where I see improvement is in the (training set) Kappa, from $0.55$ to $0.56$. Will out of sample predictions improve?
 <br>
 
-```{r, cache=TRUE}
+```{r}
 # make predictions using the trained model and the test dataset
 
 set.seed(12345)
@@ -231,7 +231,7 @@ These results also show that the biggest prediction improvements happen when we 
 
 To close the chapter, let's have a quick look at the sort of plots we can make with a Random Forest algorithm.
 
-```{r, cache=TRUE}
+```{r}
 # we'll need to re-estimate the rf model using rpart
 
 MyRandomForest <- rpart(poor ~ ., data = Train_df)
@@ -249,12 +249,12 @@ The fancy Rpart Plot returns the flow chart that we have now learned to call a d
 As always, start by opening the libraries that you'll need to reproduce the script below. We will continue to use the scikit-learn library for machine learning purposes, and some other general libraries for data wrangling and visualisation. 
 <br>
 
-```{r, setup, include = FALSE, cache=TRUE}
+```{r, setup, include = FALSE}
 library(reticulate)
 use_miniconda("/Users/michellegonzalez/Library/r-miniconda-arm64", required = T)
 ```
 
-```{python, cache=TRUE}
+```{python}
 #==== Python version: 3.10.12 ====#
 
 # Opening libraries
@@ -295,7 +295,7 @@ For this exercise, we will skip all the data pre-processing steps. At this point
 
 <h3> Data Split and Fit </h3>
 
-```{python, echo=FALSE, cache=TRUE}
+```{python, echo=FALSE}
 # preparing the dataset
 lnzline = malawi['lnzline']
 
@@ -331,7 +331,7 @@ malawi = malawi.drop(cont_target , axis=1)
 
 Let's use a simple 80:20 split for train and test data subsets. 
 
-```{python, cache=TRUE}
+```{python}
 # First, recall the df structure
 malawi.info() # returns the column number, e.g. hhsize = column number 0, hhsize2 = 1... etc.
 
@@ -344,7 +344,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 Now, let's fit a Random Forest model:
 
-```{python, cache=TRUE}
+```{python}
 # data fit: fit a random forest model
 
 rf = RandomForestClassifier(random_state=42) # empty random forest object
@@ -358,7 +358,7 @@ We have now successfully trained a Random Forest model, and there is no need to 
 <h3> Out-of-sample predictions</h3>
 <br>
 
-```{python, cache=TRUE}
+```{python}
 
 # predict our test-dataset target variable based on the trained model
 
@@ -384,7 +384,7 @@ Based on our out-of-sample predictions, the Random Forest algorithm seems to yie
 
 To improve the performance of our random forest model, we can try hyperparameter tuning. You can think of the process as optimising the learning model by defining the settings that will govern the learning process of the model. In Python, and for a random forest model, we can use RandomizedSearchCV to find the optimal parameters within a range of parameters. 
 
-```{python, cache=TRUE}
+```{python}
 # define hyperparameters and their ranges in a "parameter_distance" dictionary
 
 parameter_distance = {'n_estimators': randint(50,500),
@@ -400,7 +400,7 @@ parameter_distance = {'n_estimators': randint(50,500),
 There are other hyperparameters, but a search of the optimal value of these is a good start to our model optimisation!
 <br>
 
-```{python, cache=TRUE}
+```{python}
 
 # Please note that the script below might take a while to run (don't be alarmed if you have to wait a couple of minutes)
 
@@ -422,7 +422,7 @@ print('Best random forest hyperparameters:',  random_search.best_params_)
 
 **Now we can re-train our model using the retrieved hyperparameters and evaluate the out-of-sample-predictions of the model.**
 
-```{python, cache=TRUE}
+```{python}
 
 # for simplicity, store the best parameters again in a variable called x
 x = random_search.best_params_
@@ -456,7 +456,7 @@ These results show that the biggest prediction improvements happen when we make 
 To close the chapter, let's have a quick look at the sort of plots we can make with a Random Forest algorithm.
 While we cannot visualise the entirety of the forest, we can certainly have a look at the first two or three trees in our forest.
 
-```{python, cache=TRUE}
+```{python}
 
 # Select the first (recall in python, the firs element is 0) decision-tree to display from our random forest object:
 # (Alternatively, use a for-loop to display the first two, three, four... trees)
