@@ -130,20 +130,11 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - Dietrich et al. (2022) - [Economic Development, weather shocks, and child marriage in South Asia: A machine learning approach.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0271373)
 
-## 5. Neural Networks
+<span style="color: orange;"> **Social hours: Wednesday, January 31, 4pm CET / 9am GMT-6. Join us online at [The ML4PP Gather Town](https://app.gather.town/app/oHbUVQSaCs7SOToI/ML%20for%20Public%20Policy)** Please register for a slot in the following [link](https://docs.google.com/spreadsheets/d/1rZLRX7GX5vEveb3GmTv-KYUY-oj14QUVLaNH4XyfAps/edit?usp=sharing)</span>
 
-    ·  	The concept of a neuron
-    ·  	Network Layers
-    ·  	Neural Network Architecture
+## 5. Fair Machine Learning / Ethics
 
-**Release date: 25 January, 2024.**
-
-**Instructor:** [Dr. Emanuele Pugliese](https://scholar.google.com/citations?user=6lDNFOYAAAAJ&hl=en) and [Prof. Dr. Robin Cowan](https://ideas.repec.org/e/pco61.html)
-
-## 6. Fair Machine Learning / Ethics
-
-    ·  	An introduction to Statistical Learning, Chapter 3, 5, 6 8
-    ·  	Indicators
+    ·  	Common Machine Learning algorithms in (public policy) action
     ·  	Black box algorithms
     ·  	Biases
     ·  	Ethical challenges
@@ -158,12 +149,23 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 - [Fairness and Machine Learning: Limitations and Opportunities](https://fairmlbook.org/), Chapter 4.
 
 
-**Release date: 15 February, 2024.**
+**Release date: 30 January, 2024.**
 
 **Instructor:**  [Dr. Juba Ziani](https://www.isye.gatech.edu/users/juba-ziani)
 
 
+## 6. Neural Networks
 
+    ·  	Neural Network Architecture: neurons and layers
+    ·   Inputs and output: the activation function (sigmoid, tahn...)
+
+**Release date: 15 February, 2024.**
+
+**Instructor:** [Dr. Emanuele Pugliese](https://scholar.google.com/citations?user=6lDNFOYAAAAJ&hl=en) and [Prof. Dr. Robin Cowan](https://ideas.repec.org/e/pco61.html)
+
+**Optional Readings**
+
+- Chatsiou and Mikhaylov (2020). [Deep Learning for Political Science](https://arxiv.org/pdf/2005.06540.pdf). Arxiv preprint.
 
 <center>
 ```{r, echo=FALSE, fig.cap=" ", out.width = '65%'}
