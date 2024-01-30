@@ -19,15 +19,15 @@ navbar:
         - text: "Classification:Logistic"
           href: classification.html
           icon: fa-solid fa-gears
+        - text: "TreeModels:RandomForests"
+          href: treebasedmodels.html
+          icon: fa-tree
         - text: "Fair ML/Data Ethics"
           href: fairml.html
           icon: fa fa-graduation-cap
         #- text: "Classification"
         #  href: classification.html
         #  icon: fa-gear
-        - text: "TreeModels:RandomForests"
-          href: treebasedmodels.html
-          icon: fa-tree
         - text: "Discussion Board"
           href: discussionboard.html
           icon: fa-solid fa-comments
