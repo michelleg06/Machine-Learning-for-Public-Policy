@@ -360,7 +360,7 @@ with SHARE. You’ll need to specify this is for learning purposes, but
 you won’t be denied it.</p>
 <pre class="r"><code>rm(list = ls()) # this line cleans your Global Environment.
 
-setwd(&quot;~/Desktop/NeuralNets&quot;) # set your working directory
+setwd(&quot;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy&quot;) # set your working directory
 
 # do not forget to install neuralnet and scales, which are packages we haven&#39;t used before
 library(tidyverse) # our favourite data wrangling ackagy 
@@ -871,7 +871,7 @@ names(z4)</code></pre>
 ## plot the first 100 observations
 ## we will use a pairs plot
 plot(head(z4,100))</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
 <pre class="r"><code># you can use the zoom function of the image if you&#39;re replicating this script locally (that way you can read the variable names).
 
 ## look more closely at migrant and vaccination (the others seem to have a good spread)
@@ -1276,7 +1276,7 @@ from graphviz import Digraph
 
 # Uploading data
 
-SHARE = pd.read_csv(&#39;/Users/michellegonzalez/Desktop/NeuralNets/SHARE_subset.csv&#39;)</code></pre>
+SHARE = pd.read_csv(&#39;/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/SHARE_subset.csv&#39;)</code></pre>
 <p><br></p>
 <h3>
 <ol style="list-style-type: decimal">
@@ -1433,9 +1433,9 @@ print(&quot;Confusion Matrix:&quot;, cm)</code></pre>
 <pre><code>## Confusion Matrix: [[ 42 381]
 ##  [ 21 933]]</code></pre>
 <pre class="python"><code>ConfusionMatrixDisplay(confusion_matrix=cm).plot() # create confusion matrix plot</code></pre>
-<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x12ea5cf70&gt;</code></pre>
+<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x125208f70&gt;</code></pre>
 <pre class="python"><code>plt.show() # display confusion matrix plot created above</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>So, the numbers have switched here: <span
 class="math inline">\(2\)</span> is now <span
 class="math inline">\(1\)</span> and <span

@@ -41,7 +41,7 @@ Unfortunately, we are unable to share the dataset ourselves. However, if you wis
 ```{r, message=FALSE}
 rm(list = ls()) # this line cleans your Global Environment.
 
-setwd("~/Desktop/NeuralNets") # set your working directory
+setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy") # set your working directory
 
 # do not forget to install neuralnet and scales, which are packages we haven't used before
 library(tidyverse) # our favourite data wrangling ackagy 
@@ -56,10 +56,6 @@ load("SHARE_DATA.rda")
 ##  Put it into a structure with an easy name, the remove the original
 z <- easySHARE_rel8_0_0
 rm(easySHARE_rel8_0_0)
-
-```
-```{r, include=FALSE}
-setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy") # set your working directory
 
 ```
 
@@ -467,7 +463,7 @@ from graphviz import Digraph
 
 # Uploading data
 
-SHARE = pd.read_csv('/Users/michellegonzalez/Desktop/NeuralNets/SHARE_subset.csv')
+SHARE = pd.read_csv('/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/SHARE_subset.csv')
 
 ```
 <br>
