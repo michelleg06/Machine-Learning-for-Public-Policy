@@ -25,9 +25,9 @@ navbar:
         - text: "Fair ML/Data Ethics"
           href: fairml.html
           icon: fa fa-graduation-cap
-        #- text: "Classification"
-        #  href: classification.html
-        #  icon: fa-gear
+        - text: "Neural Networks"
+          href: NeuralNets.html
+          icon: fa-light fa-chart-network
         - text: "Discussion Board"
           href: discussionboard.html
           icon: fa-solid fa-comments

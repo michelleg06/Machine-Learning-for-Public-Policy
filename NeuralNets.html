@@ -11,7 +11,7 @@
 
 
 
-<title>Tree-based models</title>
+<title>An Introduction to Neural Networks</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -32,6 +32,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -305,32 +306,1158 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Tree-based models</h1>
+<h1 class="title toc-ignore">An Introduction to Neural Networks</h1>
 
 </div>
 
 
-<div id="neural-networks"
+<style>
+    body {
+    text-align: justify}
+</style>
+<div id="what-are-neural-networks"
 class="section level2 tabset tabset-fade tabset-pills">
-<h2 class="tabset tabset-fade tabset-pills">** Neural Networks **</h2>
-<p><strong>A general overview of Neural Networks</strong></p>
+<h2 class="tabset tabset-fade tabset-pills">What are neural
+networks?</h2>
+<p><strong>An intuitive introduction to Neural Networks</strong></p>
+<p>In this session, Prof. Dr. Robin Cowan will give is an intuitive
+introduction to neural networks. He has also prepared an exercise using
+data from <a href="https://share-eric.eu/">SHARE, the Survey of Health,
+Ageing and Retirement in Europe</a>. Please watch his video-lesson to
+get the intuition behind neural network algorithms and you can then
+follow policy-relevant application: predicting income-vulnerable older
+people in Europe.</p>
+<center>
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/xKN-5jm2kCI" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</center>
+<p><strong>Why would being able to predict what will make an older
+person struggle financially be policy-relevant?</strong></p>
+<p>This is a discussion point that you can explore. But you might want
+to investigate what the average old-age pension is in some European
+countries, and what the average cost of living is. After working for
+more than half of your life, I’m sure you’d like to live
+comfortably…</p>
 <div id="r-practical" class="section level3">
 <h3><strong>R practical</strong></h3>
+<p><br> As always, start by opening the libraries that you’ll need to
+reproduce the script below. <br></p>
+<p>Unfortunately, we are unable to share the dataset ourselves. However,
+if you wish to replicate this exercise at home (and use one of the many
+target variables that Robin has proposed to see how our model fares for
+those), you can request access to the dataset by creating an account
+with SHARE. You’ll need to specify this is for learning purposes, but
+you won’t be denied it.</p>
+<pre class="r"><code>rm(list = ls()) # this line cleans your Global Environment.
+
+setwd(&quot;~/Desktop/NeuralNets&quot;) # set your working directory
+
+# do not forget to install neuralnet and scales, which are packages we haven&#39;t used before
+library(tidyverse) # our favourite data wrangling ackagy 
+library(neuralnet) # a package specific for neural networks
+library(scales)    # to control the appearance of axis and legend labels
+library(skimr)     # dataset summary
+
+# import data
+load(&quot;SHARE_DATA.rda&quot;)
+## Notice that we&#39;re using the load() function, this is because the dataset is in .rda format, the standard R dataset format
+
+##  Put it into a structure with an easy name, the remove the original
+z &lt;- easySHARE_rel8_0_0
+rm(easySHARE_rel8_0_0)</code></pre>
+<p>You can explore the dataset now (and refer to the SHARE website if
+you have any questions about the variables).</p>
+<pre class="r"><code>names(z)</code></pre>
+<pre><code>##   [1] &quot;mergeid&quot;          &quot;hhid&quot;             &quot;coupleid&quot;        
+##   [4] &quot;wave&quot;             &quot;wavepart&quot;         &quot;int_version&quot;     
+##   [7] &quot;int_year&quot;         &quot;int_month&quot;        &quot;country&quot;         
+##  [10] &quot;country_mod&quot;      &quot;language&quot;         &quot;female&quot;          
+##  [13] &quot;dn002_mod&quot;        &quot;dn003_mod&quot;        &quot;dn004_mod&quot;       
+##  [16] &quot;age&quot;              &quot;birth_country&quot;    &quot;citizenship&quot;     
+##  [19] &quot;iv009_mod&quot;        &quot;q34_re&quot;           &quot;isced1997_r&quot;     
+##  [22] &quot;eduyears_mod&quot;     &quot;mar_stat&quot;         &quot;hhsize&quot;          
+##  [25] &quot;partnerinhh&quot;      &quot;int_partner&quot;      &quot;age_partner&quot;     
+##  [28] &quot;gender_partner&quot;   &quot;mother_alive&quot;     &quot;father_alive&quot;    
+##  [31] &quot;siblings_alive&quot;   &quot;ch001_&quot;           &quot;ch021_mod&quot;       
+##  [34] &quot;ch007_hh&quot;         &quot;ch007_km&quot;         &quot;sp002_mod&quot;       
+##  [37] &quot;sp003_1_mod&quot;      &quot;sp003_2_mod&quot;      &quot;sp003_3_mod&quot;     
+##  [40] &quot;sp008_&quot;           &quot;sp009_1_mod&quot;      &quot;sp009_2_mod&quot;     
+##  [43] &quot;sp009_3_mod&quot;      &quot;books_age10&quot;      &quot;maths_age10&quot;     
+##  [46] &quot;language_age10&quot;   &quot;vaccinated&quot;       &quot;childhood_health&quot;
+##  [49] &quot;sphus&quot;            &quot;chronic_mod&quot;      &quot;casp&quot;            
+##  [52] &quot;euro1&quot;            &quot;euro2&quot;            &quot;euro3&quot;           
+##  [55] &quot;euro4&quot;            &quot;euro5&quot;            &quot;euro6&quot;           
+##  [58] &quot;euro7&quot;            &quot;euro8&quot;            &quot;euro9&quot;           
+##  [61] &quot;euro10&quot;           &quot;euro11&quot;           &quot;euro12&quot;          
+##  [64] &quot;eurod&quot;            &quot;bfi10_extra_mod&quot;  &quot;bfi10_agree_mod&quot; 
+##  [67] &quot;bfi10_consc_mod&quot;  &quot;bfi10_neuro_mod&quot;  &quot;bfi10_open_mod&quot;  
+##  [70] &quot;hc002_mod&quot;        &quot;hc012_&quot;           &quot;hc029_&quot;          
+##  [73] &quot;maxgrip&quot;          &quot;adlwa&quot;            &quot;adla&quot;            
+##  [76] &quot;iadla&quot;            &quot;iadlza&quot;           &quot;mobilityind&quot;     
+##  [79] &quot;lgmuscle&quot;         &quot;grossmotor&quot;       &quot;finemotor&quot;       
+##  [82] &quot;recall_1&quot;         &quot;recall_2&quot;         &quot;orienti&quot;         
+##  [85] &quot;numeracy_1&quot;       &quot;numeracy_2&quot;       &quot;bmi&quot;             
+##  [88] &quot;bmi2&quot;             &quot;smoking&quot;          &quot;ever_smoked&quot;     
+##  [91] &quot;br010_mod&quot;        &quot;br015_&quot;           &quot;ep005_&quot;          
+##  [94] &quot;ep009_mod&quot;        &quot;ep011_mod&quot;        &quot;ep013_mod&quot;       
+##  [97] &quot;ep026_mod&quot;        &quot;ep036_mod&quot;        &quot;co007_&quot;          
+## [100] &quot;thinc_m&quot;          &quot;income_pct_w1&quot;    &quot;income_pct_w2&quot;   
+## [103] &quot;income_pct_w4&quot;    &quot;income_pct_w5&quot;    &quot;income_pct_w6&quot;   
+## [106] &quot;income_pct_w7&quot;    &quot;income_pct_w8&quot;</code></pre>
+<pre class="r"><code>## and how big it is
+dim(z)</code></pre>
+<pre><code>## [1] 412110    107</code></pre>
+<pre class="r"><code># ==== we can also use our trusted skimr package ==== #
+# skim(z)
+# =================================================== # </code></pre>
+<h3>
+<ol style="list-style-type: decimal">
+<li>Data Preparation
+</h3></li>
+</ol>
+<p>Now we are going to clean up some things in the data to make it
+useful.</p>
+<ul>
+<li><p>Select a subset of the countries: Spain, France, Italy, Germany,
+Poland. These are identified in the data with numbers:</p>
+<pre><code>  + Spain 724; France 250; Italy 380; Germany 276; NL 528; Poland 616</code></pre></li>
+</ul>
+<pre class="r"><code>countries &lt;- c(724, 250, 380, 276, 528, 616)</code></pre>
+<ul>
+<li><p>In the dataset, negative numbers indicate some kind of missing
+data, so we will replace them with NA (R-speak for missing
+values).</p></li>
+<li><p>We then select years since 2013 (let’s focus on the most recent
+cohorts)</p></li>
+<li><p>Restrict our data to observations that have certain qualities: we
+want people who are retired (ep005 ==1).</p></li>
+</ul>
+<pre class="r"><code>z1 &lt;- z %&gt;%
+        filter(country_mod %in% countries )%&gt;% # this line subsets the z dataset to only the countries we&#39;re interested in (expressed in the line above)
+        mutate(across(everything(), function(x){replace(x, which(x&lt;0), NA)})) %&gt;% # this line replaces all values across the entire dataframe that are less than 0 to NA (missing)
+        filter(int_year &gt;=2013) %&gt;% # now we&#39;re subsetting the dataset to the years 2013 and after
+        filter(ep005_ == 1) # and finally, keeping only people old enought for retirement</code></pre>
+<p>At this point you should have decreased the number of observation by
+366431 (new obs. = 45679). z1 now contains a cleaner version of the
+dataset (feel free to delete z)</p>
+<p>PS. The following symbols %&gt;% are called pipe operators. They
+belong to the dplyr packaged, which is masked within the tidyverse. They
+allow you to indicate a series of actions to do to the object in a
+sequence, just as above.</p>
+<p><strong>Now let’s create some variables for our model</strong></p>
+<pre class="r"><code>## Create the variable migrant  
+## change the nature of married to a dummy variable
+## change the nature of our vaccination variable to zero or 1
+
+z1 &lt;- z1 %&gt;%         
+  mutate(migrant = ifelse(birth_country==country,0,1)) %&gt;%
+  mutate(married=ifelse((mar_stat==1 | mar_stat==2),1,0))%&gt;%
+  mutate(vaccinated=ifelse(vaccinated==1,1,0))</code></pre>
+<p>At this point we should have 109 variables (because we created two
+new variables and rewrote 1.</p>
+<p><strong>Select the variables we want in the analysis</strong></p>
+<p>To access the full survey with variable definitions, here’s a <a
+href="https://share-eric.eu/fileadmin/user_upload/Questionnaires/Q-Wave_8/paperverstion_en_GB_8_2_5b.pdf">link
+to the PDF in English</a>.</p>
+<pre class="r"><code>## get rid of crazy income values (the people with high income are not not part of our population of interest (regular folks who need to save for retirement))
+
+## and make our dependent variable (co007, which is whether the household struggles to make ends meet) a factor
+z1 &lt;- z1 %&gt;% 
+        dplyr::select(female,age,married,hhsize,vaccinated,books_age10,maths_age10,language_age10,childhood_health,migrant,eduyears_mod,co007_,thinc_m,eurod,country_mod,iv009_mod) %&gt;%
+        filter(thinc_m &lt; 100000)%&gt;% # people earning above 100,000 are excluded 
+        mutate(co007_ = as.factor(co007_)) 
+
+# z1 should now contain only 16 variables and 37,286 observations (a more manageable subset)</code></pre>
+<p><strong>What is our target variable?</strong></p>
+<p>In the English Questionare of the SHARE dataset, the variable
+asks:</p>
+<pre><code>Thinking of your household&#39;s total monthly income, would you say that your household is able to make ends meet... (Income struggle)
+
+(the possible answers include: )
+
+    1. With great difficulty
+
+    2. With some difficulty 
+
+    3. Fairly easily 
+
+    4. Easily</code></pre>
+<p>Let’s work with this variable to turn this into a classification
+problem.</p>
+<pre class="r"><code>##  aggregate income struggle variable into 2 categories and add to our data
+z1$co007_mod &lt;- z1$co007_ # here we&#39;re just creating a duplicate of the co007_ variable but with a different name
+
+# it&#39;s usually a good idea to manipulate a duplicated variable in case you make a mistake and need to call on the original/untransformed data again
+
+z1$co007_mod[z1$co007_ %in% c(1,2)] &lt;- 1 # if the values in var z1$co007_ are 1 or 2, transform them into 1, store this in our new z1$co007_mod variable
+
+z1$co007_mod[z1$co007_ %in% c(3,4)] &lt;- 2 # if the values in var z1$co007_ are 3 or 4, transform them into 2, store this in our new z1$co007_mod variable
+
+## change the way to factor is defined to have only 2 levels
+z1$co007_mod &lt;- as.factor(as.integer(z1$co007_mod))
+#levels(z1$co007_mod) &lt;- c(1,2)</code></pre>
+<p>Now we have a variable that indicates whether a household struggles
+(1) or doesn’t struggle (2) to make ends meet.</p>
+<p>A different dependent variable could just be income. To make that
+sensible we make income bands (or ‘bins’): var thinc_m directly asks
+annual salary.</p>
+<pre class="r"><code># we&#39;re creating quartiles (to which income quartile do you belong, given your annual salary? the lowest? the highest?)
+z1$inc_bin = cut(z1$thinc_m,quantile(z1$thinc_m,breaks=c(0,0.25,0.5,075,1),na.rm=T))</code></pre>
+<p>We won’t work with the inc_bin (classification) variable, but it’s
+there if you wish to challenge yourself to create a neural network model
+for it.</p>
+<p><strong>Cleaning missing values (recall ML needs a full
+dataset)</strong></p>
+<pre class="r"><code>## get rid of any observation that contains NA
+sum(is.na(z1))</code></pre>
+<pre><code>## [1] 140821</code></pre>
+<pre class="r"><code># we have 140,821 missing values across the entire dataset. You can get a glimpse of which variables have the most missing values with the skim() function
+skim(z1)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">z1</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">37286</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">18</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">15</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="10%" />
+<col width="14%" />
+<col width="8%" />
+<col width="9%" />
+<col width="43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">co007_</td>
+<td align="right">623</td>
+<td align="right">0.98</td>
+<td align="left">FALSE</td>
+<td align="right">4</td>
+<td align="left">4: 12700, 3: 12382, 2: 8843, 1: 2738</td>
+</tr>
+<tr class="even">
+<td align="left">co007_mod</td>
+<td align="right">623</td>
+<td align="right">0.98</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">2: 25082, 1: 11581</td>
+</tr>
+<tr class="odd">
+<td align="left">inc_bin</td>
+<td align="right">318</td>
+<td align="right">0.99</td>
+<td align="left">FALSE</td>
+<td align="right">4</td>
+<td align="left">(2.: 9322, (1.: 9321, (3.: 9321, (0,: 9004</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="9%" />
+<col width="13%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">female</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0.47</td>
+<td align="right">0.50</td>
+<td align="right">0.0</td>
+<td align="right">0.00</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.0</td>
+<td align="left">▇▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">2</td>
+<td align="right">1.00</td>
+<td align="right">73.32</td>
+<td align="right">7.86</td>
+<td align="right">42.2</td>
+<td align="right">67.20</td>
+<td align="right">72.30</td>
+<td align="right">78.80</td>
+<td align="right">102.3</td>
+<td align="left">▁▃▇▃▁</td>
+</tr>
+<tr class="odd">
+<td align="left">married</td>
+<td align="right">208</td>
+<td align="right">0.99</td>
+<td align="right">0.71</td>
+<td align="right">0.45</td>
+<td align="right">0.0</td>
+<td align="right">0.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.0</td>
+<td align="left">▃▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">hhsize</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2.02</td>
+<td align="right">0.88</td>
+<td align="right">1.0</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="right">2.00</td>
+<td align="right">10.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">vaccinated</td>
+<td align="right">29307</td>
+<td align="right">0.21</td>
+<td align="right">0.93</td>
+<td align="right">0.25</td>
+<td align="right">0.0</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.0</td>
+<td align="left">▁▁▁▁▇</td>
+</tr>
+<tr class="even">
+<td align="left">books_age10</td>
+<td align="right">24733</td>
+<td align="right">0.34</td>
+<td align="right">1.85</td>
+<td align="right">1.11</td>
+<td align="right">1.0</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">3.00</td>
+<td align="right">5.0</td>
+<td align="left">▇▃▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">maths_age10</td>
+<td align="right">25127</td>
+<td align="right">0.33</td>
+<td align="right">2.80</td>
+<td align="right">0.85</td>
+<td align="right">1.0</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">5.0</td>
+<td align="left">▁▃▇▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">language_age10</td>
+<td align="right">25161</td>
+<td align="right">0.33</td>
+<td align="right">2.81</td>
+<td align="right">0.81</td>
+<td align="right">1.0</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">3.00</td>
+<td align="right">5.0</td>
+<td align="left">▁▃▇▂▁</td>
+</tr>
+<tr class="odd">
+<td align="left">childhood_health</td>
+<td align="right">29173</td>
+<td align="right">0.22</td>
+<td align="right">2.33</td>
+<td align="right">1.03</td>
+<td align="right">1.0</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">3.00</td>
+<td align="right">6.0</td>
+<td align="left">▇▅▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">migrant</td>
+<td align="right">250</td>
+<td align="right">0.99</td>
+<td align="right">1.00</td>
+<td align="right">0.00</td>
+<td align="right">1.0</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">1.0</td>
+<td align="left">▁▁▇▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">eduyears_mod</td>
+<td align="right">2542</td>
+<td align="right">0.93</td>
+<td align="right">10.21</td>
+<td align="right">4.44</td>
+<td align="right">0.0</td>
+<td align="right">7.00</td>
+<td align="right">10.00</td>
+<td align="right">13.00</td>
+<td align="right">25.0</td>
+<td align="left">▃▇▇▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">thinc_m</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">25379.33</td>
+<td align="right">16076.56</td>
+<td align="right">0.0</td>
+<td align="right">14357.39</td>
+<td align="right">21731.12</td>
+<td align="right">32783.51</td>
+<td align="right">99829.1</td>
+<td align="left">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">eurod</td>
+<td align="right">1485</td>
+<td align="right">0.96</td>
+<td align="right">2.57</td>
+<td align="right">2.31</td>
+<td align="right">0.0</td>
+<td align="right">1.00</td>
+<td align="right">2.00</td>
+<td align="right">4.00</td>
+<td align="right">12.0</td>
+<td align="left">▇▃▂▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">country_mod</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">434.20</td>
+<td align="right">184.53</td>
+<td align="right">250.0</td>
+<td align="right">276.00</td>
+<td align="right">380.00</td>
+<td align="right">616.00</td>
+<td align="right">724.0</td>
+<td align="left">▇▃▂▂▃</td>
+</tr>
+<tr class="odd">
+<td align="left">iv009_mod</td>
+<td align="right">1269</td>
+<td align="right">0.97</td>
+<td align="right">3.68</td>
+<td align="right">1.34</td>
+<td align="right">1.0</td>
+<td align="right">3.00</td>
+<td align="right">4.00</td>
+<td align="right">5.00</td>
+<td align="right">5.0</td>
+<td align="left">▂▂▃▆▇</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># we&#39;ll use the drop_na() function, which will delete any row if it has at least one missing value (be careful when doing this in your own data cleaning)
+z2 &lt;- drop_na(z1)
+dim(z2)</code></pre>
+<pre><code>## [1] 6881   18</code></pre>
+<pre class="r"><code># z2 is a small subset of the original dataset which contains i) no missing values, ii) only relevant variables for our model on retirement, and iii) 6,881 observations</code></pre>
+<p><strong>Rescaling data</strong></p>
+<pre class="r"><code>## age, years of education and income (thinc_m) have a big range, so let&#39;s rescale it to  between plus and minus 1
+## scaling allows us to compare data that aren&#39;t measured in the same way
+z4 &lt;- z2 %&gt;%
+        mutate(ScaledAge = rescale(age,to=c(-1,1)))%&gt;%
+        mutate(EduYears=rescale(eduyears_mod,to=c(-1,1)))%&gt;%
+        mutate(income = rescale(thinc_m,to=c(-1,1)))
+# z4 is now the working dataset, with 3 more (scaled) variables
+
+## check what we have
+summary(z4$ScaledAge)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -1.00000 -0.16230  0.01222  0.04492  0.22862  1.00000</code></pre>
+<pre class="r"><code>## check what variables we now have in the data
+names(z4)</code></pre>
+<pre><code>##  [1] &quot;female&quot;           &quot;age&quot;              &quot;married&quot;          &quot;hhsize&quot;          
+##  [5] &quot;vaccinated&quot;       &quot;books_age10&quot;      &quot;maths_age10&quot;      &quot;language_age10&quot;  
+##  [9] &quot;childhood_health&quot; &quot;migrant&quot;          &quot;eduyears_mod&quot;     &quot;co007_&quot;          
+## [13] &quot;thinc_m&quot;          &quot;eurod&quot;            &quot;country_mod&quot;      &quot;iv009_mod&quot;       
+## [17] &quot;co007_mod&quot;        &quot;inc_bin&quot;          &quot;ScaledAge&quot;        &quot;EduYears&quot;        
+## [21] &quot;income&quot;</code></pre>
+<pre class="r"><code>## let&#39;s look at the data just to see if there is anything observable at the start
+## plot the first 100 observations
+## we will use a pairs plot
+plot(head(z4,100))</code></pre>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<pre class="r"><code># you can use the zoom function of the image if you&#39;re replicating this script locally (that way you can read the variable names).
+
+## look more closely at migrant and vaccination (the others seem to have a good spread)
+table(z4$migrant)</code></pre>
+<pre><code>## 
+##    1 
+## 6881</code></pre>
+<pre class="r"><code>## there is only one value so no point in including it
+## look at vaccination
+table(z4$vaccinated)</code></pre>
+<pre><code>## 
+##    0    1 
+##  367 6514</code></pre>
+<p><strong>Select a subset of the data, including only relevant
+variables</strong></p>
+<pre class="r"><code>z5 &lt;- z4 %&gt;%
+            dplyr::select(female,married,hhsize,books_age10, maths_age10, language_age10, EduYears,eurod, country_mod,iv009_mod, inc_bin, co007_,co007_mod)</code></pre>
+<p>Notice that we create new datasets everytime we subset, instead of
+rewriting the old one. This is probably a good idea in case we need to
+take a step back.</p>
+<p>To be able to work with the neuralnet package, it’s best to have
+dummy variables instead of one variable with various categories. So,
+let’s start that process:</p>
+<pre class="r"><code>## now change country to dummy variables
+country &lt;- as.factor(z5$country_mod)
+cmat    &lt;- model.matrix(~0+country)</code></pre>
+<p>The model.matrix() function takes a formula and a data frame (or
+similar structure) and returns a matrix with rows corresponding to cases
+and columns to predictor variables.</p>
+<pre class="r"><code>## add to z5
+z5 &lt;- cbind(z5,cmat)
+head(z5)</code></pre>
+<pre><code>##        female married hhsize books_age10 maths_age10 language_age10 EduYears
+## 104800      1       1      2           1           3              3    -0.12
+## 104803      0       1      2           1           2              3    -0.12
+## 104808      1       1      2           1           3              3     0.12
+## 104812      0       1      2           1           3              3    -0.04
+## 104816      0       1      2           1           3              3     0.20
+## 104852      0       0      1           3           4              3    -0.12
+##        eurod country_mod iv009_mod             inc_bin co007_ co007_mod
+## 104800     5         276         5 (1.44e+04,2.17e+04]      2         1
+## 104803     5         276         5 (1.44e+04,2.17e+04]      2         1
+## 104808     3         276         5 (3.28e+04,9.98e+04]      4         2
+## 104812     0         276         5 (3.28e+04,9.98e+04]      4         2
+## 104816     4         276         4 (3.28e+04,9.98e+04]      4         2
+## 104852     3         276         4 (1.44e+04,2.17e+04]      2         1
+##        country250 country276 country380 country528 country724
+## 104800          0          1          0          0          0
+## 104803          0          1          0          0          0
+## 104808          0          1          0          0          0
+## 104812          0          1          0          0          0
+## 104816          0          1          0          0          0
+## 104852          0          1          0          0          0</code></pre>
+<pre class="r"><code>class(z5)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>To finalise the data preparation, let’s do some variable
+cleaning:</p>
+<pre class="r"><code>## fix level names of inc_bin
+levels(z5$inc_bin) &lt;- c(&quot;first&quot;,&quot;second&quot;,&quot;third&quot;,&quot;fourth&quot;)
+names(z5)</code></pre>
+<pre><code>##  [1] &quot;female&quot;         &quot;married&quot;        &quot;hhsize&quot;         &quot;books_age10&quot;   
+##  [5] &quot;maths_age10&quot;    &quot;language_age10&quot; &quot;EduYears&quot;       &quot;eurod&quot;         
+##  [9] &quot;country_mod&quot;    &quot;iv009_mod&quot;      &quot;inc_bin&quot;        &quot;co007_&quot;        
+## [13] &quot;co007_mod&quot;      &quot;country250&quot;     &quot;country276&quot;     &quot;country380&quot;    
+## [17] &quot;country528&quot;     &quot;country724&quot;</code></pre>
+<h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Model Preparation
+</h3></li>
+</ol>
+<p>This time around, we’re not using caret functions to split our data,
+or define our target and predictors. We’ll do this “manually”. The first
+thing we want to do, is create and object of the form [target ~ x1 + x2
++ …+ xk]. This is how R reads target variables (on the left hand side of
+the squiggle) and predictors (on the right hand side of the squiggle and
+separated by + signs).</p>
+<p><strong>Prepare model</strong></p>
+<pre class="r"><code>## now make the formula we want to estimate
+myform0 &lt;- paste(names(z5)[c(1:8,10,14:18)],collapse=&quot; + &quot;)
+# the object myform0 contains all the predictor variables for our neural network model
+
+myform &lt;- paste( &quot;co007_mod&quot;,c(myform0),sep=&quot; ~ &quot;)
+
+all.equal(myform,myform0) # returns one mistmatch.</code></pre>
+<pre><code>## [1] &quot;1 string mismatch&quot;</code></pre>
+<pre class="r"><code># myform includes the income variable as a predictor, so it&#39;s all our previous predictors + co007_mod (as target!)
+
+## look at the formula to make sure we got what we wanted
+print(myform)</code></pre>
+<pre><code>## [1] &quot;co007_mod ~ female + married + hhsize + books_age10 + maths_age10 + language_age10 + EduYears + eurod + iv009_mod + country250 + country276 + country380 + country528 + country724&quot;</code></pre>
+<p><strong>Data Split: train and test</strong></p>
+<pre class="r"><code>## set the random seed so we can duplicate things if we want to 
+set.seed(4)
+
+# we&#39;re doing this manually, instead of using our trusted caret() package
+trainRows &lt;- sample(1:nrow(z5),0.8*nrow(z5)) # 80% of data to train
+testRows  &lt;- (1:nrow(z5))[-trainRows]
+
+## now we have training data: trainz5; and testing data: testz5
+trainz5   &lt;- z5[trainRows,]
+testz5    &lt;- z5[testRows,]</code></pre>
+<p><strong>Train our neural network model!</strong></p>
+<pre class="r"><code>set.seed(4)
+
+model &lt;- neuralnet(
+            myform, ## use the formula we defined above
+            data = trainz5, ## tell it what data to use
+            hidden=c(6), ## define the number and size of hidden layers: here we have one layer with 5 nodes in it
+            linear.output = F, # F to show this is a classification problem (since our predictor is a factor) T returns a linear regression output. This also means that the (default) activation function is the sigmoid!
+            stepmax = 1000000, ## how many iterations to use to train it (1 million, but it converges before that mark)
+            lifesign=&quot;full&quot;,  ## get some output while it works
+            algorithm = &quot;rprop+&quot;, # it is a gradient descent algorithm &quot;Resilient Propagation&quot;. 
+            learningrate.limit = NULL,
+            learningrate.factor =
+                list(minus = 0.5, plus = 1.2),
+            threshold = 0.01
+            )</code></pre>
+<pre><code>## hidden: 6    thresh: 0.01    rep: 1/1    steps:    1000  min thresh: 1.22795192815468
+##                                                    2000  min thresh: 0.408629618104168
+##                                                    3000  min thresh: 0.255375732991587
+##                                                    4000  min thresh: 0.255375732991587
+##                                                    5000  min thresh: 0.206075288342767
+##                                                    6000  min thresh: 0.181738092119449
+##                                                    7000  min thresh: 0.142443872190076
+##                                                    8000  min thresh: 0.108056969567729
+##                                                    9000  min thresh: 0.0965760103945601
+##                                                   10000  min thresh: 0.0924441234865121
+##                                                   11000  min thresh: 0.0924441234865121
+##                                                   12000  min thresh: 0.0924441234865121
+##                                                   13000  min thresh: 0.0903834987550307
+##                                                   14000  min thresh: 0.0903834987550307
+##                                                   15000  min thresh: 0.0903834987550307
+##                                                   16000  min thresh: 0.0903834987550307
+##                                                   17000  min thresh: 0.0903834987550307
+##                                                   18000  min thresh: 0.0903834987550307
+##                                                   19000  min thresh: 0.0903834987550307
+##                                                   20000  min thresh: 0.0903834987550307
+##                                                   21000  min thresh: 0.0903834987550307
+##                                                   22000  min thresh: 0.0903834987550307
+##                                                   23000  min thresh: 0.0903834987550307
+##                                                   24000  min thresh: 0.0903834987550307
+##                                                   25000  min thresh: 0.0903834987550307
+##                                                   26000  min thresh: 0.0903834987550307
+##                                                   27000  min thresh: 0.0903834987550307
+##                                                   28000  min thresh: 0.0903834987550307
+##                                                   29000  min thresh: 0.0903834987550307
+##                                                   30000  min thresh: 0.0903834987550307
+##                                                   31000  min thresh: 0.0903834987550307
+##                                                   32000  min thresh: 0.0903834987550307
+##                                                   33000  min thresh: 0.0903834987550307
+##                                                   34000  min thresh: 0.0903834987550307
+##                                                   35000  min thresh: 0.0903834987550307
+##                                                   36000  min thresh: 0.0903834987550307
+##                                                   37000  min thresh: 0.0903834987550307
+##                                                   38000  min thresh: 0.0903834987550307
+##                                                   39000  min thresh: 0.080031973683847
+##                                                   40000  min thresh: 0.080031973683847
+##                                                   41000  min thresh: 0.080031973683847
+##                                                   42000  min thresh: 0.0781654073237371
+##                                                   43000  min thresh: 0.077217534035844
+##                                                   44000  min thresh: 0.077217534035844
+##                                                   45000  min thresh: 0.0663306621049722
+##                                                   46000  min thresh: 0.0663306621049722
+##                                                   47000  min thresh: 0.0663306621049722
+##                                                   48000  min thresh: 0.0663306621049722
+##                                                   49000  min thresh: 0.0640628426880909
+##                                                   50000  min thresh: 0.0549832161036877
+##                                                   51000  min thresh: 0.0549832161036877
+##                                                   52000  min thresh: 0.0549832161036877
+##                                                   53000  min thresh: 0.0535065197695844
+##                                                   54000  min thresh: 0.0451843906210169
+##                                                   55000  min thresh: 0.0407706834064874
+##                                                   56000  min thresh: 0.0407706834064874
+##                                                   57000  min thresh: 0.0407706834064874
+##                                                   58000  min thresh: 0.0407706834064874
+##                                                   59000  min thresh: 0.0407706834064874
+##                                                   60000  min thresh: 0.0398750949182902
+##                                                   61000  min thresh: 0.0347740947416519
+##                                                   62000  min thresh: 0.0347740947416519
+##                                                   63000  min thresh: 0.0347740947416519
+##                                                   64000  min thresh: 0.0333526116102184
+##                                                   65000  min thresh: 0.0333526116102184
+##                                                   66000  min thresh: 0.0333526116102184
+##                                                   67000  min thresh: 0.0333526116102184
+##                                                   68000  min thresh: 0.0333526116102184
+##                                                   69000  min thresh: 0.0316000239700686
+##                                                   70000  min thresh: 0.0306565221261171
+##                                                   71000  min thresh: 0.0274365035081705
+##                                                   72000  min thresh: 0.0274365035081705
+##                                                   73000  min thresh: 0.026496818727535
+##                                                   74000  min thresh: 0.026496818727535
+##                                                   75000  min thresh: 0.026496818727535
+##                                                   76000  min thresh: 0.026496818727535
+##                                                   77000  min thresh: 0.026496818727535
+##                                                   78000  min thresh: 0.026496818727535
+##                                                   79000  min thresh: 0.026496818727535
+##                                                   80000  min thresh: 0.026496818727535
+##                                                   81000  min thresh: 0.0259845739797748
+##                                                   82000  min thresh: 0.0259845739797748
+##                                                   83000  min thresh: 0.0259845739797748
+##                                                   84000  min thresh: 0.0240579990735271
+##                                                   85000  min thresh: 0.0226252873882434
+##                                                   86000  min thresh: 0.0226252873882434
+##                                                   87000  min thresh: 0.0221455597930601
+##                                                   88000  min thresh: 0.0221455597930601
+##                                                   89000  min thresh: 0.0221455597930601
+##                                                   90000  min thresh: 0.0221455597930601
+##                                                   91000  min thresh: 0.0203603362622581
+##                                                   92000  min thresh: 0.0200746219013495
+##                                                   93000  min thresh: 0.0200746219013495
+##                                                   94000  min thresh: 0.0200746219013495
+##                                                   95000  min thresh: 0.0200746219013495
+##                                                   96000  min thresh: 0.0200746219013495
+##                                                   97000  min thresh: 0.0163554171793395
+##                                                   98000  min thresh: 0.0163554171793395
+##                                                   99000  min thresh: 0.0163554171793395
+##                                                   1e+05  min thresh: 0.0151167048702273
+##                                                  101000  min thresh: 0.0151167048702273
+##                                                  102000  min thresh: 0.0151167048702273
+##                                                  103000  min thresh: 0.0151167048702273
+##                                                  104000  min thresh: 0.0151167048702273
+##                                                  105000  min thresh: 0.0151167048702273
+##                                                  106000  min thresh: 0.0151167048702273
+##                                                  107000  min thresh: 0.0151167048702273
+##                                                  108000  min thresh: 0.0151167048702273
+##                                                  109000  min thresh: 0.0142885225751462
+##                                                  110000  min thresh: 0.0142885225751462
+##                                                  111000  min thresh: 0.0142885225751462
+##                                                  112000  min thresh: 0.0142885225751462
+##                                                  113000  min thresh: 0.0142885225751462
+##                                                  114000  min thresh: 0.0142885225751462
+##                                                  115000  min thresh: 0.0142455799962317
+##                                                  116000  min thresh: 0.0142455799962317
+##                                                  117000  min thresh: 0.0142455799962317
+##                                                  118000  min thresh: 0.012107497406225
+##                                                  119000  min thresh: 0.012107497406225
+##                                                  120000  min thresh: 0.012107497406225
+##                                                  121000  min thresh: 0.012107497406225
+##                                                  122000  min thresh: 0.012107497406225
+##                                                  123000  min thresh: 0.0108934985445289
+##                                                  124000  min thresh: 0.0108934985445289
+##                                                  125000  min thresh: 0.0108934985445289
+##                                                  126000  min thresh: 0.0108934985445289
+##                                                  127000  min thresh: 0.0108934985445289
+##                                                  128000  min thresh: 0.0108934985445289
+##                                                  129000  min thresh: 0.0108934985445289
+##                                                  130000  min thresh: 0.0108934985445289
+##                                                  131000  min thresh: 0.0108934985445289
+##                                                  132000  min thresh: 0.0108934985445289
+##                                                  133000  min thresh: 0.0108934985445289
+##                                                  134000  min thresh: 0.0108934985445289
+##                                                  135000  min thresh: 0.0108934985445289
+##                                                  136000  min thresh: 0.0108934985445289
+##                                                  137000  min thresh: 0.0101758648461206
+##                                                  138000  min thresh: 0.0101758648461206
+##                                                  139000  min thresh: 0.0101758648461206
+##                                                  140000  min thresh: 0.0101758648461206
+##                                                  141000  min thresh: 0.0101758648461206
+##                                                  142000  min thresh: 0.0101758648461206
+##                                                  143000  min thresh: 0.0101758648461206
+##                                                  143866  error: 944.06645    time: 3.94 mins</code></pre>
+<pre class="r"><code># if you get an error, don&#39;t worry about it. It&#39;s not an issue for our estimation, and it indicates the last iteration (way before 1000000)</code></pre>
+<p>Now, let’s plot our neural network:</p>
+<pre class="r"><code>plot(model)
+
+# notice that this is a vanilla network (no deep learning for us!).</code></pre>
+<br>
+<center>
+<div class="figure">
+<img src="Images/Neural_Network.png" alt=" " width="65%" />
+<p class="caption">
+</p>
+</div>
+</center>
+<p><br></p>
+<p>Now it is time to test our model’s <strong>predictive
+abilities</strong>.</p>
+<pre class="r"><code># use our fitted neural network to try to predict what the income states in our test data
+set.seed(4)
+pred &lt;- predict(model,testz5)</code></pre>
+<p>As before, we will not use the caret package to call the
+ConfusionMatrix function, we’ll do all of it manually. We’ll have to
+manipulate the variables a little, to visualise the confusion matrix in
+a helpful way:</p>
+<pre class="r"><code># add the levels from our target variable as the column names for our predicted values
+colnames(pred) &lt;- levels(testz5$co007_mod)
+
+myLabels  &lt;- colnames(pred) # get the column names from our prediction vectors and store them in an object
+pointPred &lt;- max.col(pred) # find the index of the maximum value of my predictions
+pointPred &lt;- myLabels[pointPred] # add the labels (or column names from our predictions) 
+
+# Now, we&#39;ll store the actual/observed values in an objext as well:
+actual &lt;- testz5$co007_mod
+actual &lt;- as.factor(as.integer(actual)) # make sure these values are read as factors
+
+# Create the Confusion Matrix using the predicted, observed values and the labels
+t1 &lt;- table(actual,pointPred)[,myLabels]
+
+# voilà! manual confusion matrix!
+print(t1)</code></pre>
+<pre><code>##       pointPred
+## actual   1   2
+##      1 134 259
+##      2 114 870</code></pre>
+<p>Now that we have a confusion matrix, we can analyse the performance
+of our neural network model.</p>
+<pre class="r"><code># How many older people struggle to make ends meet?
+prop.table(table(testz5$co007_mod))</code></pre>
+<pre><code>## 
+##         1         2 
+## 0.2854031 0.7145969</code></pre>
+<pre class="r"><code># about 28%... 
+
+# How accurate is our model?
+
+sum(diag(t1))/sum(t1)</code></pre>
+<pre><code>## [1] 0.7291213</code></pre>
+<pre class="r"><code># this returns the proportion of correct predictions! 
+# 72% of correctly predicted income status
+# so, our neural network model does relatively well in predicting whether older people / pensioneers struggle to make ends meet in selected European countries</code></pre>
+<p>If we recall from previous sessions, it is hard to have accurate
+predictions of that of which we have less (struggling older people)…
+look again at the confusion matrix: what do we see? the ratio of correct
+predictions for non-strugglers (2x2) is higher than for the strugglers
+(1x1).</p>
+<p>Let’s remember what information we can obtain from a confusion
+matrix:</p>
+<ul>
+<li><p>True Positives (TP): 134 (actual = 1, predicted = 1)</p></li>
+<li><p>False Negatives (FN): 259 (actual = 1, predicted = 2)</p></li>
+<li><p>False Positives (FP): 114 (actual = 2, predicted = 1)</p></li>
+<li><p>True Negatives (TN): 870 (actual = 2, predicted = 2)</p></li>
+</ul>
+<p>Based on these confusion matrix values (and the formulas provided in
+session 2: logistic classification), we can get our neural network
+model’s performance metrics:</p>
+<ul>
+<li><p>Accuracy: 72.9%. (we got this above!). It is the proportion of
+true results regardless of the case.</p></li>
+<li><p>Recall (Sensitivity): 34.09% (we might want to know this, since
+we’re trying to identify vulnerable elderly people). It is the
+proportion of correctly identified vulnerable cases. The formula (if you
+want to check yourself) is TP/(TP+FN) = 134/(134+259) = 0.340</p></li>
+</ul>
+<p>Alternatively…</p>
+<pre class="r"><code># select the needed values from the confusion matrix t1
+(t1[1,1])/(t1[1,1]+t1[1,2])</code></pre>
+<pre><code>## [1] 0.3409669</code></pre>
+<p><strong>Conclusion</strong></p>
+<p>How did we do? Neural networks are all the rage these days, it’s
+arguably the most famous machine learning algorithm. But don’t be
+fooled, it is still subject to the same data challenges as the rest of
+the algorithms we have explored so far.</p>
 </div>
 <div id="python-practical" class="section level3">
 <h3><strong>Python practical</strong></h3>
+<p><br> As always, start by opening the libraries that you’ll need to
+reproduce the script below. <br></p>
+<p>Unfortunately, we are unable to share the dataset ourselves. However,
+if you wish to replicate this exercise at home (and use one of the many
+target variables that Robin has proposed to see how our model fares for
+those), you can request access to the dataset by creating an account
+with SHARE. You’ll need to specify this is for learning purposes, but
+you won’t be denied it. In the video, Robin tells you which waves of the
+panel he has used. For more information, you should go to the link: <a
+href="https://share-eric.eu/">https://share-eric.eu/</a>. <br></p>
+<p>You’ll notice that today we’re focusing on European citizens. Even
+though Europe is considered the Global North and economically developed,
+social policies still play an important role in making sure its people
+enjoy a good standard of living. Today’s task is to create a predictive
+model for older citizens ready for retirement who struggle to make ends
+meet. We’ll use a neural network algorithm for this. This task will help
+policymakers in Europe plan for pension schemes and retirement policies.
+<br></p>
+<p>Another important note: we’ll work with a clean subset of the data,
+prepared by Robin. The cleaning and preparation was done with R and you
+can take a look at the R practical in this page to see it. We won’t
+repeat the process in Python, since we hope that by now you have a
+general idea of how to to do data wrangling. We’ll jump straight to the
+task! <br></p>
 <pre class="python"><code>#==== Python version: 3.10.12 ====#
 
 # Opening libraries
 
-# PyTorch
-import torch # open source machine learning (ML) framework based on the Python programming language and the Torch library
-import torch.nn as nn # neural network from PyTorch
-
 # scikit-learn
+import sklearn as sk # our trusted Machine Learning library
+from sklearn.model_selection import train_test_split # split the dataset into train and test
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay # returns performance evaluation metrics
+from sklearn.neural_network import MLPClassifier
 
-# numpy
-import numpy as np # a library for numeric analysis</code></pre>
+
+# non-ML libraries
+import numpy as np # a library for numeric analysis
+import random # for random state 
+import csv # a library to read and write csv files 
+import pandas as pd # a library to help us easily navigate and manipulate dataframes
+import seaborn as sns # a data visualisation library
+import matplotlib.pyplot as plt # a data visualisation library
+from scipy.stats import randint # generate random integer
+from graphviz import Digraph
+
+
+# Uploading data
+
+SHARE = pd.read_csv(&#39;/Users/michellegonzalez/Desktop/NeuralNets/SHARE_subset.csv&#39;)</code></pre>
+<p><br></p>
+<h3>
+<ol style="list-style-type: decimal">
+<li>Overview of the data
+</h3></li>
+</ol>
+<p>Let’s take a quick look at what the dataset looks like.</p>
+<pre class="python"><code># let&#39;s start with the general dimensions and variable names
+
+print(SHARE.shape)</code></pre>
+<pre><code>## (6881, 19)</code></pre>
+<pre class="python"><code># and variable names (comma separated)
+
+print(&#39;, &#39;.join(SHARE.columns))</code></pre>
+<pre><code>## Unnamed: 0, female, married, hhsize, books_age10, maths_age10, language_age10, EduYears, eurod, country_mod, iv009_mod, inc_bin, co007_, co007_mod, country250, country276, country380, country528, country724</code></pre>
+<pre class="python"><code># finally, missing values (best be sure!)
+
+SHARE.isnull().sum() # this sums all missing values per vector/variable</code></pre>
+<pre><code>## Unnamed: 0        0
+## female            0
+## married           0
+## hhsize            0
+## books_age10       0
+## maths_age10       0
+## language_age10    0
+## EduYears          0
+## eurod             0
+## country_mod       0
+## iv009_mod         0
+## inc_bin           0
+## co007_            0
+## co007_mod         0
+## country250        0
+## country276        0
+## country380        0
+## country528        0
+## country724        0
+## dtype: int64</code></pre>
+<p>We have <span class="math inline">\(19\)</span> variables and <span
+class="math inline">\(6,881\)</span> observations and no missing values
+in the dataset. Let’s tackle the variables now: Unnamed:0 is an ID tag,
+nothing to worry about. Then, we’ve got some traditional variables in
+socioeconomic analysis: female (or gender), married (or marriage status)
+hhsize (household size), and a few indicators about the person’s
+educational past: books maths and language at age 10. These questions
+ask about a person’s reading, maths and language performance when they
+were 10 years old (arguably a good proxy for educational relevance in
+the household, and thus a predictor of future employment… but take this
+statement with a grain of very salty salt). EduYears directly asks how
+many years a person studied, formally. The next variables are quite
+interesting: eurod is a depression scale, country_mod indicates where in
+Europe the person lives (Spain 724; France 250; Italy 380; Germany 276;
+NL 528; Poland 616); similarly, the variables country* are dummies
+generated from the country_mod variable. And finally, the target
+variable(s): inc_bin was created by Robin, and it indicates whether a
+person is in the first, second, third, or fourth income quartile. We
+will work with co007_ and co007_mod (which was generated from the
+previous variable). Both variables refer to income struggles: <br></p>
+<p>In the English Questionare of the SHARE dataset, the co007_ variable
+asks:</p>
+<pre><code>Thinking of your household&#39;s total monthly income, would you say that your household is able to make ends meet...
+
+    1. With great difficulty 
+    2. With some difficulty 
+    3. Fairly easily 
+    4. Easily</code></pre>
+<p>Which Robin then recoded into a binary variable that takes on the
+value 1 if the person struggles to make ends meet at 2 otherwise
+(co007_mod). By doing so, he’s turned the task into a simple
+classification model with neural networks. <br></p>
+<h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Data Split and Fit
+</h3>
+<br></li>
+</ol>
+<pre class="python"><code># let&#39;s quickly look at the location of the relevant variables
+SHARE.info()</code></pre>
+<pre><code>## &lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+## RangeIndex: 6881 entries, 0 to 6880
+## Data columns (total 19 columns):
+##  #   Column          Non-Null Count  Dtype  
+## ---  ------          --------------  -----  
+##  0   Unnamed: 0      6881 non-null   int64  
+##  1   female          6881 non-null   int64  
+##  2   married         6881 non-null   int64  
+##  3   hhsize          6881 non-null   int64  
+##  4   books_age10     6881 non-null   int64  
+##  5   maths_age10     6881 non-null   int64  
+##  6   language_age10  6881 non-null   int64  
+##  7   EduYears        6881 non-null   float64
+##  8   eurod           6881 non-null   int64  
+##  9   country_mod     6881 non-null   int64  
+##  10  iv009_mod       6881 non-null   int64  
+##  11  inc_bin         6881 non-null   object 
+##  12  co007_          6881 non-null   int64  
+##  13  co007_mod       6881 non-null   int64  
+##  14  country250      6881 non-null   int64  
+##  15  country276      6881 non-null   int64  
+##  16  country380      6881 non-null   int64  
+##  17  country528      6881 non-null   int64  
+##  18  country724      6881 non-null   int64  
+## dtypes: float64(1), int64(17), object(1)
+## memory usage: 1021.5+ KB</code></pre>
+<pre class="python"><code>
+# X = female + married + hhsize + books_age10 + maths_age10 + language_age10 + EduYears + eurod + iv009_mod + country250 + country276 + country380 + country528 + country724
+
+# Y = co007_mod 
+
+X = SHARE.iloc[:, list(range(1, 9)) + [10] + list(range(14, 19))] # since our range is discontinuous, we&#39;ve used a combination of list() and range() to indicate which elemenets from the larger dataset we want contained in X. Also note that range has a start (1 here, so the second position) and and end (with the same example, 9 here, 10th position). Whilst the start is inclusive, the end is exclusive. Which means that the range will only capture elements 1 through 8. That&#39;s why the second range works even though we only have 18 variables ;). 
+y = SHARE.iloc[:, 13] # y is a vector containing our target variable, which is in position 13 of the dataframe
+
+
+# Split data into train and test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=12345) # random_state is for reproducibility purposes</code></pre>
+<p><br> <strong>Now, let’s fit a Neural Network model:</strong> <br></p>
+<pre class="python"><code># Initialise the MLPClassifier (or Multilayer Perceptron Classifier).
+# Despite the name indicating this type of neural network is used for deep learning, it can also be used for simpler classification &quot;vanilla network&quot; tasks
+
+nn_mlp = MLPClassifier(hidden_layer_sizes=(6,), max_iter=100000, activation=&#39;logistic&#39;, solver=&#39;sgd&#39;, random_state=12345) # the solver we&#39;re using here is the stochastic gradient descent. This is not what we used in the R practical, but there&#39;s no equivalent with the scikit-learn package, so if you peak over there, you might find some differences :).
+
+# Train the model
+nn_mlp.fit(X_train, y_train)</code></pre>
+<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>MLPClassifier(activation=&#x27;logistic&#x27;, hidden_layer_sizes=(6,), max_iter=100000,
+              random_state=12345, solver=&#x27;sgd&#x27;)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">MLPClassifier</label><div class="sk-toggleable__content"><pre>MLPClassifier(activation=&#x27;logistic&#x27;, hidden_layer_sizes=(6,), max_iter=100000,
+              random_state=12345, solver=&#x27;sgd&#x27;)</pre></div></div></div></div></div>
+<pre class="python"><code># Predictions on the test dataset
+# Something I haven&#39;t mentioned before is that the predictions are deterministic based on the random state from the initialised model
+pred = nn_mlp.predict(X_test)
+
+# Evaluation of overall the model
+Accuracy = accuracy_score(y_test, pred)
+print(f&quot;Overall Accuracy of our model: {Accuracy}, not bad!&quot;)</code></pre>
+<pre><code>## Overall Accuracy of our model: 0.7080610021786492, not bad!</code></pre>
+<p>It seems like we’re relatively good at predicting wether an older
+European citizen struggles economically. However, let’s explore our
+model a little more. We’ll start by taking a look at the proportions of
+strugglers and non-strugglers (our target variable):</p>
+<pre class="python"><code># recall that 1 is struggle and 2 is no struggle
+
+SHARE[&#39;co007_mod&#39;].value_counts(normalize=True) # when you set normalize = True, you get proportions. False gives you the counts</code></pre>
+<pre><code>## 2    0.702514
+## 1    0.297486
+## Name: co007_mod, dtype: float64</code></pre>
+<p>So, about 29% struggle, and 70% do not. If we recall from previous
+sessions it is hard to have accurate predictions of that of which we
+have less… let’s plot a confusion matrix and evaluate the recall
+(sensitivity) of our model to see how good we are at predicting
+strugglers.</p>
+<pre class="python"><code># visualising a confusion matrix
+
+cm = confusion_matrix(y_test, pred)
+print(&quot;Confusion Matrix:&quot;, cm)</code></pre>
+<pre><code>## Confusion Matrix: [[ 42 381]
+##  [ 21 933]]</code></pre>
+<pre class="python"><code>ConfusionMatrixDisplay(confusion_matrix=cm).plot() # create confusion matrix plot</code></pre>
+<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x116cf4f70&gt;</code></pre>
+<pre class="python"><code>plt.show() # display confusion matrix plot created above</code></pre>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>So, the numbers have switched here: <span
+class="math inline">\(2\)</span> is now <span
+class="math inline">\(1\)</span> and <span
+class="math inline">\(1\)</span> is now <span
+class="math inline">\(0\)</span>. Let’s have a trip back to memory lane
+and remember the values that a confusion matrix provides: <br></p>
+<ul>
+<li><p>True Positives (TP): 42 (actual = 0, predicted = 0)</p></li>
+<li><p>False Negatives (FN): 381 (actual = 0, predicted = 1)</p></li>
+<li><p>False Positives (FP): 21 (actual = 1, predicted = 0)</p></li>
+<li><p>True Negatives (TN): 933 (actual = 1, predicted = 1)</p></li>
+</ul>
+<p>Based on these confusion matrix values (and the formulas provided in
+session 2: logistic classification), we can get our neural network
+model’s performance metrics.</p>
+<p>Accuracy: 70%. (we got this above!). It is the proportion of true
+results regardless of the case. Recall (Sensitivity): 35.22% (we might
+want to know this, since we’re trying to identify vulnerable older
+people). It is the proportion of correctly identified vulnerable cases.
+The formula (if you want to check yourself) is TP/(TP+FN) = 42/(42+381)
+= 0.099.</p>
+<p>Alternatively:</p>
+<pre class="python"><code>print(&quot;Recall:&quot;, recall_score(y_test, pred))</code></pre>
+<pre><code>## Recall: 0.09929078014184398</code></pre>
+<p><strong>Conclusion</strong></p>
+<p>Neural networks are all the rage these days; it’s arguably the most
+famous machine learning algorithm. But don’t be fooled, it is still
+subject to the same data challenges as the rest of the algorithms we
+have explored so far. As you can see, we do pretty badly at predicting
+who struggles to make ends meet, even though the overall performance of
+our model was good.</p>
 </div>
 </div>
 
