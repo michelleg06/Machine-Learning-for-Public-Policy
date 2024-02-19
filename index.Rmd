@@ -159,9 +159,9 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
     ·  	Neural Network Architecture: neurons and layers
     ·   Inputs and output: the activation function (sigmoid, tahn...)
 
-**Release date: 15 February, 2024.**
+**Release date: 19 February, 2024.**
 
-**Instructor:** [Dr. Emanuele Pugliese](https://scholar.google.com/citations?user=6lDNFOYAAAAJ&hl=en) and [Prof. Dr. Robin Cowan](https://ideas.repec.org/e/pco61.html)
+**Instructor:**  [Prof. Dr. Robin Cowan](https://ideas.repec.org/e/pco61.html)
 
 **Optional Readings**
 

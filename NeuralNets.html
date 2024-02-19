@@ -291,6 +291,13 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
+  <a href="NeuralNets.html">
+    <span class="fa fa-light fa-chart-network"></span>
+     
+    Neural Networks
+  </a>
+</li>
+<li>
   <a href="discussionboard.html">
     <span class="fa fa-solid fa-comments"></span>
      
@@ -408,11 +415,13 @@ you have any questions about the variables).</p>
 ## [103] &quot;income_pct_w4&quot;    &quot;income_pct_w5&quot;    &quot;income_pct_w6&quot;   
 ## [106] &quot;income_pct_w7&quot;    &quot;income_pct_w8&quot;</code></pre>
 <pre class="r"><code>## and how big it is
-dim(z)</code></pre>
+dim(z) </code></pre>
 <pre><code>## [1] 412110    107</code></pre>
 <pre class="r"><code># ==== we can also use our trusted skimr package ==== #
 # skim(z)
-# =================================================== # </code></pre>
+# =================================================== # 
+
+# Remember to take out the hashtag to print the command! </code></pre>
 <h3>
 <ol style="list-style-type: decimal">
 <li>Data Preparation
@@ -862,7 +871,7 @@ names(z4)</code></pre>
 ## plot the first 100 observations
 ## we will use a pairs plot
 plot(head(z4,100))</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
 <pre class="r"><code># you can use the zoom function of the image if you&#39;re replicating this script locally (that way you can read the variable names).
 
 ## look more closely at migrant and vaccination (the others seem to have a good spread)
@@ -1424,9 +1433,9 @@ print(&quot;Confusion Matrix:&quot;, cm)</code></pre>
 <pre><code>## Confusion Matrix: [[ 42 381]
 ##  [ 21 933]]</code></pre>
 <pre class="python"><code>ConfusionMatrixDisplay(confusion_matrix=cm).plot() # create confusion matrix plot</code></pre>
-<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x116cf4f70&gt;</code></pre>
+<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x12ea5cf70&gt;</code></pre>
 <pre class="python"><code>plt.show() # display confusion matrix plot created above</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <p>So, the numbers have switched here: <span
 class="math inline">\(2\)</span> is now <span
 class="math inline">\(1\)</span> and <span

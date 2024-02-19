@@ -65,14 +65,16 @@ setwd("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Poli
 
 You can explore the dataset now (and refer to the SHARE website if you have any questions about the variables).
 
-```{r}
+```{r dimensions}
 names(z)
 ## and how big it is
-dim(z)
+dim(z) 
 
 # ==== we can also use our trusted skimr package ==== #
 # skim(z)
 # =================================================== # 
+
+# Remember to take out the hashtag to print the command! 
 ```
 
 <h3> 1. Data Preparation </h3>
@@ -344,6 +346,7 @@ Now it is time to test our model's **predictive abilities**.
 # use our fitted neural network to try to predict what the income states in our test data
 set.seed(4)
 pred <- predict(model,testz5)
+
 ```
 
 As before, we will not use the caret package to call the ConfusionMatrix function, we'll do all of it manually. We'll have to manipulate the variables a little, to visualise the confusion matrix in a helpful way:
