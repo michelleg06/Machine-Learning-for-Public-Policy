@@ -292,7 +292,7 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="NeuralNets.html">
-    <span class="fa fa-light fa-chart-network"></span>
+    <span class="fa fa-superpowers"></span>
      
     Neural Networks
   </a>
@@ -595,34 +595,8 @@ feature of R means that people all over the world are constantly working
 on packages and functions to make our lives easier. These can be used by
 calling the libraries in which they are stored:</p>
 <pre class="r"><code>#  My personal favourite are the Tidyverse library, by Hadley Whickam, and data.table. Both are brilliant for data exploration, manipulation, and visualisation. 
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.3     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.2     
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter()  masks stats::filter()
-## ✖ lubridate::hms() masks vembedr::hms()
-## ✖ dplyr::lag()     masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<pre class="r"><code>library(data.table)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;data.table&#39;
-## 
-## The following objects are masked from &#39;package:lubridate&#39;:
-## 
-##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
-##     yday, year
-## 
-## The following objects are masked from &#39;package:dplyr&#39;:
-## 
-##     between, first, last
-## 
-## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     transpose</code></pre>
+library(tidyverse)
+library(data.table)</code></pre>
 <p>If you’re working with an imported data set, you should probably set
 up your working directory as well:</p>
 <pre class="r"><code>setwd(&quot;~/Desktop/&quot;) #Note that the squiggly symbol is a shortcut for Mac users, if you&#39;re a Windows user, please write the whole path.</code></pre>
@@ -792,7 +766,8 @@ p &lt;- ggplot(data = mtcars, aes(x = wt, y = mpg, col = am )) +
                                labels = c(&quot;0.Automatic&quot;, &quot;1.Manual&quot;),
                                values = c(&quot;darkorange2&quot;, &quot;darkgoldenrod1&quot;))
 print(p)</code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;
+## and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-17-4.png" width="672" /></p>
 <p><strong>5. R base capabilities and reserved names</strong></p>
 <p>We’ve had some fun, now let’s go back to some r base basics. These
@@ -1321,7 +1296,7 @@ print(lm_2.summary()) # print linear model parameters</code></pre>
 ## Model:                            OLS   Adj. R-squared:                  0.507
 ## Method:                 Least Squares   F-statistic:                     46.27
 ## Date:                Mon, 19 Feb 2024   Prob (F-statistic):           3.83e-62
-## Time:                        14:43:10   Log-Likelihood:                -2386.0
+## Time:                        16:05:33   Log-Likelihood:                -2386.0
 ## No. Observations:                 442   AIC:                             4794.
 ## Df Residuals:                     431   BIC:                             4839.
 ## Df Model:                          10                                         
@@ -1373,12 +1348,12 @@ age = pandas_diabetes.iloc[:,0] # select and store age variable
 
 plt.hist(bmi)
 plt.show() </code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-1.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <pre class="python"><code>plt.clf()
 
 plt.scatter(age,bmi) # order is x,y
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-2.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-2.png" width="672" /></p>
 <pre class="python"><code># let&#39;s add some elements#add line of best fit to plot
 
 # find line of best fit
@@ -1389,7 +1364,7 @@ plt.scatter(age,bmi) # order is x,y
 # add the line and then display
 plt.plot(age, a*age+b, color=&#39;red&#39;, linestyle=&#39;--&#39;, linewidth=2)
 plt.show()</code></pre>
-<p><img src="intro_files/figure-html/unnamed-chunk-35-3.png" width="614" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-35-3.png" width="672" /></p>
 <p><strong>Defining functions and loops</strong></p>
 <p>The last useful tip before we begin to use Python in earnest, is to
 remember that we can define functions or use loops (general flow

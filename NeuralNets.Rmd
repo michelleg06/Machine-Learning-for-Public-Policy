@@ -61,7 +61,7 @@ rm(easySHARE_rel8_0_0)
 
 You can explore the dataset now (and refer to the SHARE website if you have any questions about the variables).
 
-```{r dimensions}
+```{r}
 names(z)
 ## and how big it is
 dim(z) 
@@ -79,7 +79,7 @@ Now we are going to clean up some things in the data to make it useful.
 
 + Select a subset of the countries: Spain, France, Italy, Germany, Poland. These are identified in the data with numbers:
         
-        + Spain 724; France 250; Italy 380; Germany 276; NL 528; Poland 616
+         Spain 724; France 250; Italy 380; Germany 276; NL 528; Poland 616
         
 ```{r}
 countries <- c(724, 250, 380, 276, 528, 616)
@@ -132,13 +132,12 @@ z1 <- z1 %>%
         filter(thinc_m < 100000)%>% # people earning above 100,000 are excluded 
         mutate(co007_ = as.factor(co007_)) 
 
-# z1 should now contain only 16 variables and 37,286 observations (a more manageable subset)
 
 ```
 
 **What is our target variable?** 
 
-In the English Questionare of the SHARE dataset, the variable asks:
+In the English Questionnaire of the SHARE dataset, the variable asks:
 
     Thinking of your household's total monthly income, would you say that your household is able to make ends meet... (Income struggle)
 
@@ -166,7 +165,6 @@ z1$co007_mod[z1$co007_ %in% c(3,4)] <- 2 # if the values in var z1$co007_ are 3 
 
 ## change the way to factor is defined to have only 2 levels
 z1$co007_mod <- as.factor(as.integer(z1$co007_mod))
-#levels(z1$co007_mod) <- c(1,2)
 
 ```
 
@@ -187,13 +185,13 @@ We won't work with the inc_bin (classification) variable, but it's there if you 
 ```{r}
 ## get rid of any observation that contains NA
 sum(is.na(z1))
-# we have 140,821 missing values across the entire dataset. You can get a glimpse of which variables have the most missing values with the skim() function
+#You can get a glimpse of which variables have the most missing values with the skim() function
 skim(z1)
 
 # we'll use the drop_na() function, which will delete any row if it has at least one missing value (be careful when doing this in your own data cleaning)
 z2 <- drop_na(z1)
 dim(z2)
-# z2 is a small subset of the original dataset which contains i) no missing values, ii) only relevant variables for our model on retirement, and iii) 6,881 observations
+# z2 is a small subset of the original dataset which contains i) no missing values, ii) only relevant variables for our model on retirement, and iii) a more manageable dataset size
 
 ```
 
@@ -348,19 +346,17 @@ pred <- predict(model,testz5)
 As before, we will not use the caret package to call the ConfusionMatrix function, we'll do all of it manually. We'll have to manipulate the variables a little, to visualise the confusion matrix in a helpful way:
 
 ```{r}
-# add the levels from our target variable as the column names for our predicted values
-colnames(pred) <- levels(testz5$co007_mod)
+# add the levels from our target variable as labels (stored in an object)
 
-myLabels  <- colnames(pred) # get the column names from our prediction vectors and store them in an object
+myLabels <- levels(testz5$co007_mod)
 pointPred <- max.col(pred) # find the index of the maximum value of my predictions
 pointPred <- myLabels[pointPred] # add the labels (or column names from our predictions) 
 
 # Now, we'll store the actual/observed values in an objext as well:
 actual <- testz5$co007_mod
-actual <- as.factor(as.integer(actual)) # make sure these values are read as factors
-
+actual <- as.factor(as.integer(actual))
 # Create the Confusion Matrix using the predicted, observed values and the labels
-t1 <- table(actual,pointPred)[,myLabels]
+t1 <- table(actual,pointPred)
 
 # voilà! manual confusion matrix!
 print(t1)

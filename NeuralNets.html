@@ -292,7 +292,7 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="NeuralNets.html">
-    <span class="fa fa-light fa-chart-network"></span>
+    <span class="fa fa-superpowers"></span>
      
     Neural Networks
   </a>
@@ -432,7 +432,7 @@ useful.</p>
 <ul>
 <li><p>Select a subset of the countries: Spain, France, Italy, Germany,
 Poland. These are identified in the data with numbers:</p>
-<pre><code>  + Spain 724; France 250; Italy 380; Germany 276; NL 528; Poland 616</code></pre></li>
+<pre><code>   Spain 724; France 250; Italy 380; Germany 276; NL 528; Poland 616</code></pre></li>
 </ul>
 <pre class="r"><code>countries &lt;- c(724, 250, 380, 276, 528, 616)</code></pre>
 <ul>
@@ -477,11 +477,9 @@ to the PDF in English</a>.</p>
 z1 &lt;- z1 %&gt;% 
         dplyr::select(female,age,married,hhsize,vaccinated,books_age10,maths_age10,language_age10,childhood_health,migrant,eduyears_mod,co007_,thinc_m,eurod,country_mod,iv009_mod) %&gt;%
         filter(thinc_m &lt; 100000)%&gt;% # people earning above 100,000 are excluded 
-        mutate(co007_ = as.factor(co007_)) 
-
-# z1 should now contain only 16 variables and 37,286 observations (a more manageable subset)</code></pre>
+        mutate(co007_ = as.factor(co007_)) </code></pre>
 <p><strong>What is our target variable?</strong></p>
-<p>In the English Questionare of the SHARE dataset, the variable
+<p>In the English Questionnaire of the SHARE dataset, the variable
 asks:</p>
 <pre><code>Thinking of your household&#39;s total monthly income, would you say that your household is able to make ends meet... (Income struggle)
 
@@ -506,8 +504,7 @@ z1$co007_mod[z1$co007_ %in% c(1,2)] &lt;- 1 # if the values in var z1$co007_ are
 z1$co007_mod[z1$co007_ %in% c(3,4)] &lt;- 2 # if the values in var z1$co007_ are 3 or 4, transform them into 2, store this in our new z1$co007_mod variable
 
 ## change the way to factor is defined to have only 2 levels
-z1$co007_mod &lt;- as.factor(as.integer(z1$co007_mod))
-#levels(z1$co007_mod) &lt;- c(1,2)</code></pre>
+z1$co007_mod &lt;- as.factor(as.integer(z1$co007_mod))</code></pre>
 <p>Now we have a variable that indicates whether a household struggles
 (1) or doesn’t struggle (2) to make ends meet.</p>
 <p>A different dependent variable could just be income. To make that
@@ -523,7 +520,7 @@ dataset)</strong></p>
 <pre class="r"><code>## get rid of any observation that contains NA
 sum(is.na(z1))</code></pre>
 <pre><code>## [1] 140821</code></pre>
-<pre class="r"><code># we have 140,821 missing values across the entire dataset. You can get a glimpse of which variables have the most missing values with the skim() function
+<pre class="r"><code>#You can get a glimpse of which variables have the most missing values with the skim() function
 skim(z1)</code></pre>
 <table>
 <caption>Data summary</caption>
@@ -845,7 +842,7 @@ skim(z1)</code></pre>
 z2 &lt;- drop_na(z1)
 dim(z2)</code></pre>
 <pre><code>## [1] 6881   18</code></pre>
-<pre class="r"><code># z2 is a small subset of the original dataset which contains i) no missing values, ii) only relevant variables for our model on retirement, and iii) 6,881 observations</code></pre>
+<pre class="r"><code># z2 is a small subset of the original dataset which contains i) no missing values, ii) only relevant variables for our model on retirement, and iii) a more manageable dataset size</code></pre>
 <p><strong>Rescaling data</strong></p>
 <pre class="r"><code>## age, years of education and income (thinc_m) have a big range, so let&#39;s rescale it to  between plus and minus 1
 ## scaling allows us to compare data that aren&#39;t measured in the same way
@@ -871,7 +868,7 @@ names(z4)</code></pre>
 ## plot the first 100 observations
 ## we will use a pairs plot
 plot(head(z4,100))</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
 <pre class="r"><code># you can use the zoom function of the image if you&#39;re replicating this script locally (that way you can read the variable names).
 
 ## look more closely at migrant and vaccination (the others seem to have a good spread)
@@ -1156,19 +1153,17 @@ pred &lt;- predict(model,testz5)</code></pre>
 ConfusionMatrix function, we’ll do all of it manually. We’ll have to
 manipulate the variables a little, to visualise the confusion matrix in
 a helpful way:</p>
-<pre class="r"><code># add the levels from our target variable as the column names for our predicted values
-colnames(pred) &lt;- levels(testz5$co007_mod)
+<pre class="r"><code># add the levels from our target variable as labels (stored in an object)
 
-myLabels  &lt;- colnames(pred) # get the column names from our prediction vectors and store them in an object
+myLabels &lt;- levels(testz5$co007_mod)
 pointPred &lt;- max.col(pred) # find the index of the maximum value of my predictions
 pointPred &lt;- myLabels[pointPred] # add the labels (or column names from our predictions) 
 
 # Now, we&#39;ll store the actual/observed values in an objext as well:
 actual &lt;- testz5$co007_mod
-actual &lt;- as.factor(as.integer(actual)) # make sure these values are read as factors
-
+actual &lt;- as.factor(as.integer(actual))
 # Create the Confusion Matrix using the predicted, observed values and the labels
-t1 &lt;- table(actual,pointPred)[,myLabels]
+t1 &lt;- table(actual,pointPred)
 
 # voilà! manual confusion matrix!
 print(t1)</code></pre>
@@ -1433,9 +1428,9 @@ print(&quot;Confusion Matrix:&quot;, cm)</code></pre>
 <pre><code>## Confusion Matrix: [[ 42 381]
 ##  [ 21 933]]</code></pre>
 <pre class="python"><code>ConfusionMatrixDisplay(confusion_matrix=cm).plot() # create confusion matrix plot</code></pre>
-<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x125208f70&gt;</code></pre>
+<pre><code>## &lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay object at 0x14bd20f70&gt;</code></pre>
 <pre class="python"><code>plt.show() # display confusion matrix plot created above</code></pre>
-<p><img src="NeuralNets_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="NeuralNets_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <p>So, the numbers have switched here: <span
 class="math inline">\(2\)</span> is now <span
 class="math inline">\(1\)</span> and <span

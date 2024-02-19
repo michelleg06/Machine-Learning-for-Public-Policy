@@ -27,7 +27,7 @@ navbar:
           icon: fa fa-graduation-cap
         - text: "Neural Networks"
           href: NeuralNets.html
-          icon: fa-light fa-chart-network
+          icon: fa-superpowers
         - text: "Discussion Board"
           href: discussionboard.html
           icon: fa-solid fa-comments
