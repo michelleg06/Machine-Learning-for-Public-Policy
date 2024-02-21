@@ -18,7 +18,7 @@ In this session, Prof. Dr. Robin Cowan will give is an intuitive introduction to
 <center>
 ```{r, echo=FALSE}
 library("vembedr")
-embed_url("https://youtu.be/xKN-5jm2kCI")
+embed_url("https://youtu.be/6hN2zE_nEy4")
 
 
 ```
