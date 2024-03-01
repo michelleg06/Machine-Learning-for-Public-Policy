@@ -28,6 +28,9 @@ navbar:
         - text: "Neural Networks"
           href: NeuralNets.html
           icon: fa-superpowers
+        - text: "Policy Challenge"
+          href: PolicyChallenge.html
+          icon: fa-thin fa-bolt-lightning
         - text: "Discussion Board"
           href: discussionboard.html
           icon: fa-solid fa-comments
