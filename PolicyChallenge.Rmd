@@ -1,0 +1,51 @@
+title: "Collaborative Policy Challenge"
+#author: "Michelle González Amador"
+#date: '2022-09-21'
+output: html_document
+---
+<style>
+    body {
+    text-align: justify}
+</style>
+
+##  Welcome to the ML4PP x UNHCR Innovation Collaborative Policy Challenge! 
+
+The Machine Learning for Public Policy course has partnered with the United Nations High Commissioner for Refugees (UNHCR, for short) Innovation Office to bring you a live policy challenge:
+
+<center>
+```{r, echo=FALSE, fig.cap=" ", out.width = '65%'}
+knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/policy_challenge_banner2.png")
+```
+</center>
+
+<br>
+
+On Thursday 8 March, 2024 [Rebeca Moreno Jiménez](https://www.weforum.org/people/rebeca-moreno-jimenez/) at 19h GMT+1 Lead Data Scientist at UNHCR Innovation will give a brief lecture on how UNHCR uses Machine Learning and other technological innovations for human mobility policies (via Zoom); she will further introduce us to the live policy challenge her and her team have prepared for us. The lecture will be recorded and available here afterwards for those who cannot attend. 
+
+The challenge consists of leveraging publicly available data to tackle human mobility challenges; below you can read the entire document prepared by UNHCR Innovation with details about:
+
+- **Streams:**  They propose three streams, including Linear Machine Learning Modelling and Predictive Analytics (what this introductory course has mostly prepared us for); Computer Vision, Satellite Imagery and Agent-Based Modelling (perhaps a stream that Economists might find feasible); and Generative AI, Natural Language Processing and text-based analytics (a new field that innovative minds might want to delve with, with the help of GenAI apps out there). 
+
+- **Datasets:** They provide an exhaustive list of publicly available datasets that you can easily access either by requesting the dataset (should take a day to receive it) or a simple download. The dataset list is curated for each stream, too!
+
+- **Ethics:** When working in the field of humanitarian aid, and indeed any policy field that affects human lives, there are always ethical considerations that we must be aware of. For example, will our findings - or more specifically, the way we present our findings, harm the very people we are trying to help? UNHCR Innovation discuss these elements briefly in their challenge.
+
+Below you can download the PDF of the challenge:
+
+```{r, echo=FALSE}
+library(downloadthis)
+download_link(
+  link = "https://github.com/michelleg06/Machine-Learning-for-Public-Policy/blob/main/Python code/Intro2Python.py",
+  button_label = "Collaborative Policy Challenge PDF",
+  button_type = "info",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
+
+# Policy Challenge Format
+
+> 
+
