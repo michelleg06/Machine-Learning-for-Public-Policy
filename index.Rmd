@@ -167,10 +167,13 @@ James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). [An Introduction to 
 
 - Chatsiou and Mikhaylov (2020). [Deep Learning for Political Science](https://arxiv.org/pdf/2005.06540.pdf). Arxiv preprint.
 
+<br>
+
+
 <center>
-```{r, echo=FALSE, fig.cap=" ", out.width = '65%'}
-knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/policy_challenge_banner.png")
-```
+
+[![](/Users/michellegonzalez/Documents/GitHub/Machine-Learning-for-Public-Policy/Images/policy_challenge_banner.png)](https://www.ml4publicpolicy.com/PolicyChallenge.html)
+
 </center>
 
 
