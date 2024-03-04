@@ -20,7 +20,7 @@ knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learni
 
 <br>
 
-On Thursday 7 March, 2024 [Rebeca Moreno Jiménez](https://www.weforum.org/people/rebeca-moreno-jimenez/) at 19h GMT+1 Lead Data Scientist at UNHCR Innovation will give a brief lecture on how UNHCR uses Machine Learning and other technological innovations for human mobility policies (via Zoom); she will further introduce us to the live policy challenge her and her team have prepared for us. The lecture will be recorded and available here afterwards for those who cannot attend. 
+On Thursday 7 March, 2024 [Rebeca Moreno Jiménez](https://www.weforum.org/people/rebeca-moreno-jimenez/) at 19h GMT+1 Lead Data Scientist at UNHCR Innovation will give a brief lecture on how UNHCR uses Machine Learning and other technological innovations for human mobility policies (via [Zoom](https://unu-merit-eu.zoom.us/j/5475937108?omn=82924276642)); she will further introduce us to the live policy challenge she and her team have prepared for us. The lecture will be recorded and available here afterwards for those who cannot attend. You can still enroll for the challenge via [Qualtrics](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_ctNrA5wPCm2jC86) until 5 March, COB. 
 
 The challenge consists of leveraging publicly available data to tackle human mobility challenges; below you can read the entire document prepared by UNHCR Innovation with details about:
 
