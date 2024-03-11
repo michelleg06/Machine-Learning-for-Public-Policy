@@ -20,7 +20,7 @@ knitr::include_graphics("/Users/michellegonzalez/Documents/GitHub/Machine-Learni
 
 <br>
 
-On Thursday 7 March, 2024 [Rebeca Moreno Jiménez](https://www.weforum.org/people/rebeca-moreno-jimenez/) at 19h GMT+1 Lead Data Scientist at UNHCR Innovation will give a brief lecture on how UNHCR uses Machine Learning and other technological innovations for human mobility policies (via [Zoom](https://unu-merit-eu.zoom.us/j/5475937108?omn=82924276642)); she will further introduce us to the live policy challenge she and her team have prepared for us. The lecture will be recorded and available here afterwards for those who cannot attend. You can still enroll for the challenge via [Qualtrics](https://maastrichtuniversity.eu.qualtrics.com/jfe/form/SV_ctNrA5wPCm2jC86) until 5 March, COB. 
+On Thursday 7 March, 2024 [Rebeca Moreno Jiménez](https://www.weforum.org/people/rebeca-moreno-jimenez/), Lead Data Scientist at UNHCR Innovation, gave a brief lecture on how UNHCR uses Machine Learning and other technological innovations for human mobility policies (via <>Zoom); she introduced us to the live policy challenge she and her team have prepared for us. The lecture has been recorded and will be available here afterwards for those who could not attend. Challenge registration for 20204 is closed. Thanks to all of you who are preparing for it! 
 
 The challenge consists of leveraging publicly available data to tackle human mobility challenges; below you can read the entire document prepared by UNHCR Innovation with details about:
 
@@ -78,7 +78,7 @@ All participants who successfully submit a challenge proposal are also eligible 
 # Organisation
 
 
-Enrollment to the challenge closes on 5 March (2024) COB. When we have the full list of participants, we will:
+Enrollment to the challenge closed on 5 March (2024) COB. When we have the full list of participants, we will:
 
 - Create semi-random groups. The group you end up with should be relatively diverse, and this is the team with whom you'll work towards tackling the policy challenge. We understand there are difficulties embedded in team work, including time-zone differences, time availability, differing skills... but we encourage you to work through them! For this very same reason, we are giving **a full month** to work on the challenge. The month starts counting the moment Slack invitations are sent out 😉.
 
