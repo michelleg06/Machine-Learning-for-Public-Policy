@@ -1,6 +1,6 @@
 ---
 #title: "Prediction Policy Problems: Linear Models and Lasso Regression"
-#author: "Dr. Stephan Dietrich & Michelle González Amador"
+#author: "Michelle González Amador"
 #date: '2022-09-21'
 output: html_document
 editor_options: 
